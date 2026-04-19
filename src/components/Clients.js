@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import DustScroll from './DustScroll'
+import FastScroll from './FastScroll'
+import ScrambleText from './ScrambleText'
 
 // Placeholder client names — styled as corporate name pills
 const ROW_ONE = [
@@ -61,10 +62,12 @@ export default function Clients() {
 
       <div className="container" style={{ marginBottom: 'clamp(32px,4vw,52px)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div className="section-label reveal" style={{ justifyContent: 'center' }}>Trusted By</div>
+          <div className="section-label reveal" style={{ justifyContent: 'center' }}>
+            <ScrambleText text="Trusted By" speed={25} />
+          </div>
           <h2 className="text-h2 reveal" style={{ marginBottom: 12 }}>
-            <DustScroll><span style={{ display: 'inline-block' }}>Clients Who</span></DustScroll>
-            <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Scale With Us</span></DustScroll>
+            <FastScroll><span style={{ display: 'inline-block' }}>Clients Who</span></FastScroll>
+            <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Scale With Us</span></FastScroll>
           </h2>
           <p className="text-body-lg reveal" style={{ maxWidth: 480, margin: '0 auto' }}>
             From early-stage SaaS companies to established enterprises — we deliver at every level.

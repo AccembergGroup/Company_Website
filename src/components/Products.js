@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import DustScroll from './DustScroll'
+import FastScroll from './FastScroll'
+import { SpotlightProvider, SpotlightCard } from './Spotlight'
+import ScrambleText from './ScrambleText'
 
 const PRODUCTS = [
   {
@@ -77,10 +79,12 @@ export default function Products() {
         {/* Header */}
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
           <div style={{ maxWidth: 520 }}>
-            <div className="section-label reveal">Our Core Capabilities</div>
+            <div className="section-label reveal">
+              <ScrambleText text="Our Core Capabilities" speed={40} />
+            </div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-              <DustScroll><span style={{ display: 'inline-block' }}>Engineering</span></DustScroll>
-              <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>That Scales</span></DustScroll>
+              <FastScroll><span style={{ display: 'inline-block' }}>Engineering</span></FastScroll>
+              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>That Scales</span></FastScroll>
             </h2>
             <p className="text-body-lg reveal">
               Whether we are building proprietary SaaS platforms or custom enterprise solutions, the same relentless standard of quality applies.
@@ -92,7 +96,7 @@ export default function Products() {
         </div>
 
         {/* Bento grid */}
-        <div style={{
+        <SpotlightProvider style={{
           display: 'grid',
           gridTemplateColumns: '1.4fr 1fr',
           gridTemplateRows: 'auto',
@@ -113,7 +117,7 @@ export default function Products() {
           <div className="reveal-right stagger-2">
             <ProductCard product={rest[1]} />
           </div>
-        </div>
+        </SpotlightProvider>
       </div>
 
       <style>{`
@@ -132,7 +136,7 @@ export default function Products() {
 
 function ProductCard({ product, large = false }) {
   return (
-    <div
+    <SpotlightCard
       style={{
         background: product.highlight ? 'rgba(26,143,255,0.05)' : 'var(--bg-surface)',
         border: `1px solid ${product.highlight ? 'rgba(26,143,255,0.18)' : 'var(--border-subtle)'}`,
@@ -243,7 +247,7 @@ function ProductCard({ product, large = false }) {
           pointerEvents: 'none',
         }} />
       )}
-    </div>
+    </SpotlightCard>
   )
 }
 

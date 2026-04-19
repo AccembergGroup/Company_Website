@@ -1,6 +1,7 @@
 import { Space_Grotesk, Inter } from 'next/font/google'
 import './globals.css'
 import LenisProvider from '@/components/LenisProvider'
+import CustomCursor from '@/components/CustomCursor'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
       className={`${spaceGrotesk.variable} ${inter.variable}`}
     >
       <body>
+        <CustomCursor />
         <LenisProvider>
           {children}
         </LenisProvider>

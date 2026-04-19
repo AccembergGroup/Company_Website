@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import DustScroll from './DustScroll'
+import FastScroll from './FastScroll'
+import ScrambleText from './ScrambleText'
+import { SpotlightCard } from './Spotlight'
 
 const PROJECTS = [
   {
@@ -94,10 +96,12 @@ export default function Projects() {
           marginBottom: 'clamp(48px,6vw,80px)',
         }}>
           <div style={{ maxWidth: 520 }}>
-            <div className="section-label reveal">Track Record</div>
+            <div className="section-label reveal">
+              <ScrambleText text="Track Record" speed={30} />
+            </div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-              <DustScroll><span style={{ display: 'inline-block' }}>Selected</span></DustScroll>
-              <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Projects</span></DustScroll>
+              <FastScroll><span style={{ display: 'inline-block' }}>Selected</span></FastScroll>
+              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Projects</span></FastScroll>
             </h2>
             <p className="text-body-lg reveal">
               A cross-section of our delivered work — spanning enterprise software, SaaS launches, AI integration, and cloud infrastructure.
@@ -146,7 +150,7 @@ export default function Projects() {
 
 function ProjectCard({ project }) {
   return (
-    <div
+    <SpotlightCard
       style={{
         background: 'var(--bg-surface)',
         border: '1px solid var(--border-subtle)',
@@ -237,6 +241,6 @@ function ProjectCard({ project }) {
           </span>
         </div>
       </div>
-    </div>
+    </SpotlightCard>
   )
 }

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import DustScroll from './DustScroll'
+import FastScroll from './FastScroll'
+import ScrambleText from './ScrambleText'
 
 const PROJECT_TYPES = [
   'Full-Stack Development',
@@ -76,10 +77,12 @@ export default function Contact() {
 
           {/* Left — Info panel */}
           <div style={{ paddingTop: 8 }}>
-            <div className="section-label reveal">Get In Touch</div>
+            <div className="section-label reveal">
+              <ScrambleText text="Get In Touch" speed={30} />
+            </div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 20 }}>
-              <DustScroll><span style={{ display: 'inline-block' }}>Let's Build</span></DustScroll>
-              <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Something Great</span></DustScroll>
+              <FastScroll><span style={{ display: 'inline-block' }}>Let's Build</span></FastScroll>
+              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Something Great</span></FastScroll>
             </h2>
             <p className="text-body-lg reveal" style={{ marginBottom: 40 }}>
               Whether you're an enterprise looking for a delivery partner, or a visionary

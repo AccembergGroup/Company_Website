@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import DustScroll from './DustScroll'
+import FastScroll from './FastScroll'
+import { SpotlightProvider, SpotlightCard } from './Spotlight'
+import ScrambleText from './ScrambleText'
 
 const SERVICES = [
   {
@@ -86,10 +88,12 @@ export default function Services() {
       <div className="container">
         {/* Section header */}
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', maxWidth: 600 }}>
-          <div className="section-label reveal">What We Deliver</div>
+          <div className="section-label reveal">
+            <ScrambleText text="What We Deliver" speed={35} />
+          </div>
           <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-            <DustScroll><span style={{ display: 'inline-block' }}>Full-Spectrum</span></DustScroll>
-            <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Engineering Services</span></DustScroll>
+            <FastScroll><span style={{ display: 'inline-block' }}>Full-Spectrum</span></FastScroll>
+            <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Engineering Services</span></FastScroll>
           </h2>
           <p className="text-body-lg reveal" style={{ color: 'var(--text-secondary)' }}>
             From initial architecture to production-grade deployment — we bring a studio-grade approach to every dimension of software engineering.
@@ -97,7 +101,7 @@ export default function Services() {
         </div>
 
         {/* 3×2 grid with middle row offset */}
-        <div style={{
+        <SpotlightProvider style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: 2,
@@ -116,7 +120,7 @@ export default function Services() {
               <ServiceCard svc={svc} />
             </div>
           ))}
-        </div>
+        </SpotlightProvider>
       </div>
 
       <style>{`
@@ -137,7 +141,7 @@ export default function Services() {
 
 function ServiceCard({ svc }) {
   return (
-    <div
+    <SpotlightCard
       style={{
         background: 'rgba(13,19,24,0.75)',
         backdropFilter: 'blur(12px)',
@@ -198,7 +202,7 @@ function ServiceCard({ svc }) {
           <span key={tag} className="tag tag-muted" style={{ fontSize: 10 }}>{tag}</span>
         ))}
       </div>
-    </div>
+    </SpotlightCard>
   )
 }
 
