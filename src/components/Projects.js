@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import DustScroll from './DustScroll'
 
 const PROJECTS = [
   {
@@ -95,7 +96,8 @@ export default function Projects() {
           <div style={{ maxWidth: 520 }}>
             <div className="section-label reveal">Track Record</div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-              Selected <span style={{ color: 'var(--accent)' }}>Projects</span>
+              <DustScroll><span style={{ display: 'inline-block' }}>Selected</span></DustScroll>
+              <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Projects</span></DustScroll>
             </h2>
             <p className="text-body-lg reveal">
               A cross-section of our delivered work — spanning enterprise software, SaaS launches, AI integration, and cloud infrastructure.

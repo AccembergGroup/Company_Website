@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import DustScroll from './DustScroll'
 
 // Placeholder client names — styled as corporate name pills
 const ROW_ONE = [
@@ -62,7 +63,8 @@ export default function Clients() {
         <div style={{ textAlign: 'center' }}>
           <div className="section-label reveal" style={{ justifyContent: 'center' }}>Trusted By</div>
           <h2 className="text-h2 reveal" style={{ marginBottom: 12 }}>
-            Clients Who <span style={{ color: 'var(--accent)' }}>Scale With Us</span>
+            <DustScroll><span style={{ display: 'inline-block' }}>Clients Who</span></DustScroll>
+            <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Scale With Us</span></DustScroll>
           </h2>
           <p className="text-body-lg reveal" style={{ maxWidth: 480, margin: '0 auto' }}>
             From early-stage SaaS companies to established enterprises — we deliver at every level.

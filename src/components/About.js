@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import DustScroll from './DustScroll'
 
 const ENGINES = [
   {
@@ -85,10 +86,16 @@ export default function About() {
           {/* Left — Text */}
           <div>
             <div className="section-label reveal">Our Philosophy</div>
-            <h2 className="text-h2 reveal" style={{ marginBottom: 24 }}>
-              Engineering Excellence.<br />
-              <span style={{ color: 'var(--accent)' }}>Uncompromising Quality.</span><br />
-              Scalable Impact.
+            <h2 className="text-h2 reveal" style={{ marginBottom: 24, transform: 'translateZ(0)' }}>
+              <DustScroll>
+                <span style={{ display: 'inline-block' }}>Engineering Excellence.</span>
+              </DustScroll>
+              <DustScroll>
+                <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Uncompromising Quality.</span>
+              </DustScroll>
+              <DustScroll>
+                <span style={{ display: 'inline-block' }}>Scalable Impact.</span>
+              </DustScroll>
             </h2>
             <p className="text-body-lg reveal" style={{ marginBottom: 32 }}>
               Most firms accept tradeoffs between velocity and quality. At Accemberg, we architect software that eliminates compromise. Every platform we build is engineered with extreme attention to detail, robust system architecture, and an obsessive focus on user experience.

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import DustScroll from './DustScroll'
 
 const STEPS = [
   {
@@ -61,7 +62,9 @@ export default function Process() {
         <div style={{ textAlign: 'center', marginBottom: 'clamp(52px,7vw,88px)', maxWidth: 600, margin: '0 auto clamp(52px,7vw,88px)' }}>
           <div className="section-label reveal" style={{ justifyContent: 'center' }}>Our Process</div>
           <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-            How We <span style={{ color: 'var(--accent)' }}>Deliver</span>
+            <DustScroll>
+              <span style={{ display: 'inline-block' }}>How We <span style={{ color: 'var(--accent)' }}>Deliver</span></span>
+            </DustScroll>
           </h2>
           <p className="text-body-lg reveal">
             A structured, repeatable system that eliminates ambiguity and delivers quality — at every stage.

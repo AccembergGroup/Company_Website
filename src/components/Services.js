@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import DustScroll from './DustScroll'
 
 const SERVICES = [
   {
@@ -87,8 +88,8 @@ export default function Services() {
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', maxWidth: 600 }}>
           <div className="section-label reveal">What We Deliver</div>
           <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-            Full-Spectrum<br />
-            <span style={{ color: 'var(--accent)' }}>Engineering Services</span>
+            <DustScroll><span style={{ display: 'inline-block' }}>Full-Spectrum</span></DustScroll>
+            <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Engineering Services</span></DustScroll>
           </h2>
           <p className="text-body-lg reveal" style={{ color: 'var(--text-secondary)' }}>
             From initial architecture to production-grade deployment — we bring a studio-grade approach to every dimension of software engineering.

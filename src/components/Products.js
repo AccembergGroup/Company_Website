@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import DustScroll from './DustScroll'
 
 const PRODUCTS = [
   {
@@ -78,8 +79,8 @@ export default function Products() {
           <div style={{ maxWidth: 520 }}>
             <div className="section-label reveal">Our Core Capabilities</div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-              Engineering<br/>
-              <span style={{ color: 'var(--accent)' }}>That Scales</span>
+              <DustScroll><span style={{ display: 'inline-block' }}>Engineering</span></DustScroll>
+              <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>That Scales</span></DustScroll>
             </h2>
             <p className="text-body-lg reveal">
               Whether we are building proprietary SaaS platforms or custom enterprise solutions, the same relentless standard of quality applies.

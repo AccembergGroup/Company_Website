@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import DustScroll from './DustScroll'
 
 const PROJECT_TYPES = [
   'Full-Stack Development',
@@ -77,8 +78,8 @@ export default function Contact() {
           <div style={{ paddingTop: 8 }}>
             <div className="section-label reveal">Get In Touch</div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 20 }}>
-              Let's Build<br />
-              <span style={{ color: 'var(--accent)' }}>Something Great</span>
+              <DustScroll><span style={{ display: 'inline-block' }}>Let's Build</span></DustScroll>
+              <DustScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Something Great</span></DustScroll>
             </h2>
             <p className="text-body-lg reveal" style={{ marginBottom: 40 }}>
               Whether you're an enterprise looking for a delivery partner, or a visionary
