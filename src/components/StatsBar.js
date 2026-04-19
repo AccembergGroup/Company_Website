@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 const STATS = [
-  { end: 50,  suffix: '+', label: 'Enterprise Clients',   sub: 'Across 8 industries' },
-  { end: 120, suffix: '+', label: 'Projects Delivered',   sub: 'On time, every time' },
-  { end: 6,   suffix: '',  label: 'Service Verticals',    sub: 'End-to-end coverage' },
-  { end: 98,  suffix: '%', label: 'Client Retention Rate', sub: 'Built on trust' },
+  { end: 50,  suffix: '+', label: 'Enterprise Clients',  sub: 'Across 8 industries' },
+  { end: 120, suffix: '+', label: 'Projects Delivered',  sub: 'On time, every time' },
+  { end: 6,   suffix: '',  label: 'Service Verticals',   sub: 'End-to-end coverage' },
+  { end: 3,   suffix: '',  label: 'Growth Engines',      sub: 'Build · Launch · Scale' },
 ]
 
 function useCountUp(end, duration = 1800, start = false) {
