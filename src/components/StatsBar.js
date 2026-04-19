@@ -105,6 +105,7 @@ export default function StatsBar() {
 
       <div className="container">
         <div
+          className="stats-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -123,6 +124,7 @@ export default function StatsBar() {
               {/* Divider */}
               {i > 0 && (
                 <div
+                  className="stat-divider"
                   style={{
                     position: 'absolute',
                     left: 0,
@@ -142,9 +144,13 @@ export default function StatsBar() {
       <style>{`
         @media (max-width: 768px) {
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .stats-grid .stat-divider { display: none !important; }
+          .stats-grid > div { padding-left: 0 !important; padding-right: 0 !important; padding: 24px 20px !important; }
         }
         @media (max-width: 480px) {
           .stats-grid { grid-template-columns: 1fr !important; }
+          .stats-grid > div { border-bottom: 1px solid var(--border-subtle); }
+          .stats-grid > div:last-child { border-bottom: none; }
         }
       `}</style>
     </section>

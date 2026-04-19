@@ -45,8 +45,8 @@ export default function Preloader({ onDone }) {
 
     const ctx = canvas.getContext('2d')
     const DPR = Math.min(window.devicePixelRatio || 1, 2)
-    const CW  = window.innerWidth
-    const CH  = window.innerHeight
+    const CW  = document.documentElement.clientWidth || window.innerWidth
+    const CH  = document.documentElement.clientHeight || window.innerHeight
 
     canvas.width  = CW * DPR
     canvas.height = CH * DPR

@@ -77,7 +77,7 @@ export default function Hero() {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        paddingTop: 100,
+        paddingTop: 'clamp(80px, 12vw, 120px)',
         paddingBottom: 0,
         textAlign: 'center',
       }}
@@ -187,7 +187,7 @@ export default function Hero() {
 
           {/* Line 2: two flip words + static connector */}
           <div
-            className="hero-h1-line"
+            className="hero-h1-line hero-flip-row"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -241,7 +241,7 @@ export default function Hero() {
         <p
           className="hero-subtitle"
           style={{
-            fontSize: 'clamp(15px, 1.3vw, 18px)',
+            fontSize: 'clamp(14px, 1.5vw, 18px)',
             lineHeight: 1.75,
             color: 'var(--text-secondary)',
             maxWidth: 560,
@@ -422,6 +422,16 @@ export default function Hero() {
         @keyframes flipDnExit  { to   { transform: perspective(500px) rotateX(-80deg); opacity: 0; } }
         @keyframes flipDnEnter { from { transform: perspective(500px) rotateX(80deg);  opacity: 0; } to { transform: rotateX(0deg); opacity: 1; } }
 
+        /* ── Mobile: override headline font so flip-word row fits ── */
+        @media (max-width: 640px) {
+          .hero-h1-line   { font-size: clamp(26px, 7.5vw, 46px) !important; }
+          .hero-flip-row  { gap: 8px !important; }
+          .hero-proof-row { margin-bottom: 28px !important; }
+        }
+        @media (max-width: 400px) {
+          .hero-h1-line   { font-size: clamp(22px, 6.8vw, 28px) !important; }
+        }
+        /* Dashboard preview */
         @media (max-width: 720px) {
           .preview-grid { grid-template-columns: 1fr !important; }
           .preview-grid > div:first-child { display: none; }

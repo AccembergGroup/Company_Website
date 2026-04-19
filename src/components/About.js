@@ -55,7 +55,7 @@ export default function About() {
   useReveal(ref)
 
   return (
-    <section id="about" className="section" ref={ref}>
+    <section id="about" className="section" ref={ref} style={{ position: 'relative', overflow: 'hidden' }}>
       {/* Subtle glow top-right */}
       <div
         style={{
@@ -184,10 +184,13 @@ export default function About() {
       <style>{`
         @media (max-width: 900px) {
           .about-grid { grid-template-columns: 1fr !important; }
+          /* Show text first, flywheel diagram below */
+          .about-grid > div:last-child { order: 2; max-height: 280px; min-height: 200px !important; }
+          .about-grid > div:first-child { order: 1; }
         }
         @media (max-width: 768px) {
-          .engines-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
-          .engines-grid > div { border-radius: 4px !important; margin-top: 0 !important; }
+          .engines-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+          .engines-grid > div { border-radius: 4px !important; margin-top: 0 !important; padding-top: 28px !important; }
         }
       `}</style>
     </section>

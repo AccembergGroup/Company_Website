@@ -40,6 +40,7 @@ export default function Navbar() {
     <>
       {/* ── Floating pill navbar ─────────────────────────── */}
       <nav
+        className="nav-container"
         style={{
           position: 'fixed',
           top: 20,
@@ -48,8 +49,6 @@ export default function Navbar() {
           zIndex: 100,
           display: 'flex',
           alignItems: 'center',
-          gap: 4,
-          padding: '6px 6px 6px 14px',
           background: scrolled
             ? 'rgba(10, 16, 24, 0.82)'
             : 'rgba(255, 255, 255, 0.05)',
@@ -69,11 +68,11 @@ export default function Navbar() {
         <a
           href="#"
           aria-label="Accemberg"
+          className="nav-logo-link"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: 8,
-            marginRight: 16,
             flexShrink: 0,
             textDecoration: 'none',
           }}
@@ -272,10 +271,43 @@ export default function Navbar() {
       </div>
 
       <style>{`
+        .nav-container { padding: 6px 6px 6px 14px; gap: 4px; }
+        .nav-logo-link { margin-right: 16px; }
+
         @media (max-width: 768px) {
           .pill-nav-links { display: none !important; }
           .pill-hamburger { display: flex !important; }
           .nav-wordmark   { display: none; }
+          
+          /* Destroy the "blob" pill on mobile — use natural full-width header */
+          .nav-container { 
+            top: 0 !important; 
+            left: 0 !important; 
+            transform: none !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            padding: 20px 24px !important;
+            justify-content: space-between !important;
+            
+            /* Remove central pill background */
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+          }
+          
+          .nav-logo-link { margin-right: 0 !important; }
+          
+          /* Just the hamburger gets a subtle glass button look at top-right */
+          .pill-hamburger { 
+            margin-left: 0 !important; 
+            padding: 10px 12px !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 8px !important;
+            backdrop-filter: blur(12px) !important;
+          }
         }
       `}</style>
     </>
