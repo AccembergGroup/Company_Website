@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Accemberg Corporate Platform
+A high-end, studio-grade corporate web application built for the premium enterprise software firm **Accemberg**. This platform is heavily optimized for buttery-smooth 60 FPS interactions, zero-lag physics, and a minimalist "Midnight Neo-Glow" dark aesthetic.
 
-## Getting Started
+## Tech Stack
+- **Framework:** Next.js 16 (App Router)
+- **Core:** React 19, vanilla Tailwind CSS 4
+- **Animations:** GSAP (ScrollTrigger, quickTo), Lenis (Smooth Scroll)
+- **Typography:** Space Grotesk (Headers), Inter (Body)
 
-First, run the development server:
+## Advanced UI / Physics Engines
+This platform relies heavily on mathematical DOM manipulation rather than raw canvas (WebGL) to maintain accessibility while achieving Awwwards-tier visual quality. To ensure no lag on mobile or integrated graphics, several bespoke GPU-level optimization engines have been built:
 
+1. **`FastScroll.js`:** 
+   Native hardware-accelerated wrapper that calculates `translateZ`, `filter: blur()`, and wind-drift on ScrollTrigger to simulate particles dissolving/blowing away. 
+   *(Note: The original SVG math-fractal engine is backed up at `DustScroll.js` if mathematical wave physics are ever desired on heavy GPU desktops).*
+
+2. **`Spotlight.js` (Bento Hover Engine):** 
+   Replaces global React Contexts. Bypasses Virtual DOM rendering by grabbing global cursor coordinates and injecting them straight into CSS variables mathematically per-card. Renders native border mask cutouts and inner radiant glows behind glass morphisms.
+
+3. **`CustomCursor.js`:**
+   A custom hardware shadow orb driven entirely by GSAP `quickTo` physical elasticity maps. Bypasses pure CPU blending (no `mix-blend-mode`) to maintain sub-millisecond response rates.
+
+4. **`ScrambleText.js`:** 
+   A hacker-aesthetic terminal decryption text reveal. Explicitly bound by React `useEffect` mounting lifecycle to entirely prevent Next.js 16 Server-Side Rendering (SSR) Hydration mismatches. 
+
+## Responsive Safety Nets
+All complex hover effects (Spotlight, Custom Cursor, etc.) are strictly protected by `matchMedia('(pointer: fine)')` blocks. This ensures pure native touch scrolling on all tablets and mobile devices with zero JS event-listener lag interference and no "sticky hover" bugs.
+
+## Component Structure
+The UI is broken down into distinct vertical domains found in `src/components/`:
+- `Navbar.js` & `Preloader.js`
+- `Hero.js`
+- `StatsBar.js`
+- `About.js`
+- `Products.js` (Bento Grid)
+- `Services.js` (Hover Cards)
+- `Process.js` (Line Graph Layout)
+- `Clients.js` & `Projects.js` (Masonry Grid)
+- `Contact.js` & `Footer.js`
+
+## Local Development
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Runs locally at [http://localhost:3000](http://localhost:3000). The dev server is configured to seamlessly hot-reload heavy GSAP logic without breaking the Lenis smooth-scroll listeners.
