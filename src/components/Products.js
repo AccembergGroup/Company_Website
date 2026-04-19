@@ -5,33 +5,33 @@ import { useEffect, useRef } from 'react'
 const PRODUCTS = [
   {
     id: 'flagship',
-    label: 'Flagship Product Lab',
-    title: 'Enterprise-Grade SaaS Platforms',
-    desc: 'Deep, long-lifecycle products engineered for enterprise retention and compounding MRR. Our Flagship Lab builds platforms that become the backbone of our clients\' operations — architected for 10-year horizons.',
-    tags: ['Enterprise', 'SaaS', 'Long Lifecycle'],
+    label: 'Enterprise Platforms',
+    title: 'Mission-Critical Architecture',
+    desc: 'Deep, long-lifecycle products engineered for high security, performance, and durability. We build platforms that become the reliable backbone of our clients\' critical operations — architected for 10-year horizons.',
+    tags: ['Enterprise', 'Architecture', 'Scale'],
     accent: 'var(--accent)',
-    status: 'In Development',
+    status: 'Core Expertise',
     highlight: true,
-    metric: { label: 'Target MRR Growth', val: '3× YoY' },
+    metric: { label: 'Quality Standard', val: 'Zero Downtime' },
     icon: <FlagshipIcon />,
   },
   {
     id: 'agnishakti',
-    label: 'Rapid SaaS Factory',
-    title: 'Agnishakti Platform',
-    desc: 'A high-velocity niche SaaS product built to validate a key market segment — from MVP to monetisation in weeks, not quarters.',
-    tags: ['Niche SaaS', 'Fast Launch'],
+    label: 'High-Velocity SaaS',
+    title: 'Rapid Product Validation',
+    desc: 'Rapid zero-to-one product development. We validate, build, and deploy market-ready software solutions with uncompromising quality at startup speeds.',
+    tags: ['SaaS', 'Fast Launch'],
     accent: '#4DAAFF',
-    status: 'Active',
+    status: 'Active Track',
     metric: { label: 'Dev Cycle', val: '< 8 weeks' },
     icon: <RapidIcon />,
   },
   {
     id: 'client-services',
-    label: 'Client Services Engine',
-    title: 'Custom Software Delivery',
-    desc: 'Bespoke solutions for enterprise clients — full ownership, structured delivery, and long-term maintenance partnerships.',
-    tags: ['Custom', 'Full-Stack', 'Enterprise'],
+    label: 'Dedicated Engineering',
+    title: 'Direct Team Integration',
+    desc: 'Seamlessly integrate our senior architects and full-stack developers into your organisation to accelerate your product roadmap and tackle complex technical debt.',
+    tags: ['Custom', 'Full-Stack', 'Consulting'],
     accent: '#8CC8FF',
     status: 'Open to Engagements',
     metric: { label: 'Project Start', val: '< 2 weeks' },
@@ -76,13 +76,13 @@ export default function Products() {
         {/* Header */}
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
           <div style={{ maxWidth: 520 }}>
-            <div className="section-label reveal">Products & Capabilities</div>
+            <div className="section-label reveal">Our Core Capabilities</div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-              What We're<br/>
-              <span style={{ color: 'var(--accent)' }}>Building</span>
+              Engineering<br/>
+              <span style={{ color: 'var(--accent)' }}>That Scales</span>
             </h2>
             <p className="text-body-lg reveal">
-              Three parallel product tracks — each contributing to the same compounding flywheel of growth.
+              Whether we are building proprietary SaaS platforms or custom enterprise solutions, the same relentless standard of quality applies.
             </p>
           </div>
           <a href="#contact" className="btn btn-outline btn-sm reveal">

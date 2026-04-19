@@ -81,8 +81,8 @@ export default function Contact() {
               <span style={{ color: 'var(--accent)' }}>Something Great</span>
             </h2>
             <p className="text-body-lg reveal" style={{ marginBottom: 40 }}>
-              Whether you're an enterprise looking for a delivery partner, a founder with a
-              product idea, or an investor exploring our model — we want to hear from you.
+              Whether you're an enterprise looking for a delivery partner, or a visionary
+              founder with a high-impact product idea — we want to collaborate with you.
             </p>
 
             {/* Contact details */}
@@ -112,8 +112,8 @@ export default function Contact() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }} className="reveal">
               {[
                 '98% client retention across all engagements',
-                'Flexible engagement models: fixed-scope & retainer',
-                'Senior engineers on every project — no juniors on lead',
+                'Transparent, flexible engagement models tailored to your roadmap',
+                'Led by senior engineers — we never compromise on technical leadership',
               ].map((item) => (
                 <div key={item} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--accent)', fontSize: 14, lineHeight: 1.6, flexShrink: 0 }}>✓</span>

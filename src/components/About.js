@@ -5,25 +5,25 @@ import { useEffect, useRef } from 'react'
 const ENGINES = [
   {
     num: '01',
-    title: 'Client Services Engine',
-    role: 'Revenue Anchor',
-    desc: 'Immediate cash flow from world-class custom software delivery — funding everything we build.',
+    title: 'Bespoke Engineering',
+    role: 'Precision Development',
+    desc: 'Tailor-made software solutions architected from the ground up to solve complex enterprise challenges with elegant, maintainable code.',
     color: 'var(--accent)',
     icon: <BuildIcon />,
   },
   {
     num: '02',
-    title: 'Rapid SaaS Factory',
-    role: 'Validation Engine',
-    desc: 'Fast-cycle niche tools that test markets, generate early MRR, and feed learnings into our flagship work.',
+    title: 'Product-First Mindset',
+    role: 'User-Centric Design',
+    desc: 'We approach every engagement through the lens of product ownership — prioritising intuitive user experiences, performance, and scalable architecture.',
     color: '#4DAAFF',
     icon: <RocketIcon />,
   },
   {
     num: '03',
-    title: 'Flagship Product Lab',
-    role: 'Value Engine',
-    desc: 'Deep, enterprise-grade SaaS platforms with high retention and long-term compounding valuation.',
+    title: 'Uncompromising Quality',
+    role: 'Rigorous Delivery',
+    desc: 'Multi-stage QA, automated testing pipelines, and comprehensive code reviews ensure our deployments are rock-solid, secure, and ready to scale.',
     color: '#8CC8FF',
     icon: <LayersIcon />,
   },
@@ -84,21 +84,17 @@ export default function About() {
         >
           {/* Left — Text */}
           <div>
-            <div className="section-label reveal">Our Model</div>
+            <div className="section-label reveal">Our Philosophy</div>
             <h2 className="text-h2 reveal" style={{ marginBottom: 24 }}>
-              One Studio.<br />
-              <span style={{ color: 'var(--accent)' }}>Three Engines.</span><br />
-              Infinite Scale.
+              Engineering Excellence.<br />
+              <span style={{ color: 'var(--accent)' }}>Uncompromising Quality.</span><br />
+              Scalable Impact.
             </h2>
             <p className="text-body-lg reveal" style={{ marginBottom: 32 }}>
-              Most firms choose between building scalable products and generating stable revenue.
-              Accemberg was architected to eliminate that trade-off — permanently.
+              Most firms accept tradeoffs between velocity and quality. At Accemberg, we architect software that eliminates compromise. Every platform we build is engineered with extreme attention to detail, robust system architecture, and an obsessive focus on user experience.
             </p>
             <p className="text-body reveal" style={{ marginBottom: 36 }}>
-              Our three-engine system creates a self-reinforcing flywheel: client services fund
-              product development, rapid SaaS products validate markets, and flagship platforms
-              drive long-term enterprise valuation. Each engine strengthens the others —
-              compounding with every engagement.
+              Our philosophy is rooted in engineering discipline. From complex enterprise migrations to rapid zero-to-one SaaS deployments, our team of passionate engineers treats every codebase as a craft. We don't just write code; we build durable digital assets that compound in value over time.
             </p>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }} className="reveal">
               <a href="#services" className="btn btn-primary btn-sm">
@@ -118,7 +114,7 @@ export default function About() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: 340,
+              minHeight: 480,
             }}
           >
             <FlywheelDiagram />
@@ -200,7 +196,7 @@ export default function About() {
 /* ── Flywheel SVG Diagram ───────────────────────────────── */
 function FlywheelDiagram() {
   return (
-    <div style={{ position: 'relative', width: '100%', maxWidth: 360 }}>
+    <div style={{ position: 'relative', width: '100%', maxWidth: 480 }}>
       <svg viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%' }}>
         {/* Outer circle */}
         <circle cx="180" cy="180" r="154" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="4 6" />
@@ -211,23 +207,20 @@ function FlywheelDiagram() {
 
         {/* Core text */}
         <text x="180" y="175" textAnchor="middle" fill="rgba(26,143,255,0.9)" fontSize="8" fontFamily="Space Grotesk, sans-serif" fontWeight="700" letterSpacing="0.12em">ACCEMBERG</text>
-        <text x="180" y="188" textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="6" fontFamily="Inter, sans-serif" letterSpacing="0.08em">FLYWHEEL</text>
+        <text x="180" y="188" textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="6" fontFamily="Inter, sans-serif" letterSpacing="0.08em">ECOSYSTEM</text>
 
         {/* Engine nodes */}
         {/* Node 1 — top */}
         <circle cx="180" cy="40" r="28" fill="rgba(13,19,24,0.9)" stroke="rgba(26,143,255,0.3)" strokeWidth="1" />
-        <text x="180" y="36" textAnchor="middle" fill="#1A8FFF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.08em">CLIENT</text>
-        <text x="180" y="47" textAnchor="middle" fill="#1A8FFF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.08em">SERVICES</text>
+        <text x="180" y="42" textAnchor="middle" fill="#1A8FFF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.08em">ARCHITECTURE</text>
 
         {/* Node 2 — bottom-right */}
         <circle cx="307" cy="262" r="28" fill="rgba(13,19,24,0.9)" stroke="rgba(26,143,255,0.2)" strokeWidth="1" />
-        <text x="307" y="258" textAnchor="middle" fill="#4DAAFF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.06em">RAPID</text>
-        <text x="307" y="269" textAnchor="middle" fill="#4DAAFF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.06em">SaaS</text>
+        <text x="307" y="264" textAnchor="middle" fill="#4DAAFF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.06em">ENGINEERING</text>
 
         {/* Node 3 — bottom-left */}
         <circle cx="53" cy="262" r="28" fill="rgba(13,19,24,0.9)" stroke="rgba(26,143,255,0.15)" strokeWidth="1" />
-        <text x="53" y="258" textAnchor="middle" fill="#8CC8FF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.06em">FLAGSHIP</text>
-        <text x="53" y="269" textAnchor="middle" fill="#8CC8FF" fontSize="6" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.06em">PRODUCT</text>
+        <text x="53" y="264" textAnchor="middle" fill="#8CC8FF" fontSize="7" fontFamily="Inter, sans-serif" fontWeight="500" letterSpacing="0.06em">QUALITY</text>
 
         {/* Arrows — connecting nodes clockwise */}
         <path d="M 200 62 Q 290 130 290 240" stroke="rgba(26,143,255,0.25)" strokeWidth="1" strokeDasharray="3 5" markerEnd="url(#arr)" />

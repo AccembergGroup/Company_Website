@@ -19,7 +19,7 @@ const PROJECTS = [
     industry: 'SaaS',
     type: 'Product Development',
     title: 'Real-Time Analytics SaaS',
-    desc: 'Launched a niche analytics tool from MVP to 500+ paying users within 10 weeks using our Rapid SaaS Factory model.',
+    desc: 'Launched a niche analytics tool from MVP to 500+ paying users within 10 weeks using our high-velocity engineering frameworks.',
     tech: ['Next.js', 'Python', 'ClickHouse'],
     outcome: '500+ users in 10 weeks',
     duration: '10 weeks',

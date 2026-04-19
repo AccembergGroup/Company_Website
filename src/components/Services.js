@@ -91,7 +91,7 @@ export default function Services() {
             <span style={{ color: 'var(--accent)' }}>Engineering Services</span>
           </h2>
           <p className="text-body-lg reveal" style={{ color: 'var(--text-secondary)' }}>
-            From initial architecture to production-grade deployment — we cover every dimension of modern software engineering.
+            From initial architecture to production-grade deployment — we bring a studio-grade approach to every dimension of software engineering.
           </p>
         </div>
 

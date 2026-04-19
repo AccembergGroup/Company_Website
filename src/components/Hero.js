@@ -16,8 +16,8 @@ const WORD_PAIRS = [
 const PROOF_ITEMS = [
   '50+ Clients',
   '120+ Projects',
-  '3 Growth Engines',
-  '6 Service Verticals',
+  'Engineering Excellence',
+  'Full-Stack Capabilities',
 ]
 
 export default function Hero() {
@@ -248,8 +248,9 @@ export default function Hero() {
             margin: '0 auto 44px',
           }}
         >
-          Accemberg is a hybrid venture studio — where client-grade engineering discipline
-          meets product-company ambition. We build software that compounds.
+          Accemberg is an engineering-first technology firm. We partner with ambitious
+          organizations to architect, build, and scale uncompromising digital products
+          and enterprise platforms.
         </p>
 
         {/* CTAs */}

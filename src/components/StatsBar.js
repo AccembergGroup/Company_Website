@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 const STATS = [
   { end: 50,  suffix: '+', label: 'Enterprise Clients',  sub: 'Across 8 industries' },
   { end: 120, suffix: '+', label: 'Projects Delivered',  sub: 'On time, every time' },
-  { end: 6,   suffix: '',  label: 'Service Verticals',   sub: 'End-to-end coverage' },
-  { end: 3,   suffix: '',  label: 'Growth Engines',      sub: 'Build · Launch · Scale' },
+  { end: 100, suffix: '%', label: 'In-House Engineers',  sub: 'Zero outsourcing' },
+  { end: 0,   suffix: '',  label: 'Compromises',         sub: 'On code quality' },
 ]
 
 function useCountUp(end, duration = 1800, start = false) {
