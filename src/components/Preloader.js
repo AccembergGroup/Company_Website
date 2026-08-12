@@ -1,14 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 
-const SESSION_KEY = 'acc_intro_seen'
+const SESSION_KEY = 'acc_intro_seen_v3'
 
 // ── Timing constants (ms) ─────────────────────────────────
-const T_ASSEMBLE  = 1800  // particles fly in and form text
-const T_HOLD      = 1400  // text sits crisp
-const T_DISSOLVE  = 1600  // text disintegrates to dust
-const T_OVERLAY   = 700   // final full-screen fade out
+const T_ASSEMBLE  = 1000  // particles fly in and form text
+const T_HOLD      = 500   // text sits crisp
+const T_DISSOLVE  = 800   // text disintegrates to dust
+const T_OVERLAY   = 400   // final full-screen fade out
 const SAMPLE_STEP = 3     // sample every Nth pixel (perf)
 
 function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4) }
@@ -17,11 +18,10 @@ function easeInOut(t)    { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2 }
 
 export default function Preloader({ onDone }) {
   // null = checking, true = show, false = skip entirely
-  const [show, setShow]         = useState(null)
+  const [show, setShow]             = useState(null)
   const [overlayFade, setOverlayFade] = useState(false)
 
   const canvasRef  = useRef(null)
-  const videoRef   = useRef(null)
   const animIdRef  = useRef(null)
   const doneRef    = useRef(false)
 
@@ -35,6 +35,18 @@ export default function Preloader({ onDone }) {
       setShow(true)
     }
   }, [])
+
+  // ─── Dynamic Scroll Lock ────────────────────────────────
+  useEffect(() => {
+    if (show === true) {
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+    }
+  }, [show])
 
   // ─── Particle engine ────────────────────────────────────
   useEffect(() => {
@@ -125,6 +137,8 @@ export default function Preloader({ onDone }) {
       if (doneRef.current) return
       doneRef.current = true
       setOverlayFade(true)
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
       setTimeout(() => onDone?.(), T_OVERLAY)
     }
 
@@ -238,46 +252,94 @@ export default function Preloader({ onDone }) {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        background: 'var(--bg-base)',
+        background: '#070B10',
         transition: overlayFade ? `opacity ${T_OVERLAY}ms cubic-bezier(0.16,1,0.3,1)` : 'none',
         opacity: overlayFade ? 0 : 1,
         pointerEvents: overlayFade ? 'none' : 'all',
       }}
     >
-      {/* Video — full-screen background, very subtle */}
-      <video
-        ref={videoRef}
-        src="/Accemberg_inro.mp4"
-        autoPlay
-        muted
-        playsInline
-        loop
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: 0.12,
-        }}
-      />
-
-      {/* Dark vignette over video */}
+      {/* Clean dark background — no video */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(ellipse at center, rgba(7,11,16,0.55) 0%, rgba(7,11,16,0.92) 100%)',
+          background: 'radial-gradient(ellipse at 50% 60%, rgba(13,27,75,0.55) 0%, #070B10 65%)',
         }}
       />
 
-      {/* Particle canvas */}
+      {/* ── Glowing logo centerpiece — behind particles ── */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+        }}
+      >
+        {/* Layer 1 — outermost atmosphere (wide navy bloom) */}
+        <div style={{
+          position: 'absolute',
+          width: 700,
+          height: 700,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(13,27,75,0.6) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+          animation: 'preloader-pulse 5s ease-in-out infinite',
+        }} />
+
+        {/* Layer 2 — mid electric-blue glow */}
+        <div style={{
+          position: 'absolute',
+          width: 420,
+          height: 420,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(21,101,192,0.45) 0%, transparent 65%)',
+          filter: 'blur(40px)',
+          animation: 'preloader-pulse 4s ease-in-out infinite 0.6s',
+        }} />
+
+        {/* Layer 3 — tight inner Sky Steel glow right behind logo */}
+        <div style={{
+          position: 'absolute',
+          width: 220,
+          height: 220,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(79,195,247,0.35) 0%, transparent 70%)',
+          filter: 'blur(18px)',
+          animation: 'preloader-pulse 3s ease-in-out infinite 1.2s',
+        }} />
+
+        <Image
+          src="/logo-transparent-new.png"
+          alt=""
+          width={260}
+          height={260}
+          style={{
+            objectFit: 'contain',
+            opacity: 0.22,
+            animation: 'preloader-breathe 6s ease-in-out infinite',
+            position: 'relative',
+            zIndex: 2,
+            // Soft white drop-shadow for extra luminance
+            filter: 'brightness(100) saturate(0) drop-shadow(0 0 24px rgba(255,255,255,0.3)) drop-shadow(0 0 60px rgba(79,195,247,0.25))',
+            width: 'auto',
+            height: 'auto',
+          }}
+          priority
+        />
+      </div>
+
+      {/* Particle canvas — sits above the glow layers */}
       <canvas
         ref={canvasRef}
         style={{
           position: 'absolute',
           inset: 0,
           display: 'block',
+          zIndex: 2,
         }}
       />
 
@@ -286,11 +348,22 @@ export default function Preloader({ onDone }) {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px)',
+          zIndex: 3,
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)',
           backgroundSize: '32px 32px',
           pointerEvents: 'none',
         }}
       />
+      <style>{`
+        @keyframes preloader-pulse {
+          0%, 100% { transform: scale(1);    opacity: 0.75; }
+          50%       { transform: scale(1.12); opacity: 1;    }
+        }
+        @keyframes preloader-breathe {
+          0%, 100% { transform: scale(1);    opacity: 0.22; }
+          50%       { transform: scale(1.06); opacity: 0.30; }
+        }
+      `}</style>
     </div>
   )
 }

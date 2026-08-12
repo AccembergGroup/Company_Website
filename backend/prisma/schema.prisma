@@ -1,0 +1,128 @@
+// This is your Prisma schema file.
+// Docs: https://pris.ly/d/prisma-schema
+//
+// Run `npm run db:generate` after any schema change to regenerate the client.
+// Run `npm run db:push` to sync the schema with the database.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum BookACallStatus {
+  pending
+  confirmed
+  completed
+  cancelled
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+/// Contact form submissions from the website
+model Contact {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(120)
+  email       String   @db.VarChar(255)
+  subject     String   @db.VarChar(200)
+  message     String
+  submittedAt DateTime @default(now())
+
+  @@index([submittedAt(sort: Desc)])
+  @@map("contacts")
+}
+
+/// Discovery call booking requests
+model BookACall {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String          @db.VarChar(120)
+  email         String          @db.VarChar(255)
+  phone         String?         @db.VarChar(30)
+  company       String?         @db.VarChar(120)
+  preferredDate DateTime?       @db.Date
+  message       String?
+  status        BookACallStatus @default(pending)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([status, createdAt(sort: Desc)])
+  @@map("book_a_calls")
+}
+
+/// Client testimonials — admin managed
+model Testimonial {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(120)
+  role       String?  @db.VarChar(150)
+  company    String?  @db.VarChar(120)
+  review     String
+  rating     Int      @default(5)
+  avatar     String?
+  isFeatured Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([isFeatured, sortOrder])
+  @@map("testimonials")
+}
+
+/// Frequently asked questions — admin managed
+model Faq {
+  id        String   @id @default(uuid()) @db.Uuid
+  question  String   @db.VarChar(400)
+  answer    String
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive, order])
+  @@map("faqs")
+}
+
+/// Partner and client logos — admin managed
+model Partner {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(120)
+  logoUrl    String
+  website    String?  @db.VarChar(255)
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([isVerified])
+  @@map("partners")
+}
+
+/// Services catalogue — admin managed
+model Service {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String   @db.VarChar(150)
+  description String?
+  icon        String?  @db.VarChar(100)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([order])
+  @@map("services")
+}
+
+/// SaaS products catalogue — admin managed
+model Product {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(120)
+  description String?
+  features    String[]
+  ctaLink     String?  @db.VarChar(255)
+  badge       String?  @db.VarChar(60)
+  createdAt   DateTime @default(now())
+
+  @@map("products")
+}

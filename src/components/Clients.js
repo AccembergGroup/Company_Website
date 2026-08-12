@@ -66,9 +66,10 @@ export default function Clients() {
             <ScrambleText text="Trusted By" speed={25} />
           </div>
           <h2 className="text-h2 reveal" style={{ marginBottom: 12 }}>
-            <FastScroll><span style={{ display: 'inline-block' }}>Clients Who</span></FastScroll>
-            <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Scale With Us</span></FastScroll>
-          </h2>
+              <FastScroll><span style={{ display: 'inline-block' }}>Clients Who</span></FastScroll>
+              <br />
+              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Scale With Us</span></FastScroll>
+            </h2>
           <p className="text-body-lg reveal" style={{ maxWidth: 480, margin: '0 auto' }}>
             From early-stage SaaS companies to established enterprises — we deliver at every level.
           </p>

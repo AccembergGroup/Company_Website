@@ -1,21 +1,58 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
+
+// ── Critical above-the-fold: eager imports ─────────────────────────────────
 import Preloader from '@/components/Preloader'
-import Navbar    from '@/components/Navbar'
-import Hero      from '@/components/Hero'
-import StatsBar  from '@/components/StatsBar'
-import About     from '@/components/About'
-import Services  from '@/components/Services'
-import Products  from '@/components/Products'
-import Process   from '@/components/Process'
-import Projects  from '@/components/Projects'
-import Clients   from '@/components/Clients'
-import Contact   from '@/components/Contact'
-import Footer    from '@/components/Footer'
+import Navbar   from '@/components/Navbar'
+import Hero     from '@/components/Hero'
+
+// ── Below-the-fold: lazy loaded chunks (zero parse cost at startup) ─────────
+const StatsBar      = dynamic(() => import('@/components/StatsBar'),      { ssr: false })
+const About         = dynamic(() => import('@/components/About'),         { ssr: false })
+const Services      = dynamic(() => import('@/components/Services'),      { ssr: false })
+const Products      = dynamic(() => import('@/components/Products'),      { ssr: false })
+const Process       = dynamic(() => import('@/components/Process'),       { ssr: false })
+const Solutions     = dynamic(() => import('@/components/Solutions'),     { ssr: false })
+const WhyAccemberg  = dynamic(() => import('@/components/WhyAccemberg'),  { ssr: false })
+const TechStack     = dynamic(() => import('@/components/TechStack'),     { ssr: false })
+const Partners      = dynamic(() => import('@/components/Partners'),      { ssr: false })
+const Projects      = dynamic(() => import('@/components/Projects'),      { ssr: false })
+const Testimonials  = dynamic(() => import('@/components/Testimonials'),  { ssr: false })
+const Careers       = dynamic(() => import('@/components/Careers'),       { ssr: false })
+const SectionDivider = dynamic(() => import('@/components/SectionDivider'), { ssr: false })
+const Faqs          = dynamic(() => import('@/components/Faqs'),          { ssr: false })
+const Contact       = dynamic(() => import('@/components/Contact'),       { ssr: false })
+const Footer        = dynamic(() => import('@/components/Footer'),        { ssr: false })
+
+// Register GSAP ScrollTrigger once, lazily
+let scrollTriggerRegistered = false
+function ensureScrollTrigger() {
+  if (scrollTriggerRegistered || typeof window === 'undefined') return
+  import('gsap').then(({ gsap }) => {
+    import('gsap/dist/ScrollTrigger').then(({ ScrollTrigger }) => {
+      gsap.registerPlugin(ScrollTrigger)
+      scrollTriggerRegistered = true
+    })
+  })
+}
 
 export default function Home() {
   const [preloaderDone, setPreloaderDone] = useState(false)
+  // Only mount below-fold components after preloader finishes
+  const [mountBelowFold, setMountBelowFold] = useState(false)
+
+  useEffect(() => {
+    if (preloaderDone) {
+      ensureScrollTrigger()
+      // Give the browser a full frame to paint Hero before loading the rest
+      const raf = requestAnimationFrame(() => {
+        setTimeout(() => setMountBelowFold(true), 100)
+      })
+      return () => cancelAnimationFrame(raf)
+    }
+  }, [preloaderDone])
 
   return (
     <>
@@ -23,6 +60,7 @@ export default function Home() {
 
       {/* Page content fades in after preloader */}
       <div
+        className="page-wrapper"
         style={{
           opacity: preloaderDone ? 1 : 0,
           transition: preloaderDone ? 'opacity 600ms cubic-bezier(0.16,1,0.3,1)' : 'none',
@@ -30,18 +68,32 @@ export default function Home() {
       >
         <Navbar />
         <main>
-          <Hero />
-          <StatsBar />
-          <About />
-          <Services />
-          <Products />
-          <Process />
-          <Projects />
-          <Clients />
-          <Contact />
+          <Hero preloaderDone={preloaderDone} />
+
+          {/* Everything below the fold — only mounts after Hero is painted */}
+          {mountBelowFold && (
+            <>
+              <StatsBar />
+              <About />
+              <Services />
+              <Products />
+              <Process />
+              <Solutions />
+              <WhyAccemberg />
+              <TechStack />
+              <Partners />
+              <Projects />
+              <Testimonials />
+              <Careers />
+              <SectionDivider index={2} />
+              <Faqs />
+              <Contact />
+            </>
+          )}
         </main>
-        <Footer />
+        {mountBelowFold && <Footer />}
       </div>
     </>
   )
 }
+

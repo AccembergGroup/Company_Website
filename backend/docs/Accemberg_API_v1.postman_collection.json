@@ -1,0 +1,991 @@
+{
+  "info": {
+    "_postman_id": "accemberg-api-v1",
+    "name": "Accemberg Corporate API v1",
+    "description": "Complete Postman collection for the Accemberg REST API.\n\n**Base URL (dev):** http://localhost:5000/api/v1\n\n**Auth:** Admin routes require the `x-api-key` header. Set the `adminApiKey` collection variable to your ADMIN_API_KEY value.\n\n**How to use:**\n1. Import this file into Postman.\n2. Set the `baseUrl` and `adminApiKey` collection variables.\n3. Run the Health Check first to confirm connectivity.\n4. Run the seed script (`npm run db:seed`) before testing catalogue endpoints.\n5. Use the Admin folder requests to manage data.\n6. Use the Public folder requests as the frontend would.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string",
+      "description": "API base URL. Change to production URL when deploying."
+    },
+    {
+      "key": "adminApiKey",
+      "value": "REPLACE_WITH_YOUR_ADMIN_API_KEY",
+      "type": "string",
+      "description": "Value of the ADMIN_API_KEY environment variable from backend/.env"
+    },
+    {
+      "key": "faqId",
+      "value": "",
+      "type": "string",
+      "description": "Auto-populated by the Create FAQ request test script."
+    },
+    {
+      "key": "testimonialId",
+      "value": "",
+      "type": "string",
+      "description": "Auto-populated by the Create Testimonial request test script."
+    },
+    {
+      "key": "bookingId",
+      "value": "",
+      "type": "string",
+      "description": "Auto-populated by the Create Booking request test script."
+    }
+  ],
+  "item": [
+    {
+      "name": "🟢 Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Verifies server and database connectivity. Returns 200 if healthy, 503 if database is unreachable."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 200 or 503', function () {",
+                  "  pm.expect([200, 503]).to.include(pm.response.code);",
+                  "});",
+                  "pm.test('Response has success field', function () {",
+                  "  pm.expect(pm.response.json()).to.have.property('success');",
+                  "});",
+                  "pm.test('Response has db status', function () {",
+                  "  pm.expect(pm.response.json()).to.have.property('db');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🛠️ Services",
+      "item": [
+        {
+          "name": "List All Services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"]
+            },
+            "description": "Returns all services ordered by `order` ascending. No authentication required."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('success true', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "pm.test('data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));",
+                  "pm.test('total matches data length', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body.total).to.equal(body.data.length);",
+                  "});",
+                  "pm.test('Each service has required fields', () => {",
+                  "  pm.response.json().data.forEach(s => {",
+                  "    pm.expect(s).to.have.property('id');",
+                  "    pm.expect(s).to.have.property('title');",
+                  "    pm.expect(s).to.have.property('order');",
+                  "  });",
+                  "});",
+                  "pm.test('Services are ordered by order asc', () => {",
+                  "  const orders = pm.response.json().data.map(s => s.order);",
+                  "  const sorted = [...orders].sort((a, b) => a - b);",
+                  "  pm.expect(orders).to.deep.equal(sorted);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📦 Products",
+      "item": [
+        {
+          "name": "List All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Returns all SaaS products ordered by createdAt ascending. No authentication required."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('success true', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "pm.test('data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));",
+                  "pm.test('Each product has required fields', () => {",
+                  "  pm.response.json().data.forEach(p => {",
+                  "    pm.expect(p).to.have.property('id');",
+                  "    pm.expect(p).to.have.property('name');",
+                  "    pm.expect(p.features).to.be.an('array');",
+                  "  });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "🤝 Partners",
+      "item": [
+        {
+          "name": "List Verified Partners (default)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/partners",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners"]
+            },
+            "description": "Returns only verified partners (isVerified=true). This is the default public view for the website logo wall."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('success true', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "pm.test('data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));",
+                  "pm.test('All returned partners are verified', () => {",
+                  "  pm.response.json().data.forEach(p => {",
+                  "    pm.expect(p.isVerified).to.be.true;",
+                  "  });",
+                  "});",
+                  "pm.test('Each partner has logoUrl', () => {",
+                  "  pm.response.json().data.forEach(p => {",
+                  "    pm.expect(p).to.have.property('logoUrl');",
+                  "  });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "List All Partners (including unverified)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/partners?all=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["partners"],
+              "query": [
+                { "key": "all", "value": "true", "description": "Bypass isVerified filter — returns all partners" }
+              ]
+            },
+            "description": "Pass ?all=true to include unverified partners. Useful for internal admin tooling."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Total includes unverified partners', () => {",
+                  "  const body = pm.response.json();",
+                  "  // After seeding, total should be 5 (4 verified + 1 unverified)",
+                  "  pm.expect(body.total).to.be.at.least(body.total);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📬 Contact",
+      "item": [
+        {
+          "name": "Submit Contact Form — Valid",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Priya Mehta\",\n  \"email\": \"priya.mehta@example.com\",\n  \"subject\": \"Partnership Enquiry\",\n  \"message\": \"Hi Accemberg team, I would like to explore a potential technology partnership for our fintech startup.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact",
+              "host": ["{{baseUrl}}"],
+              "path": ["contact"]
+            },
+            "description": "Submits a contact form. Triggers internal notification email + auto-reply to the submitter. Rate-limited to 5 submissions per IP per hour."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('success true', () => pm.expect(pm.response.json().success).to.be.true);",
+                  "pm.test('Has contactId', () => pm.expect(pm.response.json()).to.have.property('contactId'));",
+                  "pm.test('Data contains submitted fields', () => {",
+                  "  const data = pm.response.json().data;",
+                  "  pm.expect(data.name).to.equal('Priya Mehta');",
+                  "  pm.expect(data).to.have.property('submittedAt');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Submit Contact Form — Invalid Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"not-a-valid-email\",\n  \"subject\": \"Test\",\n  \"message\": \"This should fail validation.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact",
+              "host": ["{{baseUrl}}"],
+              "path": ["contact"]
+            },
+            "description": "Expected 400 — invalid email format."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('success false', () => pm.expect(pm.response.json().success).to.be.false);",
+                  "pm.test('Errors include email field', () => {",
+                  "  pm.expect(pm.response.json().errors.some(e => e.field === 'email')).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Submit Contact Form — Missing Required Fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"partial@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact",
+              "host": ["{{baseUrl}}"],
+              "path": ["contact"]
+            },
+            "description": "Expected 400 — missing name, subject, and message."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Errors include name', () => {",
+                  "  pm.expect(pm.response.json().errors.some(e => e.field === 'name')).to.be.true;",
+                  "});",
+                  "pm.test('Errors include subject', () => {",
+                  "  pm.expect(pm.response.json().errors.some(e => e.field === 'subject')).to.be.true;",
+                  "});",
+                  "pm.test('Errors include message', () => {",
+                  "  pm.expect(pm.response.json().errors.some(e => e.field === 'message')).to.be.true;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Submit Contact Form — Duplicate Email (5-min dedup)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Priya Mehta\",\n  \"email\": \"priya.mehta@example.com\",\n  \"subject\": \"Partnership Enquiry\",\n  \"message\": \"Sending again immediately after the first submission.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact",
+              "host": ["{{baseUrl}}"],
+              "path": ["contact"]
+            },
+            "description": "Expected 429 Too Many Requests — run this immediately after 'Submit Contact Form — Valid' with the same email. The API blocks re-submissions within 5 minutes."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 429', () => pm.response.to.have.status(429));",
+                  "pm.test('success false', () => pm.expect(pm.response.json().success).to.be.false);",
+                  "pm.test('Message mentions already received', () => {",
+                  "  pm.expect(pm.response.json().message).to.match(/already received/i);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📋 FAQs",
+      "item": [
+        {
+          "name": "Public",
+          "item": [
+            {
+              "name": "List Active FAQs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/faq",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq"]
+                },
+                "description": "Returns all active FAQs ordered by `order` ascending."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('success true', () => pm.expect(pm.response.json().success).to.be.true);",
+                      "pm.test('data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));",
+                      "pm.test('total matches data length', () => {",
+                      "  const body = pm.response.json();",
+                      "  pm.expect(body.total).to.equal(body.data.length);",
+                      "});",
+                      "const body = pm.response.json();",
+                      "if (body.data && body.data.length > 0) {",
+                      "  pm.collectionVariables.set('faqId', body.data[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get FAQ by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/faq/{{faqId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq", "{{faqId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('Has question field', () => pm.expect(pm.response.json().data).to.have.property('question'));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get FAQ by ID — 404",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/faq/00000000-0000-0000-0000-000000000000",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq", "00000000-0000-0000-0000-000000000000"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 404', () => pm.response.to.have.status(404));",
+                      "pm.test('success false', () => pm.expect(pm.response.json().success).to.be.false);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "Create FAQ",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"question\": \"What technologies does Accemberg specialise in?\",\n  \"answer\": \"We specialise in full-stack web, cloud infrastructure (AWS/GCP), AI integrations, and enterprise SaaS platforms.\",\n  \"order\": 10,\n  \"isActive\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/faq",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                      "const body = pm.response.json();",
+                      "if (body.data && body.data.id) {",
+                      "  pm.collectionVariables.set('faqId', body.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update FAQ",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isActive\": false\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/faq/{{faqId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq", "{{faqId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Delete FAQ",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/faq/{{faqId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq", "{{faqId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('Deleted message', () => pm.expect(pm.response.json().message).to.include('deleted'));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Create FAQ — Validation Error (empty fields)",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"question\": \"\",\n  \"answer\": \"\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/faq",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq"]
+                },
+                "description": "Expected 400 — empty question and answer fail validation."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Unauthorized — Missing Key",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{ \"question\": \"test\", \"answer\": \"test\" }"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/faq",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["faq"]
+                },
+                "description": "Expected 401 — no x-api-key header."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "⭐ Testimonials",
+      "item": [
+        {
+          "name": "Public",
+          "item": [
+            {
+              "name": "List Active Testimonials",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/testimonials",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["testimonials"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('data is array', () => pm.expect(pm.response.json().data).to.be.an('array'));",
+                      "const body = pm.response.json();",
+                      "if (body.data && body.data.length > 0) {",
+                      "  pm.collectionVariables.set('testimonialId', body.data[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "List Featured Testimonials Only",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/testimonials?featured=true",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["testimonials"],
+                  "query": [
+                    { "key": "featured", "value": "true" }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('All results are featured', () => {",
+                      "  pm.response.json().data.forEach(t => {",
+                      "    pm.expect(t.isFeatured).to.be.true;",
+                      "  });",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Get Testimonial by ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/testimonials/{{testimonialId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["testimonials", "{{testimonialId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('Has review field', () => pm.expect(pm.response.json().data).to.have.property('review'));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "Create Testimonial",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Arjun Kapoor\",\n  \"role\": \"Product Manager\",\n  \"company\": \"Nexus Dynamics\",\n  \"review\": \"Accemberg's rapid SaaS factory concept is exactly what early-stage startups need.\",\n  \"rating\": 5,\n  \"avatar\": \"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200\",\n  \"isFeatured\": true,\n  \"sortOrder\": 5\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/testimonials",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["testimonials"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                      "const body = pm.response.json();",
+                      "if (body.data && body.data.id) {",
+                      "  pm.collectionVariables.set('testimonialId', body.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Testimonial",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isFeatured\": false,\n  \"sortOrder\": 99\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/testimonials/{{testimonialId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["testimonials", "{{testimonialId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Delete Testimonial",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/testimonials/{{testimonialId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["testimonials", "{{testimonialId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📅 Book a Call",
+      "item": [
+        {
+          "name": "Public",
+          "item": [
+            {
+              "name": "Submit Booking",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul.sharma@example.com\",\n  \"company\": \"TechCorp India\",\n  \"phone\": \"+91 98765 43210\",\n  \"preferredDate\": \"2026-08-15\",\n  \"message\": \"We are looking to discuss a custom SaaS build for our HR workflow automation project.\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/book-a-call",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["book-a-call"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                      "pm.test('Has bookingId', () => pm.expect(pm.response.json()).to.have.property('bookingId'));",
+                      "pm.test('Status is pending', () => pm.expect(pm.response.json().data.status).to.equal('pending'));",
+                      "const body = pm.response.json();",
+                      "if (body.bookingId) {",
+                      "  pm.collectionVariables.set('bookingId', body.bookingId);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Submit Booking — Invalid Email",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"not-an-email\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/book-a-call",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["book-a-call"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 400', () => pm.response.to.have.status(400));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "List All Bookings",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/book-a-call?page=1&limit=20",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["book-a-call"],
+                  "query": [
+                    { "key": "page", "value": "1" },
+                    { "key": "limit", "value": "20" }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('Has pagination fields', () => {",
+                      "  const body = pm.response.json();",
+                      "  pm.expect(body).to.have.property('total');",
+                      "  pm.expect(body).to.have.property('page');",
+                      "  pm.expect(body).to.have.property('pages');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Update Booking Status → confirmed",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" },
+                  { "key": "Content-Type", "value": "application/json" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{ \"status\": \"confirmed\" }"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/book-a-call/{{bookingId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["book-a-call", "{{bookingId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                      "pm.test('Status updated', () => pm.expect(pm.response.json().data.status).to.equal('confirmed'));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Delete Booking",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "x-api-key", "value": "{{adminApiKey}}" }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/book-a-call/{{bookingId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["book-a-call", "{{bookingId}}"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

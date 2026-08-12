@@ -1,69 +1,138 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { Mail, Globe, Clock, Check, Send, AlertTriangle, Calendar } from 'lucide-react'
+import { useTheme } from '@/components/ThemeProvider'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
+import Magnetic from './Magnetic'
 
-const PROJECT_TYPES = [
-  'Full-Stack Development',
-  'System Architecture',
-  'Cloud Infrastructure',
-  'AI / ML Integration',
-  'SaaS Product Build',
-  'Technical Consulting',
-  'QA & Testing',
-  'Other',
-]
-
-function useReveal(ref) {
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.1 },
-    )
-    el.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((t) => observer.observe(t))
-    return () => observer.disconnect()
-  }, [])
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
 }
 
 export default function Contact() {
+  const { theme } = useTheme()
   const ref = useRef(null)
-  useReveal(ref)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const ctx = gsap.context(() => {
+      // Reveal left column elements
+      gsap.fromTo(el.querySelectorAll('.reveal-gsap-left'), 
+        {
+          opacity: 0,
+          y: 35
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          clearProps: 'opacity,transform',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 80%',
+            once: true,
+          },
+        }
+      )
+
+      // Reveal right card panel
+      gsap.fromTo(el.querySelectorAll('.reveal-gsap-right'), 
+        {
+          opacity: 0,
+          y: 35
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          clearProps: 'opacity,transform',
+          scrollTrigger: {
+            trigger: el.querySelector('.contact-grid') || el,
+            start: 'top 75%',
+            once: true,
+          },
+        }
+      )
+    }, ref)
+
+    return () => {
+      ctx.revert()
+    }
+  }, [])
 
   const [form, setForm] = useState({
-    name: '', company: '', email: '', phone: '', projectType: '', message: '',
+    name: '', company: '', email: '', phone: '', preferredDate: '', message: '',
   })
   const [status, setStatus] = useState('idle') // idle | submitting | success | error
+  const [errMessage, setErrMessage] = useState('')
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!form.name || !form.email) {
+      setStatus('error')
+      setErrMessage('Name and email are required.')
+      return
+    }
+
     setStatus('submitting')
-    // Placeholder — real submission logic to be wired later
-    setTimeout(() => setStatus('success'), 1500)
+
+    const url = process.env.NEXT_PUBLIC_API_URL
+      ? `${process.env.NEXT_PUBLIC_API_URL}/book-a-call`
+      : 'http://localhost:5000/api/book-a-call'
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone || null,
+          company: form.company || null,
+          preferredDate: form.preferredDate ? new Date(form.preferredDate).toISOString().split('T')[0] : null,
+          message: form.message || null
+        })
+      })
+
+      const result = await response.json()
+
+      if (response.ok && result.success) {
+        setStatus('success')
+      } else {
+        setStatus('error')
+        setErrMessage(result.message || 'Failed to submit booking request.')
+      }
+    } catch (err) {
+      setStatus('error')
+      setErrMessage('Something went wrong. Please try again.')
+    }
   }
 
   return (
     <section id="contact" className="section" ref={ref}
-      style={{ position: 'relative', overflow: 'hidden' }}
+      style={{ background: 'var(--bg-base)', position: 'relative', overflow: 'hidden', borderTop: '1px solid var(--border)', transition: 'background-color 400ms' }}
     >
       {/* Glow bottom-left */}
       <div style={{
         position: 'absolute', left: '-5%', bottom: '-10%',
         width: 700, height: 700,
-        background: 'radial-gradient(ellipse, rgba(26,143,255,0.08) 0%, transparent 65%)',
+        background: 'radial-gradient(ellipse, rgba(21,101,192,0.06) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
@@ -76,44 +145,45 @@ export default function Contact() {
         }} className="contact-grid">
 
           {/* Left — Info panel */}
-          <div style={{ paddingTop: 8 }}>
-            <div className="section-label reveal">
+          <div style={{ paddingTop: 8 }} className="reveal-gsap-left">
+            <div className="section-label">
               <ScrambleText text="Get In Touch" speed={30} />
             </div>
-            <h2 className="text-h2 reveal" style={{ marginBottom: 20 }}>
+            <h2 className="text-h2" style={{ marginBottom: 20 }}>
               <FastScroll><span style={{ display: 'inline-block' }}>Let's Build</span></FastScroll>
+              <br />
               <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Something Great</span></FastScroll>
             </h2>
-            <p className="text-body-lg reveal" style={{ marginBottom: 40 }}>
+            <p className="text-body-lg reveal-gsap-left" style={{ marginBottom: 40 }}>
               Whether you're an enterprise looking for a delivery partner, or a visionary
               founder with a high-impact product idea — we want to collaborate with you.
             </p>
 
             {/* Contact details */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }} className="reveal">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }} className="reveal-gsap-left">
               <ContactDetail
-                icon={<EmailIcon />}
+                icon={<Mail size={16} />}
                 label="Support & Enquiries"
-                value="support@accemberg.com"
-                href="mailto:support@accemberg.com"
+                value="office@accemberg.com"
+                href="mailto:office@accemberg.com"
               />
               <ContactDetail
-                icon={<GlobalIcon />}
+                icon={<Globe size={16} />}
                 label="Headquarters"
                 value="India · Available Globally"
               />
               <ContactDetail
-                icon={<ClockIcon />}
+                icon={<Clock size={16} />}
                 label="Response Time"
                 value="Within 24 business hours"
               />
             </div>
 
             {/* Divider */}
-            <div style={{ height: 1, background: 'var(--border-subtle)', margin: '36px 0' }} className="reveal" />
+            <div style={{ height: 1, background: 'var(--border)', margin: '36px 0' }} className="reveal-gsap-left" />
 
             {/* Trust signals */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }} className="reveal">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }} className="reveal-gsap-left">
               {[
                 '98% client retention across all engagements',
                 'Transparent, flexible engagement models tailored to your roadmap',
@@ -128,18 +198,37 @@ export default function Contact() {
           </div>
 
           {/* Right — Form */}
-          <div className="reveal-right">
-            <div style={{
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: 4,
+          <div className="reveal-gsap-right">
+            <div className="card-glass" style={{
               padding: 'clamp(28px,4vw,48px)',
+              boxShadow: theme === 'dark'
+                ? '0 20px 40px -15px rgba(21,101,192,0.22)'
+                : '0 20px 40px -15px rgba(21,101,192,0.08)',
             }}>
               {status === 'success' ? (
                 <SuccessState />
               ) : (
                 <form onSubmit={handleSubmit} noValidate>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                    
+                    {/* Error display */}
+                    {status === 'error' && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '12px 16px',
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                        borderRadius: 12,
+                        color: theme === 'dark' ? '#FCA5A5' : '#DC2626',
+                        fontSize: 13.5
+                      }}>
+                        <AlertTriangle size={16} style={{ flexShrink: 0 }} />
+                        <span>{errMessage}</span>
+                      </div>
+                    )}
+
                     {/* Row: name + company */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }} className="form-row">
                       <div className="form-field">
@@ -154,6 +243,8 @@ export default function Contact() {
                           onChange={handleChange}
                           required
                           autoComplete="name"
+                          style={{ background: theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.8)' }}
+                          suppressHydrationWarning
                         />
                       </div>
                       <div className="form-field">
@@ -167,6 +258,8 @@ export default function Contact() {
                           value={form.company}
                           onChange={handleChange}
                           autoComplete="organization"
+                          style={{ background: theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.8)' }}
+                          suppressHydrationWarning
                         />
                       </div>
                     </div>
@@ -185,6 +278,8 @@ export default function Contact() {
                           onChange={handleChange}
                           required
                           autoComplete="email"
+                          style={{ background: theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.8)' }}
+                          suppressHydrationWarning
                         />
                       </div>
                       <div className="form-field">
@@ -198,40 +293,33 @@ export default function Contact() {
                           value={form.phone}
                           onChange={handleChange}
                           autoComplete="tel"
+                          style={{ background: theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.8)' }}
+                          suppressHydrationWarning
                         />
                       </div>
                     </div>
 
-                    {/* Project type */}
+                    {/* Meeting Preferred Date */}
                     <div className="form-field">
-                      <label className="form-label" htmlFor="projectType">Project Type</label>
-                      <div style={{ position: 'relative' }}>
-                        <select
-                          id="projectType"
-                          name="projectType"
-                          className="form-select"
-                          value={form.projectType}
-                          onChange={handleChange}
-                        >
-                          <option value="">Select a service area...</option>
-                          {PROJECT_TYPES.map((t) => (
-                            <option key={t} value={t}>{t}</option>
-                          ))}
-                        </select>
-                        <div style={{
-                          position: 'absolute', right: 14, top: '50%',
-                          transform: 'translateY(-50%)',
-                          pointerEvents: 'none',
-                          color: 'var(--text-muted)',
-                        }}>
-                          <ChevronIcon />
-                        </div>
-                      </div>
+                      <label className="form-label" htmlFor="preferredDate" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Calendar size={12} />
+                        <span>Preferred Call Date (optional)</span>
+                      </label>
+                      <input
+                        id="preferredDate"
+                        name="preferredDate"
+                        type="date"
+                        className="form-input"
+                        value={form.preferredDate}
+                        onChange={handleChange}
+                        style={{ background: theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.8)', colorScheme: theme }}
+                        suppressHydrationWarning
+                      />
                     </div>
 
                     {/* Message */}
                     <div className="form-field">
-                      <label className="form-label" htmlFor="message">Message *</label>
+                      <label className="form-label" htmlFor="message">Message (optional)</label>
                       <textarea
                         id="message"
                         name="message"
@@ -239,34 +327,42 @@ export default function Contact() {
                         placeholder="Tell us about your project, timeline, and any relevant context..."
                         value={form.message}
                         onChange={handleChange}
-                        required
+                        style={{ background: theme === 'dark' ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.8)' }}
+                        suppressHydrationWarning
                       />
                     </div>
 
                     {/* Submit */}
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={status === 'submitting'}
-                      style={{
-                        width: '100%',
-                        justifyContent: 'center',
-                        opacity: status === 'submitting' ? 0.7 : 1,
-                        cursor: status === 'submitting' ? 'not-allowed' : 'pointer',
-                      }}
-                    >
-                      {status === 'submitting' ? (
-                        <>
-                          <SpinnerIcon />
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          Send Message
-                          <ArrowIcon />
-                        </>
-                      )}
-                    </button>
+                    <Magnetic style={{ width: '100%' }}>
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={status === 'submitting'}
+                        style={{
+                          width: '100%',
+                          justifyContent: 'center',
+                          opacity: status === 'submitting' ? 0.7 : 1,
+                          cursor: status === 'submitting' ? 'not-allowed' : 'pointer',
+                          padding: '16px 28px',
+                          boxShadow: theme === 'dark'
+                            ? '0 10px 30px -10px rgba(79,195,247,0.3)'
+                            : '0 10px 30px -10px rgba(21,101,192,0.3)',
+                        }}
+                        suppressHydrationWarning
+                      >
+                        {status === 'submitting' ? (
+                          <>
+                            <SpinnerIcon />
+                            Sending Request...
+                          </>
+                        ) : (
+                          <>
+                            Book Discovery Call
+                            <Send size={14} />
+                          </>
+                        )}
+                      </button>
+                    </Magnetic>
 
                     <p style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'center' }}>
                       We typically respond within 24 business hours. No spam, ever.
@@ -292,6 +388,7 @@ export default function Contact() {
 }
 
 function ContactDetail({ icon, label, value, href }) {
+  const { theme } = useTheme()
   const Wrap = href ? 'a' : 'div'
   return (
     <Wrap
@@ -304,7 +401,9 @@ function ContactDetail({ icon, label, value, href }) {
         ...(href ? { cursor: 'pointer' } : {}),
       }}
     >
-      <div className="icon-box" style={{ marginTop: 1, flexShrink: 0 }}>{icon}</div>
+      <div className="icon-box" style={{ marginTop: 1, flexShrink: 0, width: 36, height: 36, background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
+        {icon}
+      </div>
       <div>
         <div className="text-label" style={{ marginBottom: 4 }}>{label}</div>
         <div style={{
@@ -325,60 +424,29 @@ function SuccessState() {
     <div style={{ textAlign: 'center', padding: '40px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
       <div style={{
         width: 56, height: 56, borderRadius: '50%',
-        background: 'rgba(26,143,255,0.1)',
-        border: '1px solid rgba(26,143,255,0.3)',
+        background: 'rgba(21, 101, 192, 0.1)',
+        border: '1px solid rgba(21, 101, 192, 0.3)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         color: 'var(--accent)',
       }}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        <Check size={24} strokeWidth={2.5} />
       </div>
       <h3 style={{
         fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
         fontSize: 22, fontWeight: 600, color: 'var(--text-primary)',
       }}>
-        Message Received
+        Call Request Received
       </h3>
-      <p className="text-body" style={{ maxWidth: 320 }}>
-        Thank you for reaching out. A member of our team will respond within 24 business hours.
+      <p className="text-body" style={{ maxWidth: 320, fontSize: 14 }}>
+        Thank you for booking a call. A confirmation email and calendar invitation have been sent to your inbox.
       </p>
     </div>
   )
 }
 
-/* ── Icons ───────────────────────────────────────────────── */
-function EmailIcon() {
-  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-    <rect x="2" y="4" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.3"/>
-    <path d="M2 6.5l7 4.5 7-4.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-  </svg>
-}
-function GlobalIcon() {
-  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-    <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.3"/>
-    <path d="M2 9h14M9 2c-2 2-3 4.5-3 7s1 5 3 7M9 2c2 2 3 4.5 3 7s-1 5-3 7" stroke="currentColor" strokeWidth="1.3"/>
-  </svg>
-}
-function ClockIcon() {
-  return <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-    <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.3"/>
-    <path d="M9 5v4l3 2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-}
-function ChevronIcon() {
-  return <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-}
-function ArrowIcon() {
-  return <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-}
 function SpinnerIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ animation: 'spin 0.8s linear infinite' }}>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ animation: 'spin 0.8s linear infinite', marginRight: 4 }}>
       <circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5"/>
       <path d="M8 2a6 6 0 016 6" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
