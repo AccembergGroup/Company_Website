@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
+import { SpotlightProvider, SpotlightCard } from './Spotlight'
+import { useTheme } from '@/components/ThemeProvider'
 
 const STEPS = [
   {
@@ -32,6 +34,7 @@ const STEPS = [
 ]
 
 export default function Process() {
+  const { theme } = useTheme()
   const ref = useRef(null)
 
   useEffect(() => {
@@ -52,9 +55,39 @@ export default function Process() {
     return () => observer.disconnect()
   }, [])
 
+  const overrideVars = theme === 'dark' ? {
+    background: 'linear-gradient(180deg, #0A0F1E 0%, #08173B 50%, #0A0F1E 100%)',
+    color: '#E8EDF8',
+    '--bg-base': '#08173B',
+    '--text-primary': '#E8EDF8',
+    '--text-secondary': '#B4C3E6',
+    '--text-muted': '#7A8CAE',
+    '--border': 'rgba(79, 195, 247, 0.22)',
+    '--border-strong': 'rgba(79, 195, 247, 0.45)',
+    '--bg-card': '#0E1F55',
+    '--accent': '#4FC3F7',
+    '--accent-light': '#80D8FF',
+    '--accent-dim': 'rgba(79, 195, 247, 0.12)',
+    '--bg-elevated': '#122566',
+  } : {
+    background: '#F8FAFC',
+    color: '#0F172A',
+    '--bg-base': '#F8FAFC',
+    '--text-primary': '#0F172A',
+    '--text-secondary': '#475569',
+    '--text-muted': '#64748B',
+    '--border': 'rgba(21, 101, 192, 0.08)',
+    '--border-strong': 'rgba(21, 101, 192, 0.2)',
+    '--bg-card': '#FFFFFF',
+    '--accent': '#1565C0',
+    '--accent-light': '#1E88E5',
+    '--accent-dim': 'rgba(21, 101, 192, 0.05)',
+    '--bg-elevated': '#FFFFFF',
+  }
+
   return (
     <section id="process" className="section" ref={ref}
-      style={{ background: 'var(--bg-surface)', position: 'relative', overflow: 'hidden' }}
+      style={{ ...overrideVars, position: 'relative', overflow: 'hidden', transition: 'background-color 400ms, color 400ms' }}
     >
       <div className="dot-grid" style={{ opacity: 0.4 }} />
 
@@ -64,10 +97,8 @@ export default function Process() {
           <div className="section-label reveal" style={{ justifyContent: 'center' }}>
             <ScrambleText text="Our Process" speed={30} />
           </div>
-          <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
-            <FastScroll>
-              <span style={{ display: 'inline-block' }}>How We <span style={{ color: 'var(--accent)' }}>Deliver</span></span>
-            </FastScroll>
+          <h2 className="text-h2" style={{ marginBottom: 16 }}>
+            <FastScroll><span style={{ display: 'inline-block' }}>How We <span style={{ color: 'var(--accent)' }}>Deliver</span></span></FastScroll>
           </h2>
           <p className="text-body-lg reveal">
             A structured, repeatable system that eliminates ambiguity and delivers quality — at every stage.
@@ -75,97 +106,31 @@ export default function Process() {
         </div>
 
         {/* Steps grid */}
-        <div style={{
+        <SpotlightProvider style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          position: 'relative',
-          gap: 0,
+          gap: 20,
         }} className="process-grid">
-          {/* Connector line */}
-          <div style={{
-            position: 'absolute',
-            top: 34,
-            left: '12.5%',
-            right: '12.5%',
-            height: 1,
-            background: 'linear-gradient(to right, var(--border-subtle), var(--accent), var(--border-subtle))',
-            opacity: 0.4,
-            pointerEvents: 'none',
-            zIndex: 0,
-          }} className="process-line" />
-
           {STEPS.map((step, i) => (
             <div
               key={step.num}
               className={`reveal-scale stagger-${i + 1}`}
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                padding: '0 20px',
-                position: 'relative',
-                zIndex: 1,
+                height: '100%',
               }}
             >
-              {/* Step circle */}
-              <div style={{
-                width: 68,
-                height: 68,
-                borderRadius: '50%',
-                background: i === 0 || i === 3 ? 'var(--accent-dim)' : 'var(--bg-elevated)',
-                border: `1px solid ${i === 0 ? 'rgba(26,143,255,0.4)' : 'var(--border-default)'}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 24,
-                color: i === 0 ? 'var(--accent)' : 'var(--text-secondary)',
-                flexShrink: 0,
-                position: 'relative',
-                boxShadow: i === 0 ? '0 0 24px var(--accent-glow)' : 'none',
-              }}>
-                {step.icon}
-                {/* Step number badge */}
-                <span style={{
-                  position: 'absolute',
-                  bottom: -4, right: -4,
-                  width: 20, height: 20,
-                  borderRadius: '50%',
-                  background: 'var(--bg-base)',
-                  border: '1px solid var(--border-default)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 8,
-                  fontWeight: 700,
-                  color: 'var(--accent)',
-                  letterSpacing: '0.04em',
-                }}>
-                  {i + 1}
-                </span>
-              </div>
-
-              <span className="process-num" style={{ marginBottom: 8 }}>{step.num}</span>
-              <h3 style={{
-                fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-                fontSize: 15,
-                fontWeight: 600,
-                color: 'var(--text-primary)',
-                marginBottom: 12,
-                lineHeight: 1.3,
-              }}>
-                {step.title}
-              </h3>
-              <p className="text-body" style={{ fontSize: 14, lineHeight: 1.7 }}>{step.desc}</p>
+              <StepCard step={step} />
             </div>
           ))}
-        </div>
+        </SpotlightProvider>
       </div>
 
       <style>{`
-        @media (max-width: 860px) {
-          .process-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 40px 0 !important; }
-          .process-line  { display: none !important; }
+        .process-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media (max-width: 900px) {
+          .process-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 520px) {
           .process-grid { grid-template-columns: 1fr !important; }
@@ -201,4 +166,70 @@ function DeployIcon() {
     <path d="M4 19h14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
     <circle cx="11" cy="17" r="1.2" fill="currentColor"/>
   </svg>
+}
+
+function StepCard({ step }) {
+  const { theme } = useTheme()
+  return (
+    <SpotlightCard
+      style={{
+        background: 'var(--bg-card)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        border: '1px solid var(--border)',
+        borderRadius: 20,
+        padding: '28px',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 16,
+        transition: 'border-color 300ms, box-shadow 300ms, transform 300ms var(--ease-out-quart)',
+        cursor: 'default',
+        boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.03)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--border-strong)'
+        e.currentTarget.style.boxShadow = theme === 'dark'
+          ? '0 20px 40px -15px rgba(21,101,192,0.22), 0 -1px 0 var(--accent-dim) inset'
+          : '0 20px 40px -15px rgba(21,101,192,0.1), 0 -1px 0 var(--accent-dim) inset';
+        e.currentTarget.style.transform = 'translateY(-3px)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'var(--border)'
+        e.currentTarget.style.boxShadow = '0 10px 30px -10px rgba(0, 0, 0, 0.03)'
+        e.currentTarget.style.transform = 'translateY(0)'
+      }}
+    >
+      {/* Top row: Icon + Step number */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
+          {step.icon}
+        </div>
+        <span style={{
+          fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+          fontSize: 11,
+          fontWeight: 700,
+          letterSpacing: '0.14em',
+          color: 'var(--text-muted)',
+        }}>
+          {step.num}
+        </span>
+      </div>
+
+      {/* Title */}
+      <h3 style={{
+        fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+        fontSize: 16,
+        fontWeight: 600,
+        color: 'var(--text-primary)',
+        lineHeight: 1.35,
+        letterSpacing: '-0.01em',
+      }}>
+        {step.title}
+      </h3>
+
+      {/* Desc */}
+      <p className="text-body" style={{ flex: 1 }}>{step.desc}</p>
+    </SpotlightCard>
+  )
 }

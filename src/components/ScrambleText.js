@@ -5,25 +5,21 @@ import { useRef, useEffect, useState } from 'react'
 const CHARS = '01#$&%X?*<>+='
 
 export default function ScrambleText({ text, speed = 35 }) {
-  // Start with true text to avoid Next.js Server Hydration Mismatch
   const [displayText, setDisplayText] = useState(text)
-  const [mounted, setMounted] = useState(false)
   const ref = useRef(null)
 
   useEffect(() => {
-    setMounted(true)
-    // Pre-scramble heavily hidden behind the scenes immediately upon client mount
-    setDisplayText(text.replace(/[^\s]/g, () => CHARS[Math.floor(Math.random() * CHARS.length)]))
-  }, [text])
-
-  useEffect(() => {
     const el = ref.current
-    if (!el || !mounted) return
+    if (!el) return
 
     let frame
     let frameCount = 0
+    let started = false
 
     const startScramble = () => {
+      if (started) return
+      started = true
+      
       const loop = () => {
         frameCount++
         let result = ''
@@ -65,8 +61,9 @@ export default function ScrambleText({ text, speed = 35 }) {
     return () => {
       observer.disconnect()
       cancelAnimationFrame(frame)
+      setDisplayText(text) // Restore original text during cleanup
     }
-  }, [mounted, text, speed])
+  }, [text, speed])
 
   return (
     <span 
@@ -75,9 +72,6 @@ export default function ScrambleText({ text, speed = 35 }) {
       style={{ 
         display: 'inline-block', 
         fontVariantNumeric: 'tabular-nums', 
-        // Hide until hydrated to hide the flash-scramble
-        opacity: mounted ? 1 : 0,
-        transition: 'opacity 0.2s',
       }}
     >
       {displayText}

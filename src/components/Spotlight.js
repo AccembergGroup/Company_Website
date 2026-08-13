@@ -3,53 +3,16 @@
 import React, { useRef, useState, useEffect } from 'react'
 
 export function SpotlightProvider({ children, className = '', style = {} }) {
-  const containerRef = useRef(null)
-  const [isDesktop, setIsDesktop] = useState(false)
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches) {
-      setIsDesktop(true)
-    }
-  }, [])
-
-  const handleMouseMove = (e) => {
-    if (!isDesktop || !containerRef.current) return
-    // BYPASS REACT STATE: This is critical for performance. 
-    // Firing setState on mousemove causes thousands of micro-re-renders.
-    // Instead we directly inject the coordinates mathematically matching into the DOM nodes.
-    const cards = containerRef.current.querySelectorAll('.spotlight-card')
-    cards.forEach((card) => {
-      const rect = card.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      card.style.setProperty('--mouse-x', `${x}px`)
-      card.style.setProperty('--mouse-y', `${y}px`)
-      card.style.setProperty('--glow-opacity', '1')
-    })
-  }
-
-  const handleMouseLeave = () => {
-    if (!containerRef.current) return
-    const cards = containerRef.current.querySelectorAll('.spotlight-card')
-    cards.forEach((card) => {
-      card.style.setProperty('--glow-opacity', '0')
-    })
-  }
-
   return (
-    <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={className}
-      style={{ ...style }}
-    >
+    <div className={className} style={{ ...style }}>
       {children}
     </div>
   )
 }
 
 export function SpotlightCard({ children, className = '', style = {} }) {
+  const cardRef = useRef(null)
+  const rectRef = useRef(null)
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
@@ -58,14 +21,40 @@ export function SpotlightCard({ children, className = '', style = {} }) {
     }
   }, [])
 
+  const handleMouseEnter = () => {
+    if (!cardRef.current) return
+    rectRef.current = cardRef.current.getBoundingClientRect()
+  }
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return
+    if (!rectRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect()
+    }
+    const x = e.clientX - rectRef.current.left
+    const y = e.clientY - rectRef.current.top
+    cardRef.current.style.setProperty('--mouse-x', `${x}px`)
+    cardRef.current.style.setProperty('--mouse-y', `${y}px`)
+    cardRef.current.style.setProperty('--glow-opacity', '1')
+  }
+
+  const handleMouseLeave = () => {
+    if (!cardRef.current) return
+    cardRef.current.style.setProperty('--glow-opacity', '0')
+    rectRef.current = null
+  }
+
   return (
     <div
+      ref={cardRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       className={`spotlight-card ${className}`}
       style={{
         ...style,
         position: 'relative',
         overflow: 'hidden',
-        // Fallback variables before mouse enters provider bounds
         '--glow-opacity': '0',
         '--mouse-x': '-1000px',
         '--mouse-y': '-1000px',
@@ -73,6 +62,7 @@ export function SpotlightCard({ children, className = '', style = {} }) {
     >
       {isDesktop && (
         <>
+          {/* Card face glow matching brand tokens */}
           <div
             className="spotlight-glow"
             style={{
@@ -80,20 +70,22 @@ export function SpotlightCard({ children, className = '', style = {} }) {
               inset: 0,
               zIndex: 0,
               borderRadius: 'inherit',
-              background: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(26,143,255,0.06), transparent 40%)',
+              background: 'radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), var(--accent-glow) 0%, transparent 65%)',
               opacity: 'var(--glow-opacity)',
               transition: 'opacity 0.4s ease',
               pointerEvents: 'none',
             }}
           />
+          {/* Card border glow matching brand primary/tertiary colors */}
           <div 
+            className="spotlight-border-glow"
             style={{
               position: 'absolute',
               inset: 0,
               zIndex: 0,
               borderRadius: 'inherit',
               padding: '1px',
-              background: 'radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.25), transparent 40%)',
+              background: 'radial-gradient(280px circle at var(--mouse-x) var(--mouse-y), var(--accent) 0%, transparent 70%)',
               WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
               WebkitMaskComposite: 'xor',
               maskComposite: 'exclude',

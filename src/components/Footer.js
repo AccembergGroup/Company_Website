@@ -1,66 +1,72 @@
 'use client'
 
 import Image from 'next/image'
+import { ArrowUpRight } from 'lucide-react'
+import { useTheme } from '@/components/ThemeProvider'
 
 const NAV_COLS = [
   {
     heading: 'Company',
     links: [
-      { label: 'About', href: '#about' },
-      { label: 'Services', href: '#services' },
-      { label: 'Products', href: '#products' },
-      { label: 'Process', href: '#process' },
-      { label: 'Projects', href: '#projects' },
+      { label: 'About Us', href: '#about' },
+      { label: 'Why Accemberg', href: '#why-accemberg' },
+      { label: 'Careers & Culture', href: '#careers' },
+      { label: 'Book a Call', href: '#contact' },
     ],
   },
   {
-    heading: 'Services',
+    heading: 'Services & Solutions',
     links: [
-      { label: 'Full-Stack Development', href: '#services' },
-      { label: 'System Architecture', href: '#services' },
-      { label: 'Cloud & DevOps', href: '#services' },
-      { label: 'AI / ML Integration', href: '#services' },
-      { label: 'Technical Consulting', href: '#services' },
+      { label: 'Engineering Services', href: '#services' },
+      { label: 'FinTech Platforms', href: '#solutions' },
+      { label: 'Multi-Tenant SaaS', href: '#solutions' },
+      { label: 'Logistics Systems', href: '#solutions' },
     ],
   },
   {
-    heading: 'Connect',
+    heading: 'Resources',
     links: [
-      { label: 'Contact Us', href: '#contact' },
-      { label: 'LinkedIn', href: 'https://linkedin.com', external: true },
-      { label: 'X / Twitter', href: 'https://x.com', external: true },
-      { label: 'GitHub', href: 'https://github.com', external: true },
-      { label: 'Instagram', href: 'https://instagram.com', external: true },
+      { label: 'Case Studies', href: '#projects' },
+      { label: 'FAQs Accordion', href: '#faq' },
+      { label: 'Support & Enquiries', href: 'mailto:office@accemberg.com' },
     ],
-  },
-]
-
-const SOCIAL_LINKS = [
-  {
-    label: 'LinkedIn',
-    href: 'https://linkedin.com',
-    icon: <LinkedInIcon />,
-  },
-  {
-    label: 'X / Twitter',
-    href: 'https://x.com',
-    icon: <XIcon />,
-  },
-  {
-    label: 'GitHub',
-    href: 'https://github.com',
-    icon: <GitHubIcon />,
-  },
-  {
-    label: 'Instagram',
-    href: 'https://instagram.com',
-    icon: <InstagramIcon />,
   },
 ]
 
 export default function Footer() {
+  const { theme } = useTheme()
+
+  const SOCIAL_LINKS = [
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/company/accemberg-technologies',
+      icon: <LinkedInIcon />,
+    },
+    {
+      label: 'X / Twitter',
+      href: 'https://x.com/accemberg',
+      icon: <XIcon />,
+    },
+    {
+      label: 'GitHub',
+      href: 'https://github.com',
+      icon: <GitHubIcon />,
+    },
+    {
+      label: 'Instagram',
+      href: 'https://www.instagram.com/accemberg/',
+      icon: <InstagramIcon />,
+    },
+  ]
+
   return (
-    <footer className="footer-bg">
+    <footer
+      style={{
+        background: 'var(--bg-surface)',
+        borderTop: '1px solid var(--border)',
+        transition: 'background-color 400ms, border-color 400ms',
+      }}
+    >
       {/* Main footer body */}
       <div className="container" style={{ paddingTop: 'clamp(60px,8vw,96px)', paddingBottom: 'clamp(40px,5vw,64px)' }}>
         <div style={{
@@ -74,22 +80,22 @@ export default function Footer() {
             {/* Logo */}
             <a href="#" aria-label="Accemberg" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, width: 'fit-content' }}>
               <div style={{
-                width: 34, height: 34, borderRadius: 4,
-                background: 'rgba(26,143,255,0.08)',
-                border: '1px solid rgba(26,143,255,0.15)',
+                width: 34, height: 34, borderRadius: '50%',
+                background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21, 101, 192, 0.08)',
+                border: theme === 'dark' ? '1px solid rgba(79,195,247,0.15)' : '1px solid rgba(21, 101, 192, 0.12)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 overflow: 'hidden',
               }}>
                 <Image
-                  src="/logo-transparent.png"
+                  src="/logo-transparent-new.png"
                   alt="Accemberg Logo"
                   width={30}
                   height={30}
-                  style={{ objectFit: 'contain' }}
+                  style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
                 />
               </div>
               <span style={{
-                fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+                fontFamily: 'var(--font-display)',
                 fontSize: 15,
                 fontWeight: 700,
                 letterSpacing: '0.06em',
@@ -101,29 +107,26 @@ export default function Footer() {
 
             {/* Tagline */}
             <p style={{
-              fontSize: 14,
-              lineHeight: 1.7,
-              color: 'var(--text-muted)',
-              maxWidth: 260,
+              fontSize: 13.5,
+              lineHeight: 1.6,
+              color: 'var(--text-secondary)',
+              maxWidth: 280,
+              margin: 0
             }}>
-              ⭐ Empowering Innovation for Enterprise IT
-            </p>
-
-            <p className="text-body" style={{ fontSize: 13, maxWidth: 280 }}>
               A hybrid venture studio engineering scalable software products and delivering world-class services simultaneously.
             </p>
 
-            {/* Support email */}
             <a
-              href="mailto:support@accemberg.com"
+              href="mailto:office@accemberg.com"
               style={{
-                fontSize: 13,
-                color: 'var(--accent-light)',
-                fontWeight: 500,
+                fontSize: 13.5,
+                color: 'var(--accent)',
+                fontWeight: 600,
                 transition: 'color 200ms',
+                width: 'fit-content',
               }}
             >
-              support@accemberg.com
+              office@accemberg.com
             </a>
 
             {/* Social icons */}
@@ -141,21 +144,21 @@ export default function Footer() {
                     justifyContent: 'center',
                     width: 36,
                     height: 36,
-                    borderRadius: 4,
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid var(--border-subtle)',
-                    color: 'var(--text-muted)',
-                    transition: 'color 200ms, border-color 200ms, background 200ms',
+                    borderRadius: '50%',
+                    background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
+                    border: '1px solid var(--border)',
+                    color: 'var(--text-secondary)',
+                    transition: 'all 200ms',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'var(--accent-light)'
-                    e.currentTarget.style.borderColor = 'rgba(26,143,255,0.25)'
-                    e.currentTarget.style.background = 'rgba(26,143,255,0.08)'
+                    e.currentTarget.style.color = 'var(--text-primary)'
+                    e.currentTarget.style.borderColor = 'var(--border-strong)'
+                    e.currentTarget.style.background = 'var(--accent-dim)'
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'var(--text-muted)'
-                    e.currentTarget.style.borderColor = 'var(--border-subtle)'
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
+                    e.currentTarget.style.color = 'var(--text-secondary)'
+                    e.currentTarget.style.borderColor = 'var(--border)'
+                    e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)'
                   }}
                 >
                   {s.icon}
@@ -183,25 +186,18 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      target={link.external ? '_blank' : undefined}
-                      rel={link.external ? 'noopener noreferrer' : undefined}
                       style={{
-                        fontSize: 14,
-                        color: 'var(--text-muted)',
+                        fontSize: 13.5,
+                        color: 'var(--text-secondary)',
                         transition: 'color 200ms',
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: 4,
                       }}
-                      onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
-                      onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-primary)' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
                     >
                       {link.label}
-                      {link.external && (
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ opacity: 0.4 }}>
-                          <path d="M2 8L8 2M4 2h4v4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      )}
                     </a>
                   </li>
                 ))}
@@ -212,7 +208,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid var(--border-subtle)' }}>
+      <div style={{ borderTop: '1px solid var(--border)' }}>
         <div className="container" style={{
           paddingTop: 20,
           paddingBottom: 20,
@@ -230,7 +226,7 @@ export default function Footer() {
               href="/privacy-policy"
               style={{ fontSize: 13, color: 'var(--text-muted)', transition: 'color 200ms' }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.muted }}
             >
               Privacy Policy
             </a>
@@ -238,7 +234,7 @@ export default function Footer() {
               href="/terms"
               style={{ fontSize: 13, color: 'var(--text-muted)', transition: 'color 200ms' }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.muted }}
             >
               Terms &amp; Conditions
             </a>
@@ -258,26 +254,40 @@ export default function Footer() {
   )
 }
 
-/* ── Social Icons ─────────────────────────────────────────── */
+/* ── Inline SVG Social Icons ────────────────────────────────── */
 function LinkedInIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path d="M2 5.5h2.5v8H2zM3.25 4.5a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zM6 5.5h2.4v1.1h.03c.33-.63 1.15-1.3 2.37-1.3C13 5.3 13.5 7 13.5 9.2v4.3H11V9.6c0-.9-.02-2.06-1.25-2.06-1.26 0-1.45.98-1.45 2v4H6V5.5z" fill="currentColor"/>
-  </svg>
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
 }
+
 function XIcon() {
-  return <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-    <path d="M11.9 1h2.3L9.3 6.4 15 14h-4.7L7 9.7 3.2 14H.9l5.2-5.8L0 1h4.8L8.1 5l3.8-4zm-.8 11.7h1.3L4 2.3H2.6l8.5 10.4z" fill="currentColor"/>
-  </svg>
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+      <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+    </svg>
+  )
 }
+
 function GitHubIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <path d="M8 1a7 7 0 00-2.21 13.64c.35.06.48-.15.48-.34v-1.2c-1.95.42-2.36-.94-2.36-.94-.32-.81-.78-1.02-.78-1.02-.64-.44.05-.43.05-.43.7.05 1.07.72 1.07.72.62 1.07 1.63.76 2.03.58.06-.45.24-.76.44-.94-1.56-.18-3.2-.78-3.2-3.46 0-.77.27-1.4.72-1.89-.07-.18-.31-.9.07-1.87 0 0 .59-.19 1.93.72A6.7 6.7 0 018 4.86c.6.003 1.2.08 1.77.24 1.34-.91 1.93-.72 1.93-.72.38.97.14 1.69.07 1.87.45.49.72 1.12.72 1.89 0 2.69-1.64 3.28-3.2 3.46.25.22.47.65.47 1.31v1.95c0 .19.13.41.48.34A7.001 7.001 0 008 1z" fill="currentColor"/>
-  </svg>
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+    </svg>
+  )
 }
+
 function InstagramIcon() {
-  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <rect x="2" y="2" width="12" height="12" rx="3.5" stroke="currentColor" strokeWidth="1.3"/>
-    <circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.3"/>
-    <circle cx="11.5" cy="4.5" r="0.8" fill="currentColor"/>
-  </svg>
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
 }

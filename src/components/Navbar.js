@@ -2,18 +2,50 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { Sun, Moon, ArrowRight } from 'lucide-react'
+import { useTheme } from '@/components/ThemeProvider'
+import Magnetic from '@/components/Magnetic'
+import { gsap } from 'gsap'
 
 const NAV_LINKS = [
-  { label: 'About',    href: '#about' },
+  { label: 'About', href: '#about' },
   { label: 'Services', href: '#services' },
   { label: 'Products', href: '#products' },
-  { label: 'Process',  href: '#process' },
+  { label: 'Process', href: '#process' },
   { label: 'Projects', href: '#projects' },
 ]
 
 export default function Navbar() {
-  const [scrolled,  setScrolled]  = useState(false)
-  const [menuOpen,  setMenuOpen]  = useState(false)
+  const { theme, toggleTheme } = useTheme()
+  const toggleBtnRef = useRef(null)
+
+  const handleThemeToggle = () => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) {
+      toggleTheme()
+      return
+    }
+
+    gsap.to(toggleBtnRef.current, {
+      rotation: '+=360',
+      scale: 0.1,
+      opacity: 0,
+      duration: 0.25,
+      ease: 'power2.in',
+      onComplete: () => {
+        toggleTheme()
+        gsap.to(toggleBtnRef.current, {
+          scale: 1,
+          opacity: 1,
+          duration: 0.35,
+          ease: 'back.out(1.8)',
+        })
+      }
+    })
+  }
+
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
   useEffect(() => {
@@ -49,17 +81,20 @@ export default function Navbar() {
           zIndex: 100,
           display: 'flex',
           alignItems: 'center',
-          background: scrolled
-            ? 'rgba(10, 16, 24, 0.82)'
-            : 'rgba(255, 255, 255, 0.05)',
+          backgroundColor: theme === 'dark'
+            ? (scrolled ? 'rgba(10, 16, 24, 0.82)' : 'rgba(255, 255, 255, 0.05)')
+            : (scrolled ? 'rgba(245, 247, 255, 0.82)' : 'rgba(0, 0, 0, 0.04)'),
           backdropFilter: 'blur(28px) saturate(1.8)',
           WebkitBackdropFilter: 'blur(28px) saturate(1.8)',
-          border: '1px solid rgba(255,255,255,0.10)',
+          border: theme === 'dark'
+            ? '1px solid rgba(255, 255, 255, 0.10)'
+            : '1px solid rgba(21, 101, 192, 0.12)',
           borderRadius: 100,
-          transition: 'background 400ms, box-shadow 400ms',
+          backgroundClip: 'padding-box',
+          transition: 'background 400ms, box-shadow 400ms, border-color 400ms',
           boxShadow: scrolled
-            ? '0 8px 32px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.06) inset'
-            : '0 4px 24px rgba(0,0,0,0.2)',
+            ? '0 10px 30px -10px rgba(0,0,0,0.15)'
+            : '0 4px 20px -5px rgba(0,0,0,0.05)',
           whiteSpace: 'nowrap',
           maxWidth: 'calc(100vw - 48px)',
         }}
@@ -82,8 +117,8 @@ export default function Navbar() {
               width: 30,
               height: 30,
               borderRadius: '50%',
-              background: 'rgba(26,143,255,0.12)',
-              border: '1px solid rgba(26,143,255,0.22)',
+              background: theme === 'dark' ? 'rgba(26,143,255,0.12)' : 'rgba(21, 101, 192, 0.08)',
+              border: theme === 'dark' ? '1px solid rgba(26,143,255,0.22)' : '1px solid rgba(21, 101, 192, 0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -92,11 +127,11 @@ export default function Navbar() {
             }}
           >
             <Image
-              src="/logo-transparent.png"
+              src="/logo-transparent-new.png"
               alt="Accemberg"
               width={26}
               height={26}
-              style={{ objectFit: 'contain' }}
+              style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
               priority
             />
           </div>
@@ -116,29 +151,27 @@ export default function Navbar() {
 
         {/* Desktop nav links */}
         <div
-          style={{ display: 'flex', alignItems: 'center', gap: 2 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 2, marginRight: 8 }}
           className="pill-nav-links"
         >
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
+              className="nav-link-underline"
               style={{
                 padding: '7px 14px',
-                borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 400,
+                fontWeight: 550,
                 color: 'var(--text-secondary)',
-                transition: 'color 200ms, background 200ms',
+                transition: 'color 250ms',
                 letterSpacing: '0.01em',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = 'var(--text-primary)'
-                e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = 'var(--text-secondary)'
-                e.currentTarget.style.background = 'transparent'
               }}
             >
               {link.label}
@@ -146,42 +179,81 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* CTA pill — right side */}
-        <a
-          href="#contact"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '8px 18px',
-            borderRadius: 100,
-            background: 'var(--accent)',
-            color: '#fff',
-            fontSize: 13,
-            fontWeight: 500,
-            letterSpacing: '0.01em',
-            marginLeft: 8,
-            flexShrink: 0,
-            transition: 'background 200ms, box-shadow 200ms, transform 150ms',
-            boxShadow: '0 2px 12px rgba(26,143,255,0.35)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'var(--accent-light)'
-            e.currentTarget.style.transform = 'translateY(-1px)'
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(26,143,255,0.5)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'var(--accent)'
-            e.currentTarget.style.transform = 'translateY(0)'
-            e.currentTarget.style.boxShadow = '0 2px 12px rgba(26,143,255,0.35)'
-          }}
-          className="pill-nav-links"
-        >
-          Get in Touch
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-            <path d="M1 6h10M6 1l5 5-5 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </a>
+        {/* Action area — Theme switch + Get in Touch */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          {/* Theme switcher (Magnetic) */}
+          <Magnetic>
+            <button
+              onClick={handleThemeToggle}
+              ref={toggleBtnRef}
+              aria-label="Toggle visual theme"
+              className="theme-toggle-btn"
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: '50%',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
+                border: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)',
+                color: 'var(--text-secondary)',
+                cursor: 'pointer',
+                transition: 'all 200ms',
+                transformOrigin: 'center center',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'
+                e.currentTarget.style.color = 'var(--text-primary)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)'
+                e.currentTarget.style.color = 'var(--text-secondary)'
+              }}
+              suppressHydrationWarning
+            >
+              {theme === 'dark' ? (
+                <Sun size={15} strokeWidth={2} />
+              ) : (
+                <Moon size={15} strokeWidth={2} />
+              )}
+            </button>
+          </Magnetic>
+
+          {/* CTA pill — right side (Magnetic) */}
+          <Magnetic>
+            <a
+              href="#contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '8px 18px',
+                borderRadius: 100,
+                background: 'var(--accent)',
+                color: '#fff',
+                fontSize: 13,
+                fontWeight: 500,
+                letterSpacing: '0.01em',
+                flexShrink: 0,
+                transition: 'background 200ms, box-shadow 200ms, transform 150ms',
+                boxShadow: theme === 'dark'
+                  ? '0 4px 14px rgba(79,195,247,0.2)'
+                  : '0 4px 14px rgba(21,101,192,0.3)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--accent-light)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'var(--accent)'
+              }}
+              className="pill-nav-links"
+            >
+              Get in Touch
+              <ArrowRight size={13} strokeWidth={2} />
+            </a>
+          </Magnetic>
+        </div>
 
         {/* Hamburger (mobile) */}
         <button
@@ -198,6 +270,7 @@ export default function Navbar() {
             marginLeft: 4,
           }}
           className="pill-hamburger"
+          suppressHydrationWarning
         >
           {[0, 1, 2].map((i) => (
             <span
@@ -212,8 +285,8 @@ export default function Navbar() {
                 transform:
                   menuOpen
                     ? i === 0 ? 'translateY(5.5px) rotate(45deg)'
-                    : i === 2 ? 'translateY(-5.5px) rotate(-45deg)'
-                    : 'none'
+                      : i === 2 ? 'translateY(-5.5px) rotate(-45deg)'
+                        : 'none'
                     : 'none',
                 opacity: menuOpen && i === 1 ? 0 : 1,
               }}
@@ -231,15 +304,16 @@ export default function Navbar() {
           left: '50%',
           transform: `translateX(-50%) translateY(${menuOpen ? '0' : '-8px'})`,
           zIndex: 99,
-          background: 'rgba(10,16,24,0.92)',
+          background: theme === 'dark' ? 'rgba(10,16,24,0.92)' : 'rgba(245,247,255,0.92)',
           backdropFilter: 'blur(28px)',
-          border: '1px solid rgba(255,255,255,0.10)',
+          border: theme === 'dark' ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(21,101,192,0.12)',
           borderRadius: 20,
           padding: '16px 8px',
           minWidth: 220,
           opacity: menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? 'auto' : 'none',
           transition: 'opacity 250ms, transform 250ms',
+          boxShadow: '0 20px 40px -15px rgba(0,0,0,0.15)',
         }}
       >
         {[...NAV_LINKS, { label: 'Contact', href: '#contact' }].map((link) => (
@@ -258,7 +332,7 @@ export default function Navbar() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = 'var(--text-primary)'
-              e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+              e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.color = 'var(--text-secondary)'
@@ -271,7 +345,7 @@ export default function Navbar() {
       </div>
 
       <style>{`
-        .nav-container { padding: 6px 6px 6px 14px; gap: 4px; }
+        .nav-container { padding: 6px 12px 6px 16px; gap: 14px; }
         .nav-logo-link { margin-right: 16px; }
 
         @media (max-width: 768px) {

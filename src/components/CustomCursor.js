@@ -8,8 +8,12 @@ export default function CustomCursor() {
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches) {
-      setIsDesktop(true)
+    if (typeof window !== 'undefined') {
+      const isFine = window.matchMedia('(pointer: fine)').matches
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (isFine && !prefersReduced) {
+        setIsDesktop(true)
+      }
     }
   }, [])
 

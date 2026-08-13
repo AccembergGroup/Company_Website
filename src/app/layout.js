@@ -2,6 +2,7 @@ import { Space_Grotesk, Inter } from 'next/font/google'
 import './globals.css'
 import LenisProvider from '@/components/LenisProvider'
 import CustomCursor from '@/components/CustomCursor'
+import { ThemeProvider } from '@/components/ThemeProvider'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -53,12 +54,33 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${inter.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  document.documentElement.classList.add('js-enabled');
+                  var theme = localStorage.getItem('theme') || 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                  if (sessionStorage.getItem('acc_intro_seen_v3')) {
+                    document.documentElement.classList.add('preloader-skipped');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>
-        <CustomCursor />
-        <LenisProvider>
-          {children}
-        </LenisProvider>
+        <ThemeProvider>
+          <CustomCursor />
+          <LenisProvider>
+            {children}
+          </LenisProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
