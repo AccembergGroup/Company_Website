@@ -1,7 +1,8 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import { Briefcase, ArrowUpRight, Zap, Globe, Heart } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { useTheme } from '@/components/ThemeProvider'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
@@ -76,17 +77,51 @@ export default function Careers() {
             </p>
 
             {/* Perks */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               {[
-                { label: 'Work from Anywhere', desc: 'Accemberg is fully remote-first. Choose your workspace anywhere globally.', icon: Globe },
-                { label: 'Premium Hardware & Tools', desc: 'Get top-tier hardware allowances and subscriptions for whatever tooling you need.', icon: Zap },
-                { label: 'High Trust, High Freedom', desc: 'No micro-management or time-tracking. We measure value delivered, not hours.', icon: Heart }
+                { label: 'Work from Anywhere', desc: 'Accemberg is fully remote-first. Choose your workspace anywhere globally.', icon: 'fluent:globe-24-filled', iconColor: '#90CAF9' },
+                { label: 'Premium Hardware & Tools', desc: 'Get top-tier hardware allowances and subscriptions for whatever tooling you need.', icon: 'fluent:laptop-24-filled', iconColor: '#FFD54F' },
+                { label: 'High Trust, High Freedom', desc: 'No micro-management or time-tracking. We measure value delivered, not hours.', icon: 'fluent:handshake-24-filled', iconColor: '#A5D6A7' }
               ].map((perk) => {
-                const Icon = perk.icon
                 return (
-                  <div key={perk.label} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                    <div className="icon-box" style={{ width: 34, height: 34, background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                      <Icon size={14} className="text-accent" />
+                  <div key={perk.label} style={{ display: 'flex', gap: 18, alignItems: 'flex-start' }}>
+                    {/* Realistic 3D icon box */}
+                    <div style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 12,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      flexShrink: 0,
+                      background: theme === 'dark'
+                        ? `linear-gradient(145deg, ${perk.iconColor}22 0%, ${perk.iconColor}0c 60%, ${perk.iconColor}02 100%)`
+                        : `linear-gradient(145deg, ${perk.iconColor}28 0%, ${perk.iconColor}10 60%, ${perk.iconColor}04 100%)`,
+                      border: `1px solid ${perk.iconColor}33`,
+                      boxShadow: [
+                        `0 0 0 1px ${perk.iconColor}12`,
+                        `0 4px 12px -3px ${perk.iconColor}33`,
+                        `0 1px 0 0 ${perk.iconColor}22 inset`,
+                      ].join(', '),
+                    }}>
+                      {/* Inner shine */}
+                      <div style={{
+                        position: 'absolute', top: 1.5, left: 4, right: 4, height: '40%',
+                        background: `linear-gradient(180deg, ${perk.iconColor}18 0%, transparent 100%)`,
+                        borderRadius: '6px 6px 50% 50%', pointerEvents: 'none',
+                      }} />
+                      <Icon
+                        icon={perk.icon}
+                        width={20}
+                        height={20}
+                        style={{
+                          color: perk.iconColor,
+                          filter: `drop-shadow(0 0 4px ${perk.iconColor}66)`,
+                          position: 'relative',
+                          zIndex: 1,
+                        }}
+                      />
                     </div>
                     <div>
                       <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>{perk.label}</h4>

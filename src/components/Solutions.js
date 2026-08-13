@@ -1,7 +1,8 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import { Landmark, Sparkles, Truck, HeartPulse, Zap } from 'lucide-react'
+import { Zap } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { useTheme } from '@/components/ThemeProvider'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
@@ -11,7 +12,8 @@ const SOLUTIONS = [
     id: 'fintech',
     title: 'FinTech Platforms',
     desc: 'High-frequency transaction ledgers, banking API integrations, and strict SOC2 security compliance for enterprise money movement.',
-    icon: Landmark,
+    icon: 'fluent:building-bank-24-filled',
+    iconColor: '#81D4FA',
     colSpan: 'col-span-2',
     accent: '#4FC3F7',
     badge: 'Enterprise Security'
@@ -20,7 +22,8 @@ const SOLUTIONS = [
     id: 'saas',
     title: 'Multi-Tenant SaaS',
     desc: 'Scalable multi-tenant databases, Stripe/billing integration, role-based access control, and dynamic reporting dashboards.',
-    icon: Sparkles,
+    icon: 'fluent:apps-24-filled',
+    iconColor: '#90CAF9',
     colSpan: 'col-span-1',
     accent: '#1565C0',
     badge: 'Rapid Build'
@@ -29,7 +32,8 @@ const SOLUTIONS = [
     id: 'logistics',
     title: 'Logistics & Supply Chain',
     desc: 'Real-time telemetry ingestion pipelines, route optimization systems, and warehouse automation endpoints.',
-    icon: Truck,
+    icon: 'fluent:vehicle-truck-24-filled',
+    iconColor: '#FFCC80',
     colSpan: 'col-span-1',
     accent: '#1565C0',
     badge: 'Real-time Engine'
@@ -38,7 +42,8 @@ const SOLUTIONS = [
     id: 'health',
     title: 'HealthTech Systems',
     desc: 'HIPAA-compliant patient portals, telemetry data capture, and audit trails engineered for maximum reliability and privacy.',
-    icon: HeartPulse,
+    icon: 'fluent:heart-pulse-24-filled',
+    iconColor: '#EF9A9A',
     colSpan: 'col-span-2',
     accent: '#4FC3F7',
     badge: 'HIPAA Compliant'
@@ -96,10 +101,10 @@ export default function Solutions() {
             <ScrambleText text="Targeted Expertise" speed={30} />
           </div>
           <h2 className="text-h2" style={{ marginBottom: 16 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Tailored Solutions for</span></FastScroll>
-              <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Modern Industries</span></FastScroll>
-            </h2>
+            <FastScroll><span style={{ display: 'inline-block' }}>Tailored Solutions for</span></FastScroll>
+            <br />
+            <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Modern Industries</span></FastScroll>
+          </h2>
           <p className="text-body-lg">
             We build specialized web systems and data engines designed to solve complex business constraints in high-impact domains.
           </p>
@@ -108,7 +113,6 @@ export default function Solutions() {
         {/* Bento Grid */}
         <div className="bento-grid">
           {SOLUTIONS.map((sol, i) => {
-            const Icon = sol.icon
             return (
               <div
                 key={sol.id}
@@ -141,9 +145,49 @@ export default function Solutions() {
                 }}
               >
                 {/* Card Top */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                    <Icon size={18} strokeWidth={2.2} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  {/* Realistic 3D icon box */}
+                  <div style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 16,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    background: theme === 'dark'
+                      ? `linear-gradient(145deg, ${sol.iconColor}26 0%, ${sol.iconColor}10 60%, ${sol.iconColor}04 100%)`
+                      : `linear-gradient(145deg, ${sol.iconColor}30 0%, ${sol.iconColor}14 60%, ${sol.iconColor}06 100%)`,
+                    border: `1px solid ${sol.iconColor}44`,
+                    boxShadow: [
+                      `0 0 0 1px ${sol.iconColor}18`,
+                      `0 4px 16px -4px ${sol.iconColor}55`,
+                      `0 1px 0 0 ${sol.iconColor}33 inset`,
+                      `inset 0 0 12px 0 ${sol.iconColor}11`,
+                    ].join(', '),
+                  }}>
+                    {/* Inner shine */}
+                    <div style={{
+                      position: 'absolute',
+                      top: 2,
+                      left: 6,
+                      right: 6,
+                      height: '40%',
+                      background: `linear-gradient(180deg, ${sol.iconColor}22 0%, transparent 100%)`,
+                      borderRadius: '8px 8px 50% 50%',
+                      pointerEvents: 'none',
+                    }} />
+                    <Icon
+                      icon={sol.icon}
+                      width={28}
+                      height={28}
+                      style={{
+                        color: sol.iconColor,
+                        filter: `drop-shadow(0 0 6px ${sol.iconColor}88) drop-shadow(0 2px 4px ${sol.iconColor}44)`,
+                        position: 'relative',
+                        zIndex: 1,
+                      }}
+                    />
                   </div>
                   <span style={{
                     fontSize: 10,

@@ -49,7 +49,7 @@ export default function Footer() {
     },
     {
       label: 'GitHub',
-      href: 'https://github.com',
+      href: 'https://github.com/AccembergGroup/Company_Website',
       icon: <GitHubIcon />,
     },
     {
@@ -94,13 +94,10 @@ export default function Footer() {
                   style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
                 />
               </div>
-              <span style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 15,
-                fontWeight: 700,
-                letterSpacing: '0.06em',
-                color: 'var(--text-primary)',
-              }}>
+              <span
+                style={{ fontSize: 16 }}
+                className="brand-wordmark-gradient"
+              >
                 ACCEMBERG
               </span>
             </a>
@@ -171,10 +168,10 @@ export default function Footer() {
           {NAV_COLS.map((col) => (
             <div key={col.heading}>
               <h4 style={{
-                fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+                fontFamily: 'var(--font-display)',
                 fontSize: 12,
-                fontWeight: 600,
-                letterSpacing: '0.1em',
+                fontWeight: 700,
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 color: 'var(--text-primary)',
                 marginBottom: 20,

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useTheme } from '@/components/ThemeProvider'
-import { Star } from 'lucide-react'
+import { Star, X, ExternalLink, GraduationCap, Microscope, Cpu, Users } from 'lucide-react'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 import { gsap } from 'gsap'
@@ -145,6 +145,7 @@ export default function Partners() {
   const sectionRef = useRef(null)
   const [data, setData] = useState(PARTNERS)
   const [loading, setLoading] = useState(false)
+  const [iiitModalOpen, setIiitModalOpen] = useState(false)
 
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_API_URL
@@ -296,6 +297,7 @@ export default function Partners() {
             <div
               key={partner.name}
               className="partner-tile"
+              onClick={() => partner.name === 'IIIT Kottayam' && setIiitModalOpen(true)}
               style={{
                 background: 'var(--bg-card)',
                 border: partner.featured
@@ -312,6 +314,7 @@ export default function Partners() {
                   ? (theme === 'dark' ? '0 10px 25px -5px rgba(79,195,247,0.15)' : '0 10px 25px -5px rgba(21,101,192,0.08)')
                   : '0 8px 24px -10px rgba(0,0,0,0.02)',
                 transition: 'all 300ms var(--ease-out-quart)',
+                cursor: partner.name === 'IIIT Kottayam' ? 'pointer' : 'default',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = 'var(--border-strong)'
@@ -350,21 +353,49 @@ export default function Partners() {
 
                 {/* Logo and Name row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: partner.featured ? 12 : 4 }}>
+                  {/* 3D logo box */}
                   <div style={{
-                    padding: 8,
-                    borderRadius: 10,
-                    background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
-                    border: '1px solid var(--border)',
+                    width: 56,
+                    height: 56,
+                    borderRadius: 14,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    transition: 'border-color 300ms',
-                    width: 52,
-                    height: 52,
+                    position: 'relative',
+                    flexShrink: 0,
+                    background: theme === 'dark'
+                      ? 'linear-gradient(145deg, rgba(79,195,247,0.18) 0%, rgba(79,195,247,0.07) 60%, rgba(79,195,247,0.02) 100%)'
+                      : 'linear-gradient(145deg, rgba(21,101,192,0.14) 0%, rgba(21,101,192,0.06) 60%, rgba(21,101,192,0.01) 100%)',
+                    border: theme === 'dark' ? '1px solid rgba(79,195,247,0.30)' : '1px solid rgba(21,101,192,0.18)',
+                    boxShadow: theme === 'dark' ? [
+                      '0 0 0 1px rgba(79,195,247,0.10)',
+                      '0 4px 16px -4px rgba(79,195,247,0.35)',
+                      '0 1px 0 0 rgba(79,195,247,0.18) inset',
+                    ].join(', ') : [
+                      '0 0 0 1px rgba(21,101,192,0.07)',
+                      '0 4px 16px -4px rgba(21,101,192,0.18)',
+                    ].join(', '),
+                    overflow: 'hidden',
                   }}>
-                    {partner.logoUrl ? (
-                      <img src={partner.logoUrl} alt={partner.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    ) : partner.logo}
+                    {/* inner shine */}
+                    <div style={{
+                      position: 'absolute', top: 2, left: 5, right: 5, height: '40%',
+                      background: theme === 'dark'
+                        ? 'linear-gradient(180deg, rgba(79,195,247,0.15) 0%, transparent 100%)'
+                        : 'linear-gradient(180deg, rgba(21,101,192,0.08) 0%, transparent 100%)',
+                      borderRadius: '8px 8px 50% 50%', pointerEvents: 'none',
+                    }} />
+                    {partner.name === 'IIIT Kottayam' ? (
+                      <img
+                        src={theme === 'dark' ? '/iiit-kottayam-dark.png' : '/iiit-kottayam-light.jpg'}
+                        alt="IIIT Kottayam Logo"
+                        style={{ width: '80%', height: '80%', objectFit: 'contain', position: 'relative', zIndex: 1 }}
+                      />
+                    ) : partner.logoUrl ? (
+                      <img src={partner.logoUrl} alt={partner.name} style={{ width: '80%', height: '80%', objectFit: 'contain', position: 'relative', zIndex: 1 }} />
+                    ) : (
+                      <div style={{ position: 'relative', zIndex: 1 }}>{partner.logo}</div>
+                    )}
                   </div>
                   <h3 style={{
                     fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
@@ -396,7 +427,181 @@ export default function Partners() {
 
       </div>
 
+      {/* ── IIIT Kottayam Partnership Modal ── */}
+      {iiitModalOpen && (
+        <div
+          onClick={() => setIiitModalOpen(false)}
+          data-lenis-prevent
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(5, 10, 25, 0.82)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '16px',
+            animation: 'fadeIn 0.2s ease-out',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            data-lenis-prevent
+            style={{
+              background: theme === 'dark'
+                ? 'linear-gradient(160deg, #0D1B4B 0%, #08122E 100%)'
+                : '#FFFFFF',
+              border: theme === 'dark' ? '1px solid rgba(79,195,247,0.30)' : '1px solid rgba(21,101,192,0.18)',
+              borderRadius: 24,
+              padding: 'clamp(20px, 4vw, 36px)',
+              maxWidth: 620,
+              width: '100%',
+              maxHeight: '88vh',
+              overflowY: 'auto',
+              WebkitOverflowScrolling: 'touch',
+              boxShadow: theme === 'dark'
+                ? '0 40px 80px -20px rgba(0,0,0,0.8), 0 0 0 1px rgba(79,195,247,0.15)'
+                : '0 40px 80px -20px rgba(21,101,192,0.18)',
+              position: 'relative',
+              animation: 'slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1)',
+            }}
+          >
+            {/* Sticky Header Bar with Close Button */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              position: 'sticky', top: -20, zIndex: 10,
+              background: theme === 'dark' ? 'rgba(8, 18, 46, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              margin: '-20px -20px 16px -20px',
+              padding: '16px 20px',
+              borderRadius: '20px 20px 0 0',
+              borderBottom: '1px solid var(--border)',
+            }}>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--accent)' }}>
+                Academic Alliance Details
+              </span>
+              <button
+                onClick={() => setIiitModalOpen(false)}
+                style={{
+                  width: 36, height: 36, borderRadius: '50%',
+                  border: '1px solid var(--border)',
+                  background: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: 'var(--text-primary)',
+                  flexShrink: 0,
+                }}
+                aria-label="Close Modal"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+              <div style={{
+                width: 64, height: 64, borderRadius: 16, flexShrink: 0,
+                background: theme === 'dark'
+                  ? 'linear-gradient(145deg, rgba(79,195,247,0.18) 0%, rgba(79,195,247,0.07) 100%)'
+                  : 'linear-gradient(145deg, rgba(21,101,192,0.12) 0%, rgba(21,101,192,0.04) 100%)',
+                border: theme === 'dark' ? '1px solid rgba(79,195,247,0.30)' : '1px solid rgba(21,101,192,0.18)',
+                boxShadow: '0 4px 16px -4px rgba(79,195,247,0.35)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden',
+              }}>
+                <img
+                  src={theme === 'dark' ? '/iiit-kottayam-dark.png' : '/iiit-kottayam-light.jpg'}
+                  alt="IIIT Kottayam"
+                  style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                />
+              </div>
+              <div>
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 4 }}>
+                  Research & Incubation Partner
+                </div>
+                <h2 style={{
+                  fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+                  fontSize: 22, fontWeight: 700, color: 'var(--text-primary)',
+                  letterSpacing: '-0.02em', margin: 0,
+                }}>IIIT Kottayam</h2>
+                <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>
+                  Indian Institute of Information Technology, Kottayam
+                </p>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div style={{ height: 1, background: 'var(--border)', marginBottom: 24 }} />
+
+            {/* Partnership description */}
+            <p style={{ fontSize: 14, lineHeight: 1.75, color: 'var(--text-secondary)', marginBottom: 28 }}>
+              Accemberg and IIIT Kottayam share a formal research and incubation partnership, enabling collaborative enterprise engineering projects, academic research pathways, and system prototyping validation — bridging cutting-edge academic research with real-world software delivery.
+            </p>
+
+            {/* Collaboration pillars */}
+            <div className="modal-pillars-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
+              {[
+                { icon: GraduationCap, label: 'Academic Research', desc: 'Joint research projects on distributed systems, ML, and scalable architectures.' },
+                { icon: Cpu, label: 'System Prototyping', desc: 'Rapid prototyping and validation of enterprise-grade system designs.' },
+                { icon: Microscope, label: 'R&D Incubation', desc: 'Incubation support for student-led engineering innovations and tech ventures.' },
+                { icon: Users, label: 'Talent Pipeline', desc: 'Priority access to top IIIT graduates for engineering roles at Accemberg.' },
+              ].map(({ icon: Icon, label, desc }) => (
+                <div key={label} style={{
+                  padding: '16px',
+                  borderRadius: 14,
+                  background: theme === 'dark' ? 'rgba(79,195,247,0.05)' : 'rgba(21,101,192,0.04)',
+                  border: theme === 'dark' ? '1px solid rgba(79,195,247,0.12)' : '1px solid rgba(21,101,192,0.10)',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                    <Icon size={15} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{label}</span>
+                  </div>
+                  <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>{desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer badge */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '12px 16px', borderRadius: 12,
+              background: theme === 'dark' ? 'rgba(79,195,247,0.08)' : 'rgba(21,101,192,0.05)',
+              border: theme === 'dark' ? '1px solid rgba(79,195,247,0.18)' : '1px solid rgba(21,101,192,0.12)',
+              marginBottom: 16,
+              flexWrap: 'wrap', gap: 10,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Star size={13} fill="var(--accent)" stroke="none" />
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>Verified Academic Alliance</span>
+              </div>
+              <a
+                href="https://iiitkottayam.ac.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--text-secondary)', textDecoration: 'none' }}
+              >
+                Visit Website <ExternalLink size={11} />
+              </a>
+            </div>
+
+            {/* Bottom Close Button for Mobile */}
+            <button
+              onClick={() => setIiitModalOpen(false)}
+              style={{
+                width: '100%', padding: '12px', borderRadius: 12,
+                border: '1px solid var(--border)',
+                background: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                color: 'var(--text-primary)',
+                fontSize: 13, fontWeight: 600,
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              }}
+            >
+              ← Back to Partners
+            </button>
+          </div>
+        </div>
+      )}
+
       <style>{`
+        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.96) } to { opacity: 1; transform: translateY(0) scale(1) } }
         @media (max-width: 900px) {
           .partners-grid {
             grid-template-columns: 1fr 1fr !important;
@@ -416,6 +621,9 @@ export default function Partners() {
           }
           .partner-tile h3 {
             font-size: 15px !important;
+          }
+          .modal-pillars-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useTheme } from '@/components/ThemeProvider'
+import { Icon } from '@iconify/react'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
@@ -17,24 +18,27 @@ const ENGINES = [
     title: 'Bespoke Engineering',
     role: 'Precision Development',
     desc: 'Tailor-made software solutions architected from the ground up to solve complex enterprise challenges with elegant, maintainable code.',
-    color: 'var(--accent)',
-    icon: <BuildIcon />,
+    color: '#00E5FF',
+    icon: 'fluent:wrench-screwdriver-24-filled',
+    iconColor: '#00E5FF',
   },
   {
     num: '02',
     title: 'Product-First Mindset',
     role: 'User-Centric Design',
     desc: 'We approach every engagement through the lens of product ownership — prioritising intuitive user experiences, performance, and scalable architecture.',
-    color: '#4DAAFF',
-    icon: <RocketIcon />,
+    color: '#38BDF8',
+    icon: 'fluent:target-arrow-24-filled',
+    iconColor: '#38BDF8',
   },
   {
     num: '03',
     title: 'Uncompromising Quality',
     role: 'Rigorous Delivery',
     desc: 'Multi-stage QA, automated testing pipelines, and comprehensive code reviews ensure our deployments are rock-solid, secure, and ready to scale.',
-    color: '#8CC8FF',
-    icon: <LayersIcon />,
+    color: '#34D399',
+    icon: 'fluent:ribbon-star-24-filled',
+    iconColor: '#34D399',
   },
 ]
 
@@ -114,9 +118,9 @@ export default function About() {
     const ctx = gsap.context(() => {
       // 1. Draw connecting progress line
       gsap.fromTo('.connecting-line-progress',
-        { scaleX: 0 },
+        { width: '0%' },
         {
-          scaleX: 1,
+          width: '100%',
           duration: 1.2,
           ease: 'power2.inOut',
           scrollTrigger: {
@@ -247,7 +251,7 @@ export default function About() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 2,
+              gap: 20,
               position: 'relative',
               zIndex: 5,
             }}
@@ -282,13 +286,48 @@ export default function About() {
 
                 {/* Top Row: Icon Box + Monospace Number */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20, position: 'relative', zIndex: 5 }}>
-                  <div
-                    className="engine-icon-box"
-                    style={{
-                      color: engine.color,
-                    }}
-                  >
-                    {engine.icon}
+                  {/* Realistic 3D icon box */}
+                  <div style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 16,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    background: isDark
+                      ? `linear-gradient(145deg, ${engine.iconColor}36 0%, ${engine.iconColor}18 60%, ${engine.iconColor}08 100%)`
+                      : `linear-gradient(145deg, ${engine.iconColor}40 0%, ${engine.iconColor}20 60%, ${engine.iconColor}0A 100%)`,
+                    border: `1px solid ${engine.iconColor}66`,
+                    boxShadow: [
+                      `0 0 0 1px ${engine.iconColor}33`,
+                      `0 6px 22px -2px ${engine.iconColor}77`,
+                      `0 1px 0 0 ${engine.iconColor}55 inset`,
+                      `inset 0 0 14px 0 ${engine.iconColor}22`,
+                    ].join(', '),
+                  }}>
+                    {/* Inner shine highlight */}
+                    <div style={{
+                      position: 'absolute',
+                      top: 2,
+                      left: 6,
+                      right: 6,
+                      height: '40%',
+                      background: `linear-gradient(180deg, ${engine.iconColor}33 0%, transparent 100%)`,
+                      borderRadius: '8px 8px 50% 50%',
+                      pointerEvents: 'none',
+                    }} />
+                    <Icon
+                      icon={engine.icon}
+                      width={28}
+                      height={28}
+                      style={{
+                        color: engine.iconColor,
+                        filter: `drop-shadow(0 0 8px ${engine.iconColor}aa) drop-shadow(0 2px 4px ${engine.iconColor}66)`,
+                        position: 'relative',
+                        zIndex: 1,
+                      }}
+                    />
                   </div>
                   <span className="engine-num-label">
                     {engine.num}
@@ -335,7 +374,7 @@ export default function About() {
         }
         .connecting-line-container {
           position: absolute;
-          top: 48px;
+          top: 18px;
           left: 0;
           right: 0;
           height: 1px;
@@ -363,40 +402,38 @@ export default function About() {
         }
         .engine-card {
           position: relative;
-          border-radius: 0;
+          border-radius: 20px;
           padding: 32px 32px;
           display: flex;
           flex-direction: column;
           transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.35s, box-shadow 0.35s;
           cursor: default;
           opacity: 1;
+          overflow: hidden;
         }
         .engine-card.dark {
-          background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%);
-          border: 1px solid var(--border);
+          background: linear-gradient(145deg, rgba(12, 24, 60, 0.65) 0%, rgba(6, 12, 28, 0.85) 100%);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid var(--border-strong);
+          box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), inset 0 0 24px 0 rgba(21, 101, 192, 0.12), inset 0 1px 0 0 rgba(79, 195, 247, 0.18);
         }
         .engine-card.light {
           background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(245,247,255,0.92) 100%);
-          border: 1px solid rgba(21, 101, 192, 0.12);
-          box-shadow: 0 4px 20px -6px rgba(21, 101, 192, 0.04);
+          border: 1px solid rgba(21, 101, 192, 0.24);
+          box-shadow: 0 8px 24px -6px rgba(21, 101, 192, 0.08);
         }
         .engine-card.dark:hover {
           transform: translateY(-5px) scale(1.01);
-          border-color: var(--border-strong);
-          box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.4);
+          border-color: var(--accent);
+          box-shadow: 0 20px 45px -12px rgba(79, 195, 247, 0.4), 0 -1px 0 var(--accent) inset;
         }
         .engine-card.light:hover {
           transform: translateY(-5px) scale(1.01) !important;
-          border-color: rgba(21, 101, 192, 0.28) !important;
-          box-shadow: 0 16px 36px -12px rgba(21, 101, 192, 0.12) !important;
-        }
-        @media (min-width: 769px) {
-          .engine-card:first-child { border-radius: 12px 0 0 12px; }
-          .engine-card:last-child { border-radius: 0 12px 12px 0; }
+          border-color: rgba(21, 101, 192, 0.4) !important;
+          box-shadow: 0 16px 36px -12px rgba(21, 101, 192, 0.16) !important;
         }
         @media (max-width: 768px) {
-          .engine-card:first-child { border-radius: 12px 12px 0 0; }
-          .engine-card:last-child { border-radius: 0 0 12px 12px; }
           .connecting-line-container { display: none; }
         }
         .card-top-glow {
@@ -406,8 +443,7 @@ export default function About() {
           right: 0;
           height: 2px;
           background: linear-gradient(90deg, transparent, var(--accent), transparent);
-          opacity: 0;
-          transition: opacity 0.35s;
+          opacity: 0.85;
           pointer-events: none;
           z-index: 5;
         }
@@ -658,30 +694,3 @@ function OrbitalDiagram() {
   )
 }
 
-/* ── SVG Icons ──────────────────────────────────────────── */
-function BuildIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="2" y="10" width="4" height="6" rx="1" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="7" y="6" width="4" height="10" rx="1" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="12" y="2" width="4" height="14" rx="1" stroke="currentColor" strokeWidth="1.3" />
-    </svg>
-  )
-}
-function RocketIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M9 14s-3-2-3-6c0-2 1.5-4 3-5 1.5 1 3 3 3 5s-3 6-3 6z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
-      <circle cx="9" cy="8" r="1.5" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M6 12l-2 2M12 12l2 2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-    </svg>
-  )
-}
-function LayersIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M9 2L16 6.5 9 11 2 6.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
-      <path d="M2 11l7 4.5 7-4.5" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
-    </svg>
-  )
-}

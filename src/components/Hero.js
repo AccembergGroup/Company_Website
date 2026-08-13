@@ -1307,7 +1307,7 @@ export default function Hero({ preloaderDone }) {
         </div>
 
         {/* Trusted brands marquee */}
-        <div style={{
+        <div className="hero-marquee-container" style={{
           borderTop: '1px solid var(--border)',
           paddingTop: 28,
           paddingBottom: 10,
@@ -1419,16 +1419,19 @@ export default function Hero({ preloaderDone }) {
           perspective: 1000px;
         }
 
-        @media (max-width: 1440px) {
-          .orbit-gsap-wrap {
-            transform: translate(-50%, -50%) scale(0.9);
-            top: calc(50% - 35px);
+        @media (max-width: 1200px) {
+          #hero {
+            padding-bottom: 120px !important;
           }
-        }
-        @media (max-width: 1100px) {
           .orbit-gsap-wrap {
-            transform: translate(-50%, -50%) scale(0.8);
-            top: calc(50% - 25px);
+            transform: translate(-50%, -50%) scale(0.92);
+            top: 50%;
+          }
+          .hero-orbit-container {
+            min-height: 480px;
+          }
+          .hero-marquee-container {
+            margin-top: 150px !important;
           }
         }
         @media (max-width: 900px) {
@@ -1447,11 +1450,11 @@ export default function Hero({ preloaderDone }) {
           }
           .hero-orbit-container {
             transform: none;
-            margin-top: 40px;
+            margin-top: 20px;
           }
           .orbit-gsap-wrap {
-            transform: translate(-50%, -50%) scale(0.85);
-            top: 50%; /* centered on mobile */
+            transform: translate(-50%, -50%) scale(0.82);
+            top: 50%;
           }
         }
 
@@ -1475,30 +1478,36 @@ export default function Hero({ preloaderDone }) {
         }
 
         @media (max-width: 768px) {
+          .hero-btns-container {
+            margin-bottom: 20px !important;
+          }
           .orbit-gsap-wrap {
-            top: calc(50% - 60px) !important;
-            transform: translate(-50%, -50%) scale(0.75) !important;
+            top: 50% !important;
+            transform: translate(-50%, calc(-50% - 15px)) scale(0.58) !important;
           }
           .hero-orbit-container {
-            min-height: 380px !important;
+            min-height: 280px !important;
+            margin-top: 0 !important;
+            overflow: visible !important;
           }
         }
         @media (max-width: 480px) {
           .orbit-gsap-wrap {
-            top: calc(50% - 50px) !important;
-            transform: translate(-50%, -50%) scale(0.64) !important;
+            top: 50% !important;
+            transform: translate(-50%, calc(-50% - 15px)) scale(0.54) !important;
           }
           .hero-orbit-container {
-            min-height: 340px !important;
+            min-height: 260px !important;
+            margin-top: 0 !important;
           }
         }
         @media (max-width: 380px) {
           .orbit-gsap-wrap {
-            top: calc(50% - 40px) !important;
-            transform: translate(-50%, -50%) scale(0.54) !important;
+            top: 50% !important;
+            transform: translate(-50%, calc(-50% - 15px)) scale(0.48) !important;
           }
           .hero-orbit-container {
-            min-height: 300px !important;
+            min-height: 230px !important;
           }
         }
 

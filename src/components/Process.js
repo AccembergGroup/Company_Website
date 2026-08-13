@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { Icon } from '@iconify/react'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 import { SpotlightProvider, SpotlightCard } from './Spotlight'
@@ -11,25 +12,29 @@ const STEPS = [
     num: '01',
     title: 'Discovery & Scoping',
     desc: 'We immerse ourselves in your requirements, technical landscape, and business goals to produce a precise, deliverable-bound project scope.',
-    icon: <DiscoveryIcon />,
+    icon: 'fluent:search-24-filled',
+    iconColor: '#4FC3F7',
   },
   {
     num: '02',
     title: 'Architecture & Strategy',
     desc: 'Our senior engineers design the technical foundation — selecting the right stack, system boundaries, and scalability approach before a single line is written.',
-    icon: <ArchIcon />,
+    icon: 'fluent:branch-fork-24-filled',
+    iconColor: '#90CAF9',
   },
   {
     num: '03',
     title: 'Iterative Development',
     desc: 'Modular, documentation-first engineering with QA gates at every sprint. You see progress early and often — no black-box delivery.',
-    icon: <DevIcon />,
+    icon: 'fluent:code-block-24-filled',
+    iconColor: '#80CBC4',
   },
   {
     num: '04',
     title: 'Deployment & Scale',
     desc: 'Structured handoff, production deployment, monitoring setup, and optional long-term maintenance — built for systems that need to keep running.',
-    icon: <DeployIcon />,
+    icon: 'fluent:cloud-arrow-up-24-filled',
+    iconColor: '#A5D6A7',
   },
 ]
 
@@ -140,36 +145,11 @@ export default function Process() {
   )
 }
 
-function DiscoveryIcon() {
-  return <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-    <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.4"/>
-    <path d="M15.5 15.5L20 20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-    <path d="M10 7v3l2 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-}
-function ArchIcon() {
-  return <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-    <rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.4"/>
-    <rect x="13" y="2" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.4"/>
-    <rect x="7.5" y="13" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.4"/>
-    <path d="M5.5 9v2a3 3 0 003 3h5a3 3 0 003-3V9" stroke="currentColor" strokeWidth="1.4"/>
-  </svg>
-}
-function DevIcon() {
-  return <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-    <path d="M6 7L2 11l4 4M16 7l4 4-4 4M13 4l-4 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-}
-function DeployIcon() {
-  return <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-    <path d="M11 3v12M7 11l4-5 4 5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M4 19h14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-    <circle cx="11" cy="17" r="1.2" fill="currentColor"/>
-  </svg>
-}
 
 function StepCard({ step }) {
   const { theme } = useTheme()
+  // Derive a hex color with alpha for glow
+  const iconHex = step.iconColor || '#4FC3F7'
   return (
     <SpotlightCard
       style={{
@@ -182,7 +162,7 @@ function StepCard({ step }) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        gap: 16,
+        gap: 0,
         transition: 'border-color 300ms, box-shadow 300ms, transform 300ms var(--ease-out-quart)',
         cursor: 'default',
         boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.03)',
@@ -201,9 +181,49 @@ function StepCard({ step }) {
       }}
     >
       {/* Top row: Icon + Step number */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-          {step.icon}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+        {/* Realistic 3D icon box */}
+        <div style={{
+          width: 56,
+          height: 56,
+          borderRadius: 16,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          background: theme === 'dark'
+            ? `linear-gradient(145deg, ${iconHex}26 0%, ${iconHex}10 60%, ${iconHex}04 100%)`
+            : `linear-gradient(145deg, ${iconHex}30 0%, ${iconHex}14 60%, ${iconHex}06 100%)`,
+          border: `1px solid ${iconHex}44`,
+          boxShadow: [
+            `0 0 0 1px ${iconHex}18`,
+            `0 4px 16px -4px ${iconHex}55`,
+            `0 1px 0 0 ${iconHex}33 inset`,
+            `inset 0 0 12px 0 ${iconHex}11`,
+          ].join(', '),
+        }}>
+          {/* Inner shine highlight */}
+          <div style={{
+            position: 'absolute',
+            top: 2,
+            left: 6,
+            right: 6,
+            height: '40%',
+            background: `linear-gradient(180deg, ${iconHex}22 0%, transparent 100%)`,
+            borderRadius: '8px 8px 50% 50%',
+            pointerEvents: 'none',
+          }} />
+          <Icon
+            icon={step.icon}
+            width={28}
+            height={28}
+            style={{
+              color: iconHex,
+              filter: `drop-shadow(0 0 6px ${iconHex}88) drop-shadow(0 2px 4px ${iconHex}44)`,
+              position: 'relative',
+              zIndex: 1,
+            }}
+          />
         </div>
         <span style={{
           fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
@@ -224,6 +244,7 @@ function StepCard({ step }) {
         color: 'var(--text-primary)',
         lineHeight: 1.35,
         letterSpacing: '-0.01em',
+        marginBottom: 10,
       }}>
         {step.title}
       </h3>

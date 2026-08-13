@@ -1,4 +1,4 @@
-import { Space_Grotesk, Inter } from 'next/font/google'
+import { Space_Grotesk, Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import LenisProvider from '@/components/LenisProvider'
 import CustomCursor from '@/components/CustomCursor'
@@ -13,6 +13,12 @@ const spaceGrotesk = Space_Grotesk({
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
+  display: 'swap',
+})
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-plus-jakarta',
   display: 'swap',
 })
 
@@ -53,7 +59,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable}`}
+      className={`${plusJakartaSans.variable} ${spaceGrotesk.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
       <head>

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { ArrowRight, Trophy, Zap, Monitor } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { useTheme } from '@/components/ThemeProvider'
 import FastScroll from './FastScroll'
 import { SpotlightProvider, SpotlightCard } from './Spotlight'
@@ -9,9 +10,9 @@ import ScrambleText from './ScrambleText'
 import { gsap } from 'gsap'
 
 const getProductIcon = (name) => {
-  if (name.includes('Agnishakti')) return Trophy;
-  if (name.includes('FormForge')) return Zap;
-  return Monitor;
+  if (name.includes('Agnishakti')) return 'fluent:rocket-24-filled';
+  if (name.includes('FormForge')) return 'fluent:form-24-filled';
+  return 'fluent:people-team-24-filled';
 }
 
 const PRODUCTS = [
@@ -25,7 +26,8 @@ const PRODUCTS = [
     status: 'Core Expertise',
     highlight: true,
     metric: { label: 'Quality Standard', val: 'Zero Downtime' },
-    icon: Trophy,
+    icon: 'fluent:shield-keyhole-24-filled',
+    iconColor: '#FFD54F',   // amber gold — trust, security, authority
   },
   {
     id: 'agnishakti',
@@ -36,7 +38,8 @@ const PRODUCTS = [
     accent: 'var(--accent)',
     status: 'Active Track',
     metric: { label: 'Dev Cycle', val: '< 8 weeks' },
-    icon: Zap,
+    icon: 'fluent:rocket-24-filled',
+    iconColor: '#CE93D8',   // purple — innovation, velocity
   },
   {
     id: 'client-services',
@@ -47,7 +50,8 @@ const PRODUCTS = [
     accent: 'var(--accent)',
     status: 'Open to Engagements',
     metric: { label: 'Project Start', val: '< 2 weeks' },
-    icon: Monitor,
+    icon: 'fluent:people-team-24-filled',
+    iconColor: '#80CBC4',   // teal — collaboration, people
   },
 ]
 
@@ -337,7 +341,7 @@ function ProductCard({ product, large = false }) {
   const { theme } = useTheme()
   const cardRef = useRef(null)
   const contentRef = useRef(null)
-  const Icon = product.icon
+  const iconName = product.icon
 
   // Live Terminal Logs (only for the large flagship card)
   const [logs, setLogs] = useState([
@@ -492,8 +496,46 @@ function ProductCard({ product, large = false }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {/* Top: icon + status badge */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                  <Icon size={18} strokeWidth={2.2} className="text-accent" />
+                {/* Realistic 3D icon box */}
+                <div style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 14,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  background: `linear-gradient(145deg, ${product.iconColor}40 0%, ${product.iconColor}1A 60%, ${product.iconColor}08 100%)`,
+                  border: `1px solid ${product.iconColor}77`,
+                  boxShadow: [
+                    `0 0 0 1px ${product.iconColor}22`,
+                    `0 4px 16px -4px ${product.iconColor}99`,
+                    `0 1px 0 0 ${product.iconColor}44 inset`,
+                    `inset 0 0 12px 0 ${product.iconColor}18`,
+                  ].join(', '),
+                }}>
+                  {/* Inner shine highlight */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 2,
+                    left: 5,
+                    right: 5,
+                    height: '40%',
+                    background: `linear-gradient(180deg, ${product.iconColor}35 0%, transparent 100%)`,
+                    borderRadius: '8px 8px 50% 50%',
+                    pointerEvents: 'none',
+                  }} />
+                  <Icon
+                    icon={iconName}
+                    width={22}
+                    height={22}
+                    style={{
+                      color: product.iconColor,
+                      filter: `drop-shadow(0 0 8px ${product.iconColor}cc) drop-shadow(0 2px 6px ${product.iconColor}77)`,
+                      position: 'relative',
+                      zIndex: 1,
+                    }}
+                  />
                 </div>
                 <span
                   style={{
