@@ -2,7 +2,8 @@
 
 import { useRef, useEffect } from 'react'
 import Image from 'next/image'
-import { Layout, Server, Database, Cloud, Terminal, CheckCircle2 } from 'lucide-react'
+import { Icon } from '@iconify/react'
+import { CheckCircle2 } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
@@ -10,22 +11,26 @@ import ScrambleText from './ScrambleText'
 const STACKS = [
   {
     category: 'Frontend & Client Systems',
-    icon: Layout,
+    icon: 'fluent:window-dev-tools-24-filled',
+    iconColor: '#4FC3F7',   // cyan — UI, interface
     techs: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Framer Motion', 'Redux Toolkit']
   },
   {
     category: 'Backend & Service Logic',
-    icon: Server,
+    icon: 'fluent:code-block-24-filled',
+    iconColor: '#A5D6A7',   // green — servers, reliability
     techs: ['Node.js', 'Express', 'NestJS', 'Go (Golang)', 'Python (FastAPI)', 'GraphQL', 'gRPC']
   },
   {
     category: 'Database & Data Ingestion',
-    icon: Database,
+    icon: 'fluent:database-24-filled',
+    iconColor: '#FFD54F',   // amber — data, storage
     techs: ['PostgreSQL', 'Supabase', 'Prisma ORM', 'Redis', 'MongoDB', 'Elasticsearch', 'DynamoDB']
   },
   {
     category: 'Cloud Infrastructure & DevOps',
-    icon: Cloud,
+    icon: 'fluent:cloud-flow-24-filled',
+    iconColor: '#CE93D8',   // purple — cloud, orchestration
     techs: ['Amazon Web Services (AWS)', 'Google Cloud (GCP)', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD Pipelines', 'GitHub Actions']
   }
 ]
@@ -140,7 +145,6 @@ export default function TechStack() {
         {/* Stack grid */}
         <div className="stack-grid">
           {STACKS.map((stack, i) => {
-            const Icon = stack.icon
             return (
               <div
                 key={stack.category}
@@ -172,8 +176,43 @@ export default function TechStack() {
               >
                 {/* Header */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                    <Icon size={18} strokeWidth={2.2} />
+                  {/* 3D icon box */}
+                  <div style={{
+                    width: 52,
+                    height: 52,
+                    borderRadius: 14,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    flexShrink: 0,
+                    background: `linear-gradient(145deg, ${stack.iconColor}26 0%, ${stack.iconColor}10 60%, ${stack.iconColor}04 100%)`,
+                    border: `1px solid ${stack.iconColor}44`,
+                    boxShadow: [
+                      `0 0 0 1px ${stack.iconColor}18`,
+                      `0 4px 16px -4px ${stack.iconColor}55`,
+                      `0 1px 0 0 ${stack.iconColor}30 inset`,
+                      `inset 0 0 12px 0 ${stack.iconColor}11`,
+                    ].join(', '),
+                  }}>
+                    {/* inner shine */}
+                    <div style={{
+                      position: 'absolute', top: 2, left: 5, right: 5, height: '40%',
+                      background: `linear-gradient(180deg, ${stack.iconColor}22 0%, transparent 100%)`,
+                      borderRadius: '8px 8px 50% 50%',
+                      pointerEvents: 'none',
+                    }} />
+                    <Icon
+                      icon={stack.icon}
+                      width={26}
+                      height={26}
+                      style={{
+                        color: stack.iconColor,
+                        filter: `drop-shadow(0 0 6px ${stack.iconColor}88) drop-shadow(0 2px 4px ${stack.iconColor}44)`,
+                        position: 'relative',
+                        zIndex: 1,
+                      }}
+                    />
                   </div>
                   <h3 style={{
                     fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',

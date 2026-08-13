@@ -1,158 +1,59 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { Icon } from '@iconify/react'
 import FastScroll from './FastScroll'
 import { SpotlightProvider, SpotlightCard } from './Spotlight'
 import ScrambleText from './ScrambleText'
 import { useTheme } from '@/components/ThemeProvider'
-
-const getIconSvg = (iconName) => {
-  switch (iconName) {
-    case 'code-2': return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-        <line x1="12" y1="2" x2="12" y2="22" strokeOpacity="0.4" />
-      </svg>
-    )
-    case 'network': return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <circle cx="12" cy="5" r="2" fill="currentColor" fillOpacity="0.3" />
-        <circle cx="5" cy="19" r="2" fill="currentColor" fillOpacity="0.3" />
-        <circle cx="19" cy="19" r="2" fill="currentColor" fillOpacity="0.3" />
-        <line x1="12" y1="7" x2="5" y2="17" />
-        <line x1="12" y1="7" x2="19" y2="17" />
-        <line x1="7" y1="19" x2="17" y2="19" />
-      </svg>
-    )
-    case 'rocket': return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2C12 2 7 6 7 13H17C17 6 12 2 12 2Z" fill="currentColor" fillOpacity="0.15" />
-        <path d="M7 13L5 17H19L17 13" />
-        <line x1="12" y1="13" x2="12" y2="20" />
-        <line x1="9" y1="20" x2="15" y2="20" />
-      </svg>
-    )
-    case 'lightbulb': return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <path d="M9 21h6" />
-        <path d="M10 17h4" />
-        <path d="M12 3a6 6 0 0 1 6 6c0 2.5-1.5 4.5-3 6H9C7.5 13.5 6 11.5 6 9a6 6 0 0 1 6-6z" fill="currentColor" fillOpacity="0.12" />
-        <line x1="12" y1="7" x2="12" y2="11" strokeOpacity="0.5" />
-      </svg>
-    )
-    case 'shield-check': return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L4 6V12C4 16.42 7.58 21 12 22C16.42 21 20 16.42 20 12V6L12 2Z" fill="currentColor" fillOpacity="0.12" />
-        <polyline points="9 12 11 14 15 10" />
-      </svg>
-    )
-    default: return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <circle cx="12" cy="12" r="3" fill="currentColor" fillOpacity="0.2" />
-        <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-        <path d="M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" strokeOpacity="0.5" />
-      </svg>
-    )
-  }
-}
 
 const SERVICES = [
   {
     num: '01',
     title: 'Full-Stack Software Development',
     desc: 'End-to-end product engineering from architecture to deployment — scalable, maintainable, and built for growth.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Code brackets + center line */}
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-        <line x1="14" y1="4" x2="10" y2="20" strokeOpacity="0.45" />
-      </svg>
-    ),
+    icon: 'fluent:window-dev-tools-24-filled',
+    iconColor: '#4FC3F7',
     tags: ['React', 'Node.js', 'Databases', 'APIs'],
   },
   {
     num: '02',
     title: 'System Architecture & Integration',
     desc: 'Robust technical foundations and seamless third-party integrations that eliminate bottlenecks at scale.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        {/* Hex nodes in triangle */}
-        <circle cx="12" cy="5" r="2" fill="currentColor" fillOpacity="0.3" />
-        <circle cx="5" cy="18" r="2" fill="currentColor" fillOpacity="0.3" />
-        <circle cx="19" cy="18" r="2" fill="currentColor" fillOpacity="0.3" />
-        <line x1="12" y1="7" x2="6" y2="16" />
-        <line x1="12" y1="7" x2="18" y2="16" />
-        <line x1="7" y1="18" x2="17" y2="18" />
-      </svg>
-    ),
+    icon: 'fluent:organization-horizontal-24-filled',
+    iconColor: '#81D4FA',
     tags: ['Microservices', 'APIs', 'Legacy Migration'],
   },
   {
     num: '03',
     title: 'Cloud Infrastructure & DevOps',
     desc: 'Cloud-native infrastructure design with CI/CD pipelines, container orchestration, and 99.9% uptime targets.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Cloud with upward arrow */}
-        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="currentColor" fillOpacity="0.12" />
-        <line x1="12" y1="22" x2="12" y2="14" />
-        <polyline points="9 17 12 14 15 17" />
-      </svg>
-    ),
+    icon: 'fluent:cloud-flow-24-filled',
+    iconColor: '#4FC3F7',
     tags: ['AWS', 'GCP', 'Kubernetes', 'CI/CD'],
   },
   {
     num: '04',
     title: 'AI & ML Integration',
     desc: 'Intelligent automation, predictive analytics, and LLM-powered features built directly into your product stack.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        {/* Neural net: 3-layer nodes + edges */}
-        <circle cx="4" cy="8" r="1.5" fill="currentColor" />
-        <circle cx="4" cy="16" r="1.5" fill="currentColor" />
-        <circle cx="12" cy="5" r="1.5" fill="currentColor" />
-        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-        <circle cx="12" cy="19" r="1.5" fill="currentColor" />
-        <circle cx="20" cy="12" r="1.5" fill="currentColor" />
-        <line x1="5.5" y1="8" x2="10.5" y2="5" strokeOpacity="0.5" />
-        <line x1="5.5" y1="8" x2="10.5" y2="12" strokeOpacity="0.5" />
-        <line x1="5.5" y1="16" x2="10.5" y2="12" strokeOpacity="0.5" />
-        <line x1="5.5" y1="16" x2="10.5" y2="19" strokeOpacity="0.5" />
-        <line x1="13.5" y1="5" x2="18.5" y2="12" strokeOpacity="0.5" />
-        <line x1="13.5" y1="12" x2="18.5" y2="12" strokeOpacity="0.5" />
-        <line x1="13.5" y1="19" x2="18.5" y2="12" strokeOpacity="0.5" />
-      </svg>
-    ),
+    icon: 'fluent:brain-circuit-24-filled',
+    iconColor: '#CE93D8',
     tags: ['LLMs', 'ML Pipelines', 'NLP', 'GenAI'],
   },
   {
     num: '05',
     title: 'Technical Consulting & Strategy',
     desc: 'Senior engineering advisory for product decisions, technical debt reduction, and scalability roadmaps.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Compass */}
-        <circle cx="12" cy="12" r="9" fill="currentColor" fillOpacity="0.08" />
-        <polygon points="12 3 14 10 12 12 10 10" fill="currentColor" fillOpacity="0.7" />
-        <polygon points="12 21 10 14 12 12 14 14" fill="currentColor" fillOpacity="0.25" />
-        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-      </svg>
-    ),
+    icon: 'fluent:whiteboard-24-filled',
+    iconColor: '#80CBC4',
     tags: ['Roadmapping', 'Audits', 'Advisory'],
   },
   {
     num: '06',
     title: 'QA, Testing & Maintenance',
     desc: 'Multi-stage quality assurance with automated testing pipelines and dedicated support — ensuring reliability.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Shield with checkmark */}
-        <path d="M12 2L4 6V12C4 16.42 7.58 21 12 22C16.42 21 20 16.42 20 12V6L12 2Z" fill="currentColor" fillOpacity="0.12" />
-        <polyline points="9 12 11 14 15 10" />
-      </svg>
-    ),
+    icon: 'fluent:shield-checkmark-24-filled',
+    iconColor: '#A5D6A7',
     tags: ['Automated QA', 'Performance', 'SLAs'],
   },
 ]
@@ -302,6 +203,12 @@ export default function Services() {
           grid-template-columns: repeat(3, 1fr);
           gap: 20px;
         }
+        .svc-card-top {
+          margin-bottom: 8px;
+        }
+        .svc-card-title {
+          margin-top: 4px !important;
+        }
         @media (max-width: 900px) {
           .services-grid {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -312,6 +219,12 @@ export default function Services() {
           .services-grid {
             grid-template-columns: 1fr !important;
             gap: 14px !important;
+          }
+          .svc-card-top {
+            margin-bottom: 10px;
+          }
+          .svc-card-title {
+            margin-top: 6px !important;
           }
         }
       `}</style>
@@ -333,7 +246,7 @@ function ServiceCard({ svc }) {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        gap: 16,
+        gap: 0,
         transition: 'border-color 300ms, box-shadow 300ms, transform 300ms var(--ease-out-quart)',
         cursor: 'default',
         boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.03)',
@@ -352,9 +265,49 @@ function ServiceCard({ svc }) {
       }}
     >
       {/* Top row: icon + number */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)', color: theme === 'dark' ? '#4FC3F7' : '#1565C0' }}>
-          {svc.icon}
+      <div className="svc-card-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+        {/* Realistic 3D icon box */}
+        <div style={{
+          width: 56,
+          height: 56,
+          borderRadius: 16,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          background: theme === 'dark'
+            ? `linear-gradient(145deg, ${svc.iconColor}26 0%, ${svc.iconColor}10 60%, ${svc.iconColor}04 100%)`
+            : `linear-gradient(145deg, ${svc.iconColor}30 0%, ${svc.iconColor}14 60%, ${svc.iconColor}06 100%)`,
+          border: `1px solid ${svc.iconColor}44`,
+          boxShadow: [
+            `0 0 0 1px ${svc.iconColor}18`,
+            `0 4px 16px -4px ${svc.iconColor}55`,
+            `0 1px 0 0 ${svc.iconColor}33 inset`,
+            `inset 0 0 12px 0 ${svc.iconColor}11`,
+          ].join(', '),
+        }}>
+          {/* Inner shine highlight */}
+          <div style={{
+            position: 'absolute',
+            top: 2,
+            left: 6,
+            right: 6,
+            height: '40%',
+            background: `linear-gradient(180deg, ${svc.iconColor}22 0%, transparent 100%)`,
+            borderRadius: '8px 8px 50% 50%',
+            pointerEvents: 'none',
+          }} />
+          <Icon
+            icon={svc.icon}
+            width={28}
+            height={28}
+            style={{
+              color: svc.iconColor,
+              filter: `drop-shadow(0 0 6px ${svc.iconColor}88) drop-shadow(0 2px 4px ${svc.iconColor}44)`,
+              position: 'relative',
+              zIndex: 1,
+            }}
+          />
         </div>
         <span style={{
           fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
@@ -368,19 +321,20 @@ function ServiceCard({ svc }) {
       </div>
 
       {/* Title */}
-      <h3 style={{
+      <h3 className="svc-card-title" style={{
         fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
         fontSize: 16,
         fontWeight: 600,
         color: 'var(--text-primary)',
         lineHeight: 1.35,
         letterSpacing: '-0.01em',
+        marginBottom: 10,
       }}>
         {svc.title}
       </h3>
 
       {/* Desc */}
-      <p className="text-body" style={{ flex: 1 }}>{svc.desc}</p>
+      <p className="text-body" style={{ flex: 1, marginBottom: 16 }}>{svc.desc}</p>
 
       {/* Tags */}
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', paddingTop: 4 }}>

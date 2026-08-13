@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from '@/components/ThemeProvider'
-import { ArrowRight, Maximize2, Minimize2, Check, ExternalLink, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Maximize2, Minimize2, Check, ExternalLink, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
@@ -24,20 +24,20 @@ function VortexGraphic() {
       t += 0.015
       const cx = 90
       const cy = 90
-      
+
       // Draw outer swirl particles
       for (let i = 0; i < 240; i++) {
         const angle = i * 0.18 + t
         const r = (i * 0.28) + 16
         const x = cx + Math.cos(angle) * r
         const y = cy + Math.sin(angle) * r
-        
+
         ctx.beginPath()
         ctx.arc(x, y, 1.1, 0, Math.PI * 2)
         ctx.fillStyle = `rgba(236, 72, 153, ${Math.max(0, 0.9 - r / 75)})` // neon pink fading
         ctx.fill()
       }
-      
+
       animId = requestAnimationFrame(render)
     }
     render()
@@ -61,9 +61,9 @@ function VortexGraphic() {
         zIndex: 2,
       }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="9" cy="21" r="1"/>
-          <circle cx="20" cy="21" r="1"/>
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
         </svg>
       </div>
     </div>
@@ -152,7 +152,7 @@ function GlobeGraphic() {
     const ctx = canvas.getContext('2d')
     let animId
     let t = 0
-    
+
     const numPoints = 70
     const points = []
     for (let i = 0; i < numPoints; i++) {
@@ -177,11 +177,11 @@ function GlobeGraphic() {
         // Rotate around Y axis
         const x1 = p.x * Math.cos(t) - p.z * Math.sin(t)
         const z1 = p.x * Math.sin(t) + p.z * Math.cos(t)
-        
+
         // Rotate around X axis slightly
         const y2 = p.y * Math.cos(0.25) - z1 * Math.sin(0.25)
         const z2 = p.y * Math.sin(0.25) + z1 * Math.cos(0.25)
-        
+
         return {
           sx: cx + x1 * r,
           sy: cy + y2 * r,
@@ -279,6 +279,33 @@ export default function Projects() {
   const { theme } = themeHookSafe()
   const [activeFilter, setActiveFilter] = useState('All Projects')
   const [activeProjectId, setActiveProjectId] = useState(null) // Opened project in modal
+  const scrollRef = useRef(null)
+
+  // Attach mouse wheel handler to enable smooth horizontal mouse scrolling
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const isAtStart = el.scrollLeft <= 0 && e.deltaY < 0
+        const isAtEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2 && e.deltaY > 0
+        if (!isAtStart && !isAtEnd) {
+          e.preventDefault()
+          el.scrollLeft += e.deltaY * 0.95
+        }
+      }
+    }
+
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [])
+
+  const scrollByAmount = (dir) => {
+    if (!scrollRef.current) return
+    const amount = scrollRef.current.clientWidth * 0.75
+    scrollRef.current.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' })
+  }
 
   // Filter matching logic
   const filteredProjects = PROJECTS.filter(proj => {
@@ -290,7 +317,7 @@ export default function Projects() {
 
   return (
     <section id="projects" className="section" style={{ background: 'var(--bg-base)', borderTop: '1px solid var(--border)', position: 'relative', overflow: 'hidden', padding: '90px 0', transition: 'background-color 400ms' }}>
-      
+
       {/* Background Mesh Blobs */}
       <div style={{
         position: 'absolute', right: -120, top: '10%',
@@ -301,7 +328,7 @@ export default function Projects() {
       }} />
 
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        
+
         {/* Header Block */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 48 }}>
           <span style={{
@@ -315,54 +342,59 @@ export default function Projects() {
             Our Work
           </span>
           <h2 className="text-h2" style={{ marginBottom: 14 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Projects that</span></FastScroll>
-              <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>drive impact</span></FastScroll>
-            </h2>
+            <FastScroll><span style={{ display: 'inline-block' }}>Projects that</span></FastScroll>
+            <br />
+            <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>drive impact</span></FastScroll>
+          </h2>
           <p className="text-body-lg" style={{ maxWidth: 580 }}>
             We build scalable, AI-powered digital solutions that help our clients innovate, automate, and grow.
           </p>
         </div>
 
-        {/* Filter Controls Row */}
-        <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
-          {['All Projects', 'AI / ML', 'Web Development', 'Cloud', 'Mobile', 'DevOps'].map(filter => {
-            const isActive = activeFilter === filter
-            return (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: 100,
-                  fontSize: 12,
-                  fontWeight: 600,
-                  border: isActive ? '1px solid var(--accent)' : '1px solid var(--border)',
-                  background: isActive ? 'var(--accent-dim)' : 'transparent',
-                  color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
-                  cursor: 'pointer',
-                  transition: 'all 200ms',
-                }}
-                suppressHydrationWarning
-              >
-                {filter}
-              </button>
-            )
-          })}
+        {/* Filter Controls Row & Nav Arrows */}
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {['All Projects', 'AI / ML', 'Web Development', 'Cloud', 'Mobile', 'DevOps'].map(filter => {
+              const isActive = activeFilter === filter
+              return (
+                <button
+                  key={filter}
+                  onClick={() => setActiveFilter(filter)}
+                  style={{
+                    padding: '8px 18px',
+                    borderRadius: 100,
+                    fontSize: 12,
+                    fontWeight: 600,
+                    border: isActive ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: isActive ? 'var(--accent-dim)' : 'transparent',
+                    color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    transition: 'all 200ms',
+                  }}
+                  suppressHydrationWarning
+                >
+                  {filter}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        {/* Short Version: Consistent 3-column Grid */}
-        <div className="projects-grid-desktop" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 20,
-          width: '100%'
-        }}>
+        {/* Projects Grid */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gap: 24,
+            width: '100%',
+          }}
+        >
           {filteredProjects.map(proj => (
             <div
               key={proj.id}
               onClick={() => setActiveProjectId(proj.id)}
               style={{
+                width: '100%',
                 background: 'var(--bg-card)',
                 border: '1px solid var(--border)',
                 borderRadius: 20,
@@ -371,7 +403,7 @@ export default function Projects() {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 position: 'relative',
-                minHeight: 480,
+                minHeight: 460,
                 cursor: 'pointer',
                 boxShadow: '0 8px 24px -10px rgba(0,0,0,0.02)',
                 transition: 'border-color 300ms, box-shadow 300ms, transform 300ms',
@@ -455,35 +487,6 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Mobile stacking Accordion list */}
-        <div className="projects-grid-mobile" style={{ display: 'none', flexDirection: 'column', gap: 16 }}>
-          {filteredProjects.map(proj => (
-            <div
-              key={proj.id}
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: 20,
-                padding: 20,
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} onClick={() => setActiveProjectId(proj.id)}>
-                <div>
-                  <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', color: 'var(--accent)', display: 'block', marginBottom: 4 }}>
-                    {proj.category}
-                  </span>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
-                    {proj.title}
-                  </h3>
-                </div>
-                <div style={{ color: 'var(--text-muted)' }}>
-                  <Maximize2 size={14} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Case Study Details Modal Overlay */}
         <AnimatePresence>
           {activeProjectId && selectedProject && (
@@ -492,6 +495,7 @@ export default function Projects() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveProjectId(null)}
+              data-lenis-prevent
               style={{
                 position: 'fixed',
                 inset: 0,
@@ -511,6 +515,7 @@ export default function Projects() {
                 exit={{ y: 40, scale: 0.95, opacity: 0 }}
                 transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                 onClick={(e) => e.stopPropagation()}
+                data-lenis-prevent
                 style={{
                   background: 'var(--bg-card)',
                   border: '1px solid var(--border)',
@@ -521,6 +526,7 @@ export default function Projects() {
                   boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
                   maxHeight: '85vh',
                   overflowY: 'auto',
+                  WebkitOverflowScrolling: 'touch',
                 }}
               >
                 {/* Modal Header */}
@@ -664,18 +670,18 @@ export default function Projects() {
       </div>
 
       <style>{`
-        @media (max-width: 900px) {
-          .projects-grid-desktop {
-            display: none !important;
-          }
-          .projects-grid-mobile {
-            display: flex !important;
-          }
+        .projects-scroll-track::-webkit-scrollbar {
+          height: 6px;
+        }
+        .projects-scroll-track::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.03);
+          border-radius: 10px;
+        }
+        .projects-scroll-track::-webkit-scrollbar-thumb {
+          background: var(--border-strong);
+          border-radius: 10px;
         }
         @media (max-width: 768px) {
-          .project-card-grid {
-            grid-template-columns: 1fr !important;
-          }
           .project-expanded-top {
             grid-template-columns: 1fr !important;
           }

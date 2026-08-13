@@ -83,18 +83,18 @@ export default function Navbar() {
           alignItems: 'center',
           backgroundColor: theme === 'dark'
             ? (scrolled ? 'rgba(10, 16, 24, 0.82)' : 'rgba(255, 255, 255, 0.05)')
-            : (scrolled ? 'rgba(245, 247, 255, 0.82)' : 'rgba(0, 0, 0, 0.04)'),
+            : (scrolled ? 'rgba(255, 255, 255, 0.92)' : 'rgba(255, 255, 255, 0.78)'),
           backdropFilter: 'blur(28px) saturate(1.8)',
           WebkitBackdropFilter: 'blur(28px) saturate(1.8)',
           border: theme === 'dark'
             ? '1px solid rgba(255, 255, 255, 0.10)'
-            : '1px solid rgba(21, 101, 192, 0.12)',
+            : '1px solid rgba(21, 101, 192, 0.16)',
           borderRadius: 100,
           backgroundClip: 'padding-box',
           transition: 'background 400ms, box-shadow 400ms, border-color 400ms',
-          boxShadow: scrolled
-            ? '0 10px 30px -10px rgba(0,0,0,0.15)'
-            : '0 4px 20px -5px rgba(0,0,0,0.05)',
+          boxShadow: theme === 'dark'
+            ? (scrolled ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 4px 20px -5px rgba(0,0,0,0.2)')
+            : (scrolled ? '0 10px 30px -10px rgba(21, 101, 192, 0.15)' : '0 4px 20px -5px rgba(21, 101, 192, 0.08)'),
           whiteSpace: 'nowrap',
           maxWidth: 'calc(100vw - 48px)',
         }}
@@ -118,7 +118,7 @@ export default function Navbar() {
               height: 30,
               borderRadius: '50%',
               background: theme === 'dark' ? 'rgba(26,143,255,0.12)' : 'rgba(21, 101, 192, 0.08)',
-              border: theme === 'dark' ? '1px solid rgba(26,143,255,0.22)' : '1px solid rgba(21, 101, 192, 0.15)',
+              border: theme === 'dark' ? '1px solid rgba(26,143,255,0.22)' : '1px solid rgba(21, 101, 192, 0.18)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -136,14 +136,8 @@ export default function Navbar() {
             />
           </div>
           <span
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: '0.07em',
-              color: 'var(--text-primary)',
-            }}
-            className="nav-wordmark"
+            style={{ fontSize: 14 }}
+            className="nav-wordmark brand-wordmark-gradient"
           >
             ACCEMBERG
           </span>

@@ -1,29 +1,33 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import { ShieldCheck, Eye, RefreshCw, Trophy } from 'lucide-react'
+import { Icon } from '@iconify/react'
 import { useTheme } from '@/components/ThemeProvider'
 import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
 const PILLARS = [
   {
-    icon: Trophy,
+    icon: 'fluent:hat-graduation-24-filled',  // senior / expertise
+    iconColor: '#FFD54F',
     title: 'Senior Engineering Guarantee',
     desc: 'Every line of code is written by senior systems architects and senior full-stack engineers. We never compromise on technical leadership.'
   },
   {
-    icon: Eye,
+    icon: 'fluent:open-folder-24-filled',      // open / transparent access
+    iconColor: '#4FC3F7',
     title: 'Absolute Transparency',
     desc: 'Get direct access to our Slack channels, GitHub repository commits, and active Jira sprint boards. We work as a unified extension of your team.'
   },
   {
-    icon: RefreshCw,
+    icon: 'fluent:resize-24-filled',           // scale up/down
+    iconColor: '#80CBC4',
     title: 'Flexible Scale Models',
     desc: 'Scale your active engineering squad up or down based on product velocity requirements. Pay only for the resources you need.'
   },
   {
-    icon: ShieldCheck,
+    icon: 'fluent:lock-closed-24-filled',      // lock = security
+    iconColor: '#CE93D8',
     title: 'Enterprise-Grade Security',
     desc: 'Built-in security audits, encrypted pipelines, and compliance checks (HIPAA/SOC2 frameworks) baked directly into initial builds.'
   }
@@ -124,7 +128,6 @@ export default function WhyAccemberg() {
           {/* Right pillars list */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }} className="pillars-grid">
             {PILLARS.map((pillar, i) => {
-              const Icon = pillar.icon
               return (
                 <div
                   key={pillar.title}
@@ -152,8 +155,47 @@ export default function WhyAccemberg() {
                     e.currentTarget.style.transform = 'translateY(0)'
                   }}
                 >
-                  <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                    <Icon size={18} strokeWidth={2.2} />
+                  {/* Realistic 3D icon box */}
+                  <div style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 16,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    flexShrink: 0,
+                    background: theme === 'dark'
+                      ? `linear-gradient(145deg, ${pillar.iconColor}26 0%, ${pillar.iconColor}10 60%, ${pillar.iconColor}04 100%)`
+                      : `linear-gradient(145deg, ${pillar.iconColor}30 0%, ${pillar.iconColor}14 60%, ${pillar.iconColor}06 100%)`,
+                    border: `1px solid ${pillar.iconColor}44`,
+                    boxShadow: [
+                      `0 0 0 1px ${pillar.iconColor}18`,
+                      `0 4px 16px -4px ${pillar.iconColor}55`,
+                      `0 1px 0 0 ${pillar.iconColor}33 inset`,
+                      `inset 0 0 12px 0 ${pillar.iconColor}11`,
+                    ].join(', '),
+                  }}>
+                    {/* Inner shine */}
+                    <div style={{
+                      position: 'absolute',
+                      top: 2, left: 6, right: 6,
+                      height: '40%',
+                      background: `linear-gradient(180deg, ${pillar.iconColor}22 0%, transparent 100%)`,
+                      borderRadius: '8px 8px 50% 50%',
+                      pointerEvents: 'none',
+                    }} />
+                    <Icon
+                      icon={pillar.icon}
+                      width={28}
+                      height={28}
+                      style={{
+                        color: pillar.iconColor,
+                        filter: `drop-shadow(0 0 6px ${pillar.iconColor}88) drop-shadow(0 2px 4px ${pillar.iconColor}44)`,
+                        position: 'relative',
+                        zIndex: 1,
+                      }}
+                    />
                   </div>
                   <h3 style={{
                     fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
