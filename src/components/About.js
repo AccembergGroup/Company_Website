@@ -118,9 +118,9 @@ export default function About() {
     const ctx = gsap.context(() => {
       // 1. Draw connecting progress line
       gsap.fromTo('.connecting-line-progress',
-        { scaleX: 0 },
+        { width: '0%' },
         {
-          scaleX: 1,
+          width: '100%',
           duration: 1.2,
           ease: 'power2.inOut',
           scrollTrigger: {
