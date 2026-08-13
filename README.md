@@ -1,68 +1,110 @@
-# Accemberg Corporate Platform
-A high-end, studio-grade corporate web application built for the premium enterprise software firm **Accemberg**. This platform is heavily optimized for buttery-smooth 60 FPS interactions, zero-lag physics, and a minimalist "Midnight Neo-Glow" dark aesthetic.
+# Accemberg Corporate Web Platform
 
-## Tech Stack
+A studio-grade, high-performance corporate web platform built for **Accemberg** — a hybrid venture studio engineering scalable software products and delivering enterprise services. 
+
+Engineered for 60 FPS interactions, custom 3D physics, glassmorphism UI, and executive-tier responsive design across all viewports (Mobile, iPad Air, iPad Pro, 4K Displays).
+
+---
+
+## ⚡ Tech Stack & Architecture
+
 - **Frontend Framework:** Next.js 16 (App Router)
-- **Backend Framework:** Node.js + Express REST API
-- **Core Library:** React 19, vanilla Tailwind CSS 4
-- **ORM & Database:** Prisma ORM, PostgreSQL (hosted on Supabase)
-- **Animations & Layouts:** GSAP (ScrollTrigger, quickTo), Lenis (Smooth Scroll)
-- **Background Jobs:** `node-cron` scheduled tasks
-- **Typography:** Space Grotesk (Headers), Inter (Body)
+- **UI Library & Rendering:** React 19
+- **3D Graphics & Physics:** Three.js / `@react-three/fiber` / `@react-three/drei`
+- **Animation Engines:** GSAP 3 (ScrollTrigger, quickTo), Lenis (Smooth Scroll)
+- **Typography:** Plus Jakarta Sans (Display Headings & Brand Wordmarks), Inter (Body Copy)
+- **Styling & Aesthetics:** Vanilla CSS Design System, Glassmorphism, Theme-Aware CSS Variables
+- **Backend Infrastructure:** Node.js + Express REST API
+- **Database & ORM:** PostgreSQL (Supabase) + Prisma ORM
+- **Background Operations:** `node-cron` database keep-alive & snapshot tasks
 
-## Advanced UI / Physics Engines
-This platform relies heavily on mathematical DOM manipulation rather than raw canvas (WebGL) to maintain accessibility while achieving Awwwards-tier visual quality. To ensure no lag on mobile or integrated graphics, several bespoke GPU-level optimization engines have been built:
+---
 
-1. **`FastScroll.js`:** 
-   Native hardware-accelerated wrapper that calculates `translateZ`, `filter: blur()`, and wind-drift on ScrollTrigger to simulate particles dissolving/blowing away. 
-   *(Note: The original SVG math-fractal engine is backed up at `DustScroll.js` if mathematical wave physics are ever desired on heavy GPU desktops).*
+## 🌟 Key Features & Engineering Highlights
 
-2. **`Spotlight.js` (Bento Hover Engine):** 
-   Replaces global React Contexts. Bypasses Virtual DOM rendering by grabbing global cursor coordinates and injecting them straight into CSS variables mathematically per-card. Renders native border mask cutouts and inner radiant glows behind glass morphisms.
+### 1. Interactive 3D Hero Orbit Stage
+- Hardware-accelerated 3D orbital mesh stage powered by Three.js.
+- Dynamic viewport scaling (`clamp()`) and containment geometry tailored for Desktop, iPad Air, iPad Pro, and Mobile devices.
 
-3. **`CustomCursor.js`:**
-   A custom hardware shadow orb driven entirely by GSAP `quickTo` physical elasticity maps. Bypasses pure CPU blending (no `mix-blend-mode`) to maintain sub-millisecond response rates.
+### 2. Executive Typography & Theme System
+- **Display Headings & Wordmarks:** Powered by **Plus Jakarta Sans** with geometric feature settings (`font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11'`).
+- **Brand Wordmark System:** `.brand-wordmark-gradient` delivers theme-aware sky-cyan gradients in Dark Mode and cobalt-navy gradients in Light Mode with zero rendering artifacts.
+- **Dark / Light Mode:** Instant theme switching with frosted glass pill navigation and backdrop blur filters.
 
-4. **`ScrambleText.js`:** 
-   A hacker-aesthetic terminal decryption text reveal. Explicitly bound by React `useEffect` mounting lifecycle to entirely prevent Next.js 16 Server-Side Rendering (SSR) Hydration mismatches. 
+### 3. Modal Overlays & Scroll Containment
+- Dedicated case study detail popups and **IIIT Kottayam** Academic Alliance modals.
+- Enhanced with `data-lenis-prevent` attributes to guarantee 100% smooth mouse wheel scrolling inside modal containers.
 
-## Backend API & Maintenance System
-The Express REST API server is located in the `/backend` subdirectory and interfaces directly with the Supabase PostgreSQL database using Prisma ORM.
+### 4. Performance & Physics Engines
+- **`Spotlight.js` (Bento Hover Engine):** Bypasses React Virtual DOM state re-renders by feeding raw cursor coordinates into CSS variables per card for GPU-driven border masks and radiant glows.
+- **`CustomCursor.js`:** GSAP `quickTo` physical elasticity maps for instantaneous, sub-millisecond cursor tracking.
+- **`ScrambleText.js`:** Hacker-aesthetic terminal decryption text reveal with SSR hydration safety hooks.
 
-### Key Background Operations:
-* **Database Keep-Alive** (Every 4 minutes): Performs a lightweight `SELECT 1` query to prevent PgBouncer connection timeouts.
-* **Nightly Backups** (Daily at 02:00 UTC): Exports full database snapshots of all tables in JSON format directly to the `backups/` directory on disk.
-* **Database Cleanup** (Sundays at 03:00 UTC): Automatically deletes cancelled booking requests older than **120 days** to keep tables lightweight.
+---
 
-## Responsive Safety Nets
-All complex hover effects (Spotlight, Custom Cursor, etc.) are strictly protected by `matchMedia('(pointer: fine)')` blocks. This ensures pure native touch scrolling on all tablets and mobile devices with zero JS event-listener lag interference and no "sticky hover" bugs.
+## 🛠️ Project Structure
 
-## Component Structure
-The UI is broken down into distinct vertical domains found in `src/components/`:
-- `Navbar.js` & `Preloader.js`
-- `Hero.js`
-- `StatsBar.js`
-- `About.js`
-- `Products.js` (Bento Grid)
-- `Services.js` (Hover Cards)
-- `Process.js` (Line Graph Layout)
-- `Clients.js` & `Projects.js` (Masonry Grid)
-- `Contact.js` & `Footer.js`
+```
+├── public/                # Static assets, logos, and partner media
+├── src/
+│   ├── app/
+│   │   ├── globals.css    # Global design system tokens, typography rules & utilities
+│   │   ├── layout.js     # Root layout & Next.js Google Fonts configuration
+│   │   └── page.js       # Main application landing page
+│   └── components/
+│       ├── Navbar.js      # Floating frosted glass pill navigation
+│       ├── Hero.js        # 3D interactive orbit & marquee strip
+│       ├── StatsBar.js    # Metric counter bar
+│       ├── About.js       # Core engineering pillars
+│       ├── WhyAccemberg.js # Studio value proposition
+│       ├── Solutions.js   # FinTech, SaaS & Logistics solution cards
+│       ├── Services.js    # Engineering services grid
+│       ├── Products.js   # Flagship product showcase (Bento layout)
+│       ├── Process.js    # Delivery timeline & milestone graph
+│       ├── TechStack.js  # Technology radar & stack chips
+│       ├── Partners.js   # Academic alliance & IIIT Kottayam modal
+│       ├── Projects.js   # Case study gallery & popup details
+│       ├── Careers.js    # Culture & open roles
+│       ├── Faqs.js       # Accordion FAQ system
+│       ├── Contact.js    # Project discovery & contact form
+│       └── Footer.js     # Brand footer, social links & repository link
+└── backend/              # Node.js + Express API & Prisma database services
+```
 
-## Local Development
+---
 
-### 1. Run the Frontend Server
+## 🚀 Local Development Setup
+
+### 1. Frontend Development Server
 ```bash
+# Install dependencies
 npm install
+
+# Run the dev server
 npm run dev
 ```
-Runs locally at [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 2. Run the Backend API Server
+### 2. Backend API & Database Service (Optional)
 ```bash
+# Navigate to backend directory
 cd backend
+
+# Install dependencies
 npm install
+
+# Generate Prisma Client
 npm run db:generate
+
+# Start API server
 npm run dev
 ```
-Runs locally at [http://localhost:5000](http://localhost:5000). The server triggers and executes keep-alive and maintenance jobs automatically.
+Runs at [http://localhost:5000](http://localhost:5000). Handles database connection keep-alives and automated maintenance background tasks.
+
+---
+
+## 📬 Contact & Enquiries
+
+- **Official Website:** [Accemberg](https://github.com/AccembergGroup/Company_Website)
+- **GitHub Repository:** [AccembergGroup/Company_Website](https://github.com/AccembergGroup/Company_Website)
+- **Email:** `office@accemberg.com`
