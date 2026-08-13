@@ -42,37 +42,6 @@ Engineered for 60 FPS interactions, custom 3D physics, glassmorphism UI, and exe
 
 ---
 
-## 🛠️ Project Structure
-
-```
-├── public/                # Static assets, logos, and partner media
-├── src/
-│   ├── app/
-│   │   ├── globals.css    # Global design system tokens, typography rules & utilities
-│   │   ├── layout.js     # Root layout & Next.js Google Fonts configuration
-│   │   └── page.js       # Main application landing page
-│   └── components/
-│       ├── Navbar.js      # Floating frosted glass pill navigation
-│       ├── Hero.js        # 3D interactive orbit & marquee strip
-│       ├── StatsBar.js    # Metric counter bar
-│       ├── About.js       # Core engineering pillars
-│       ├── WhyAccemberg.js # Studio value proposition
-│       ├── Solutions.js   # FinTech, SaaS & Logistics solution cards
-│       ├── Services.js    # Engineering services grid
-│       ├── Products.js   # Flagship product showcase (Bento layout)
-│       ├── Process.js    # Delivery timeline & milestone graph
-│       ├── TechStack.js  # Technology radar & stack chips
-│       ├── Partners.js   # Academic alliance & IIIT Kottayam modal
-│       ├── Projects.js   # Case study gallery & popup details
-│       ├── Careers.js    # Culture & open roles
-│       ├── Faqs.js       # Accordion FAQ system
-│       ├── Contact.js    # Project discovery & contact form
-│       └── Footer.js     # Brand footer, social links & repository link
-└── backend/              # Node.js + Express API & Prisma database services
-```
-
----
-
 ## 🚀 Local Development Setup
 
 ### 1. Frontend Development Server
