@@ -16,23 +16,36 @@ export default function HeroWaveCanvas() {
     let width = (canvas.width = canvas.offsetWidth)
     let height = (canvas.height = canvas.offsetHeight)
 
-    const cols = 28
-    const rows = 18
+    const cols = 18
+    const rows = 12
     let t = 0
     const prefersReduced = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
 
-    const render = () => {
+    let lastTime = 0
+    const fpsInterval = 1000 / 30 
+
+    const render = (currentTime) => {
       if (!ctx) return
+
+      if (!prefersReduced) {
+        animFrameId = requestAnimationFrame(render)
+      }
+
+      if (!currentTime) currentTime = performance.now()
+      const elapsed = currentTime - lastTime
+      if (elapsed < fpsInterval && lastTime !== 0) return
+      lastTime = currentTime - (elapsed % fpsInterval)
+
       ctx.clearRect(0, 0, width, height)
       if (!prefersReduced) {
-        t += 0.015
+        t += 0.008 
       }
 
       const fov = 350
       const xc = width / 2
-      const yc = height / 2 + 50 // center of perspective
+      const yc = height / 2 + 50 
 
-      // Draw rows (horizontal grid lines)
+      
       for (let r = 0; r < rows; r++) {
         ctx.beginPath()
         for (let c = 0; c < cols; c++) {
@@ -65,7 +78,7 @@ export default function HeroWaveCanvas() {
         ctx.stroke()
       }
 
-      // Draw cols (vertical grid lines)
+      
       for (let c = 0; c < cols; c++) {
         ctx.beginPath()
         for (let r = 0; r < rows; r++) {
@@ -95,10 +108,6 @@ export default function HeroWaveCanvas() {
           : `rgba(21, 101, 192, ${alpha})`
         ctx.lineWidth = 0.8
         ctx.stroke()
-      }
-
-      if (!prefersReduced) {
-        animFrameId = requestAnimationFrame(render)
       }
     }
 

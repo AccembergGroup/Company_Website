@@ -1,23 +1,26 @@
-import { Space_Grotesk, Inter } from 'next/font/google'
+import { Syne, Archivo } from 'next/font/google'
 import './globals.css'
 import LenisProvider from '@/components/LenisProvider'
-import CustomCursor from '@/components/CustomCursor'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
-const spaceGrotesk = Space_Grotesk({
+const syne = Syne({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
+  variable: '--font-syne',
   display: 'swap',
 })
 
-const inter = Inter({
+const archivo = Archivo({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-archivo',
   display: 'swap',
 })
 
 export const metadata = {
-  title: 'Accemberg — Empowering Innovation for Enterprise IT',
+  metadataBase: new URL('https://www.accemberg.com'),
+  title: {
+    default: 'Accemberg — Empowering Innovation for Enterprise IT',
+    template: '%s | Accemberg',
+  },
   description:
     'Accemberg Products & Services is a hybrid venture studio delivering enterprise software, SaaS products, and full-stack engineering services for ambitious organisations.',
   keywords: [
@@ -30,18 +33,34 @@ export const metadata = {
     'Accemberg',
   ],
   authors: [{ name: 'Accemberg Products & Services' }],
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/logo-transparent-new.png',
+  },
   openGraph: {
     title: 'Accemberg — Empowering Innovation for Enterprise IT',
     description:
       'A hybrid venture studio building scalable products and delivering world-class engineering services simultaneously.',
+    url: 'https://www.accemberg.com',
+    siteName: 'Accemberg',
     type: 'website',
     locale: 'en_US',
+    images: [
+      {
+        url: '/hero-bg.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Accemberg — Engineering-first Venture Studio',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Accemberg — Empowering Innovation for Enterprise IT',
     description:
       'A hybrid venture studio building scalable products and delivering world-class engineering services simultaneously.',
+    images: ['/hero-bg.png'],
   },
   robots: {
     index: true,
@@ -53,7 +72,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable}`}
+      className={`${syne.variable} ${archivo.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -63,11 +82,9 @@ export default function RootLayout({ children }) {
               (function() {
                 try {
                   document.documentElement.classList.add('js-enabled');
-                  var theme = localStorage.getItem('theme') || 'dark';
+                  var theme = localStorage.getItem('theme') || 'light';
                   document.documentElement.setAttribute('data-theme', theme);
-                  if (sessionStorage.getItem('acc_intro_seen_v3')) {
-                    document.documentElement.classList.add('preloader-skipped');
-                  }
+                  // Always show preloader now
                 } catch (e) {}
               })();
             `,
@@ -76,7 +93,6 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <ThemeProvider>
-          <CustomCursor />
           <LenisProvider>
             {children}
           </LenisProvider>

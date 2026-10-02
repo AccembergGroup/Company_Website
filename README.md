@@ -1,68 +1,177 @@
-# Accemberg Corporate Platform
-A high-end, studio-grade corporate web application built for the premium enterprise software firm **Accemberg**. This platform is heavily optimized for buttery-smooth 60 FPS interactions, zero-lag physics, and a minimalist "Midnight Neo-Glow" dark aesthetic.
+﻿# Accemberg — Company Website
 
-## Tech Stack
-- **Frontend Framework:** Next.js 16 (App Router)
-- **Backend Framework:** Node.js + Express REST API
-- **Core Library:** React 19, vanilla Tailwind CSS 4
-- **ORM & Database:** Prisma ORM, PostgreSQL (hosted on Supabase)
-- **Animations & Layouts:** GSAP (ScrollTrigger, quickTo), Lenis (Smooth Scroll)
-- **Background Jobs:** `node-cron` scheduled tasks
-- **Typography:** Space Grotesk (Headers), Inter (Body)
+<div align="center">
 
-## Advanced UI / Physics Engines
-This platform relies heavily on mathematical DOM manipulation rather than raw canvas (WebGL) to maintain accessibility while achieving Awwwards-tier visual quality. To ensure no lag on mobile or integrated graphics, several bespoke GPU-level optimization engines have been built:
+### Engineering-first Venture Studio
 
-1. **`FastScroll.js`:** 
-   Native hardware-accelerated wrapper that calculates `translateZ`, `filter: blur()`, and wind-drift on ScrollTrigger to simulate particles dissolving/blowing away. 
-   *(Note: The original SVG math-fractal engine is backed up at `DustScroll.js` if mathematical wave physics are ever desired on heavy GPU desktops).*
+Official website for **Accemberg** — built with Next.js, GSAP, and premium design.
 
-2. **`Spotlight.js` (Bento Hover Engine):** 
-   Replaces global React Contexts. Bypasses Virtual DOM rendering by grabbing global cursor coordinates and injecting them straight into CSS variables mathematically per-card. Renders native border mask cutouts and inner radiant glows behind glass morphisms.
+[🌐 Live Site](https://www.accemberg.com) | [📧 Contact](mailto:office@accemberg.com) | [LinkedIn](https://www.linkedin.com/company/accemberg-technologies)
 
-3. **`CustomCursor.js`:**
-   A custom hardware shadow orb driven entirely by GSAP `quickTo` physical elasticity maps. Bypasses pure CPU blending (no `mix-blend-mode`) to maintain sub-millisecond response rates.
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
+![GSAP](https://img.shields.io/badge/GSAP-3-88CE02?style=flat-square)
+![License](https://img.shields.io/badge/License-Private-red?style=flat-square)
 
-4. **`ScrambleText.js`:** 
-   A hacker-aesthetic terminal decryption text reveal. Explicitly bound by React `useEffect` mounting lifecycle to entirely prevent Next.js 16 Server-Side Rendering (SSR) Hydration mismatches. 
+</div>
 
-## Backend API & Maintenance System
-The Express REST API server is located in the `/backend` subdirectory and interfaces directly with the Supabase PostgreSQL database using Prisma ORM.
+---
 
-### Key Background Operations:
-* **Database Keep-Alive** (Every 4 minutes): Performs a lightweight `SELECT 1` query to prevent PgBouncer connection timeouts.
-* **Nightly Backups** (Daily at 02:00 UTC): Exports full database snapshots of all tables in JSON format directly to the `backups/` directory on disk.
-* **Database Cleanup** (Sundays at 03:00 UTC): Automatically deletes cancelled booking requests older than **120 days** to keep tables lightweight.
+## 📋 Overview
 
-## Responsive Safety Nets
-All complex hover effects (Spotlight, Custom Cursor, etc.) are strictly protected by `matchMedia('(pointer: fine)')` blocks. This ensures pure native touch scrolling on all tablets and mobile devices with zero JS event-listener lag interference and no "sticky hover" bugs.
+This is the official marketing website for **Accemberg Technologies**, an engineering-first Venture Studio building premier digital systems, scalable SaaS platforms, and enterprise cloud architectures.
 
-## Component Structure
-The UI is broken down into distinct vertical domains found in `src/components/`:
-- `Navbar.js` & `Preloader.js`
-- `Hero.js`
-- `StatsBar.js`
-- `About.js`
-- `Products.js` (Bento Grid)
-- `Services.js` (Hover Cards)
-- `Process.js` (Line Graph Layout)
-- `Clients.js` & `Projects.js` (Masonry Grid)
-- `Contact.js` & `Footer.js`
+The site reflects our engineering standards — precision, performance, and premium aesthetics.
 
-## Local Development
+---
 
-### 1. Run the Frontend Server
+## 🛠 Tech Stack
+
+| Category | Technology |
+|---|---|
+| **Framework** | [Next.js 15](https://nextjs.org/) (App Router) |
+| **UI Library** | [React 19](https://react.dev/) |
+| **Animations** | [GSAP 3](https://gsap.com/) + ScrollTrigger |
+| **Smooth Scroll** | [Lenis](https://lenis.darkroom.engineering/) |
+| **Styling** | Vanilla CSS + CSS Variables |
+| **Typography** | Syne + Archivo (Google Fonts) |
+| **Icons** | [Lucide React](https://lucide.dev/) |
+| **Deployment** | Vercel |
+
+---
+
+## 📁 Project Structure
+
+```
+Company_Website-main/
+├── public/
+│   ├── logo.svg              # Accemberg logo
+│   ├── logo-dark.svg         # Dark mode variant
+│   └── partners/             # Partner logo assets
+├── src/
+│   ├── app/
+│   │   ├── globals.css       # Global design system & CSS variables
+│   │   ├── layout.js         # Root layout with fonts & metadata
+│   │   ├── page.js           # Home page — assembles all sections
+│   │   └── privacy-policy/   # Privacy policy page
+│   └── components/
+│       ├── Hero.js           # Hero with animated orbit + cycling text
+│       ├── Navbar.js         # Floating pill navigation bar
+│       ├── Partners.js       # Trusted by / partner logos marquee
+│       ├── Services.js       # 6 service cards grid
+│       ├── Products.js       # Bento grid product showcase
+│       ├── About.js          # About section with engine grid
+│       ├── Process.js        # 4-step delivery process cards
+│       ├── Projects.js       # Case studies / project showcases
+│       ├── Careers.js        # Careers & job listings
+│       ├── Contact.js        # Contact form section
+│       ├── Footer.js         # Site footer with nav columns
+│       ├── Preloader.js      # Entry animation preloader
+│       ├── ThemeProvider.js  # Dark/Light mode context
+│       ├── ScrambleText.js   # Scramble text animation
+│       ├── Spotlight.js      # Mouse-tracking spotlight cards
+│       ├── Magnetic.js       # Magnetic hover effect
+│       ├── CustomCursor.js   # Custom cursor
+│       └── LenisProvider.js  # Smooth scroll setup
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** 18.x or higher
+- **npm** 9.x or higher
+
+### Installation
+
 ```bash
+# 1. Clone the repository
+git clone https://github.com/accemberg/company-website.git
+cd company-website
+
+# 2. Install dependencies
 npm install
+
+# 3. Start the development server
 npm run dev
 ```
-Runs locally at [http://localhost:3000](http://localhost:3000).
 
-### 2. Run the Backend API Server
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Build for Production
+
 ```bash
-cd backend
-npm install
-npm run db:generate
-npm run dev
+# Build the production bundle
+npm run build
+
+# Start the production server
+npm start
 ```
-Runs locally at [http://localhost:5000](http://localhost:5000). The server triggers and executes keep-alive and maintenance jobs automatically.
+
+---
+
+## 🎨 Design System
+
+All design tokens are defined in [`src/app/globals.css`](src/app/globals.css) as CSS custom properties.
+
+### Color Palette
+
+| Variable | Value | Usage |
+|---|---|---|
+| `--accent` | `#0C49A2` | Primary brand blue |
+| `--text-primary` | `#32373c` | Main text |
+| `--text-secondary` | `#4A5568` | Secondary text |
+| `--bg-base` | `#FFFFFF` | Page background |
+| `--border` | `rgba(12,73,162,0.15)` | Card borders |
+
+### Typography
+
+- **Display / Headings:** `Syne` (700–800 weight)
+- **Body:** `Archivo` (400–500 weight)
+
+### Spacing
+
+- `--section-y`: `clamp(60px, 6vw, 90px)` — vertical section padding
+- `--container-x`: `clamp(24px, 6vw, 100px)` — horizontal container padding
+
+---
+
+## 🌗 Dark Mode
+
+Full dark/light mode switching via `ThemeProvider`. Toggle is in the navbar. All components use CSS variables for instant, smooth theme transitions.
+
+---
+
+## 📦 Key Features
+
+- ⚡ **GSAP Orbit Animation** — Interactive 3D orbit ring in the hero with mouse-responsive tilt
+- 🔄 **Cycling Hero Text** — "From X to Y" headline cycling through word pairs every 3s
+- 🖱️ **Custom Cursor** — Premium cursor with magnetic hover effects
+- 📜 **Lenis Smooth Scroll** — Ultra-smooth scrolling experience
+- 🔡 **ScrambleText** — Character scramble animation on section labels
+- 🃏 **Spotlight Cards** — Radial spotlight that follows the mouse on cards
+- 🌐 **Partners Marquee** — Infinite scroll marquee of partner logos
+- 📱 **Fully Responsive** — Optimized for mobile, tablet, and desktop
+
+---
+
+## 🔧 Environment Variables
+
+No environment variables required to run locally. All content is static.
+
+---
+
+## 📄 License
+
+**Private & Proprietary.** All rights reserved © 2025 Accemberg Technologies.
+
+Unauthorized copying, modification, or distribution of this codebase is strictly prohibited.
+
+---
+
+<div align="center">
+  <p>Built with precision by the <strong>Accemberg Engineering Team</strong></p>
+  <p><a href="https://www.accemberg.com">accemberg.com</a></p>
+</div>

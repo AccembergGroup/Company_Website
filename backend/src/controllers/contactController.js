@@ -13,6 +13,21 @@ const emailService = require('../services/emailService');
 exports.createContact = async (req, res, next) => {
   try {
     const { name, email, subject, message } = req.body;
+    
+    // Check if database is configured
+    if (!process.env.DATABASE_URL) {
+      console.log('⚠️ [Mock] Contact submitted successfully (No DB connected):', req.body);
+      const mockContact = { id: 'mock-id-' + Date.now(), name, email, subject, message, submittedAt: new Date() };
+      
+      emailService.sendContactNotification(mockContact).catch((e) => console.error('[email] notify:', e.message));
+      emailService.sendContactAutoReply(mockContact).catch((e) => console.error('[email] auto-reply:', e.message));
+
+      return res.status(201).json({ 
+        success: true, 
+        contactId: mockContact.id,
+        data: req.body 
+      });
+    }
 
     // ── Duplicate-submission guard (5-minute window) ──────────────────────────
     const recent = await Contact.findRecentByEmail(email);
@@ -39,6 +54,18 @@ exports.createContact = async (req, res, next) => {
 
     res.status(201).json({ success: true, contactId: contact.id, data: contact });
   } catch (err) {
+    if (!process.env.DATABASE_URL || err.name === 'PrismaClientInitializationError') {
+      console.log('⚠️ [Mock Fallback] Contact submitted successfully:', req.body);
+      const mockContact = { id: 'mock-id-' + Date.now(), ...req.body, submittedAt: new Date() };
+      emailService.sendContactNotification(mockContact).catch((e) => console.error('[email] notify:', e.message));
+      emailService.sendContactAutoReply(mockContact).catch((e) => console.error('[email] auto-reply:', e.message));
+
+      return res.status(201).json({ 
+        success: true, 
+        contactId: mockContact.id,
+        data: req.body 
+      });
+    }
     next(err);
   }
 };

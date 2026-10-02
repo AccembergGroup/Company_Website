@@ -6,9 +6,8 @@ import { gsap } from 'gsap'
 export default function Magnetic({ children, ...props }) {
   const ref = useRef(null)
 
-  let cleanupListeners;
-
   useEffect(() => {
+    let cleanupListeners = null
     const el = ref.current
     if (!el || typeof window === 'undefined') return
 
@@ -16,7 +15,7 @@ export default function Magnetic({ children, ...props }) {
     if (prefersReduced) return
 
     const ctx = gsap.context(() => {
-      // High performance GSAP quickTo interpolators
+      
       const xTo = gsap.quickTo(el, "x", { duration: 0.8, ease: "elastic.out(1, 0.4)" })
       const yTo = gsap.quickTo(el, "y", { duration: 0.8, ease: "elastic.out(1, 0.4)" })
       const scaleXTo = gsap.quickTo(el, "scaleX", { duration: 0.4, ease: "power2.out" })
@@ -26,11 +25,11 @@ export default function Magnetic({ children, ...props }) {
         const { clientX, clientY } = e
         const { left, top, width, height } = el.getBoundingClientRect()
         
-        // Calculate cursor offset from button center
+        
         const x = clientX - (left + width / 2)
         const y = clientY - (top + height / 2)
         
-        // Magnet pull intensity (35%) + hover scale (1.06)
+        
         xTo(x * 0.35)
         yTo(y * 0.35)
         scaleXTo(1.06)

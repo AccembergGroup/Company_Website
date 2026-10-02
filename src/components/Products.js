@@ -1,53 +1,53 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { ArrowRight, Trophy, Zap, Monitor } from 'lucide-react'
+import { ArrowRight, Trophy, Zap, Monitor, Mic, Activity } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
-import FastScroll from './FastScroll'
 import { SpotlightProvider, SpotlightCard } from './Spotlight'
 import ScrambleText from './ScrambleText'
 import { gsap } from 'gsap'
 
 const getProductIcon = (name) => {
   if (name.includes('Agnishakti')) return Trophy;
-  if (name.includes('FormForge')) return Zap;
+  if (name.includes('Niramaya')) return Activity;
+  if (name.includes('VaakSetu')) return Mic;
   return Monitor;
 }
 
 const PRODUCTS = [
   {
-    id: 'flagship',
-    label: 'Enterprise Platforms',
-    title: 'Mission-Critical Architecture',
-    desc: 'Deep, long-lifecycle products engineered for high security, performance, and durability. We build platforms that become the reliable backbone of our clients\' critical operations — architected for 10-year horizons.',
-    tags: ['Enterprise', 'Architecture', 'Scale'],
+    id: 'agnishakti',
+    label: 'Crisis Management',
+    title: 'Agnishakti',
+    desc: 'A next-generation emergency response and hazard prediction platform that uses real-time data streams to proactively mitigate disaster risks.',
+    tags: ['Python', 'React', 'Machine Learning', 'Data Engineering'],
     accent: 'var(--accent)',
-    status: 'Core Expertise',
+    status: 'Flagship',
     highlight: true,
-    metric: { label: 'Quality Standard', val: 'Zero Downtime' },
-    icon: Trophy,
+    metric: { label: 'Speed', val: '40% faster response' },
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3112/3112946.png',
   },
   {
-    id: 'agnishakti',
-    label: 'High-Velocity SaaS',
-    title: 'Rapid Product Validation',
-    desc: 'Rapid zero-to-one product development. We validate, build, and deploy market-ready software solutions with uncompromising quality at startup speeds.',
-    tags: ['SaaS', 'Fast Launch'],
+    id: 'niramaya',
+    label: 'HealthTech',
+    title: 'Niramaya',
+    desc: 'A comprehensive healthcare management system streamlining patient records and enabling predictive health analytics for medical institutions.',
+    tags: ['Next.js', 'Node.js', 'MongoDB', 'Express'],
     accent: 'var(--accent)',
     status: 'Active Track',
-    metric: { label: 'Dev Cycle', val: '< 8 weeks' },
-    icon: Zap,
+    metric: { label: 'Scale', val: '10k+ records' },
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/2933/2933116.png',
   },
   {
-    id: 'client-services',
-    label: 'Dedicated Engineering',
-    title: 'Direct Team Integration',
-    desc: 'Seamlessly integrate our senior architects and full-stack developers into your organisation to accelerate your product roadmap and tackle complex technical debt.',
-    tags: ['Custom', 'Full-Stack', 'Consulting'],
+    id: 'vaaksetu',
+    label: 'Communication',
+    title: 'VaakSetu',
+    desc: 'Real-time multilingual speech-to-text platform designed to break language barriers and facilitate clear cross-regional enterprise communications.',
+    tags: ['NLP', 'React', 'Python', 'WebSockets'],
     accent: 'var(--accent)',
-    status: 'Open to Engagements',
-    metric: { label: 'Project Start', val: '< 2 weeks' },
-    icon: Monitor,
+    status: 'Active Track',
+    metric: { label: 'Bridging', val: 'Real-time' },
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
   },
 ]
 
@@ -68,20 +68,21 @@ export default function Products() {
         if (resJson.success && resJson.data && resJson.data.length > 0) {
           const mapped = resJson.data.map((p) => {
             const isAgnishakti = p.name === 'Agnishakti'
-            const isFormForge = p.name === 'FormForge'
+            const isNiramaya = p.name === 'Niramaya'
+            const isVaakSetu = p.name === 'VaakSetu'
 
             return {
               id: p.id,
               name: p.name,
-              label: isAgnishakti ? 'Enterprise Platforms' : (isFormForge ? 'Rapid Forms Tool' : 'Uptime Monitoring'),
+              label: isAgnishakti ? 'Crisis Management' : (isNiramaya ? 'HealthTech' : (isVaakSetu ? 'Communication' : 'Product')),
               title: p.name,
               desc: p.description,
               tags: p.features || [],
               accent: 'var(--accent)',
               status: p.badge || 'Active Track',
               metric: isAgnishakti
-                ? { label: 'Quality Standard', val: 'Zero Downtime' }
-                : (isFormForge ? { label: 'Validation Cycle', val: '< 2 mins' } : { label: 'Alerting Latency', val: '< 5 secs' }),
+                ? { label: 'Speed', val: '40% faster response' }
+                : (isNiramaya ? { label: 'Scale', val: '10k+ records' } : (isVaakSetu ? { label: 'Bridging', val: 'Real-time' } : { label: 'Metric', val: 'N/A' })),
               icon: getProductIcon(p.name),
             }
           })
@@ -115,13 +116,11 @@ export default function Products() {
     return () => observer.disconnect()
   }, [loading, data])
 
-
-
   const [flagship, ...rest] = data
 
   return (
     <section id="products" className="section" ref={ref} style={{ background: 'var(--bg-base)', position: 'relative', overflow: 'hidden', borderTop: '1px solid var(--border)', transition: 'background-color 400ms' }}>
-      {/* Glow left */}
+      
       <div style={{
         position: 'absolute', left: -100, top: '30%',
         width: 500, height: 500,
@@ -130,16 +129,16 @@ export default function Products() {
       }} />
 
       <div className="container">
-        {/* Header */}
+        
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
           <div style={{ maxWidth: 520 }}>
             <div className="section-label reveal">
               <ScrambleText text="Our Core Capabilities" speed={40} />
             </div>
             <h2 className="text-h2" style={{ marginBottom: 16 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Engineering</span></FastScroll>
+              <span style={{ display: 'inline-block' }}>Engineering</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>That Scales</span></FastScroll>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>That Scales</span>
             </h2>
             <p className="text-body-lg reveal">
               Whether we are building proprietary SaaS platforms or custom enterprise solutions, the same relentless standard of quality applies.
@@ -151,22 +150,19 @@ export default function Products() {
           </a>
         </div>
 
-        {/* Bento grid */}
+        
         <SpotlightProvider style={{
           display: 'grid',
-          gridTemplateColumns: '1.4fr 1fr',
+          gridTemplateColumns: 'repeat(3, 1fr)',
           gridTemplateRows: 'auto',
           gap: 20,
         }} className="products-bento">
-          {/* Large flagship card */}
-          <div
-            className="reveal-left"
-            style={{ gridRow: '1 / 3' }}
-          >
-            <ProductCard product={flagship} large />
+          
+          <div className="reveal-left">
+            <ProductCard product={flagship} />
           </div>
 
-          {/* Two stacked cards */}
+          
           <div className="reveal-right stagger-1">
             <ProductCard product={rest[0]} />
           </div>
@@ -339,45 +335,6 @@ function ProductCard({ product, large = false }) {
   const contentRef = useRef(null)
   const Icon = product.icon
 
-  // Live Terminal Logs (only for the large flagship card)
-  const [logs, setLogs] = useState([
-    { id: 1, api: 'POST /v1/systems.deploy', status: '202 Accepted', time: '82ms' },
-    { id: 2, api: 'GET /v1/nodes/active', status: '200 OK', time: '6ms' },
-    { id: 3, api: 'POST /v1/networks/sync', status: '200 OK', time: '11ms' }
-  ])
-
-  useEffect(() => {
-    if (!large) return
-    const timer = setInterval(() => {
-      setLogs((prev) => {
-        const next = [...prev]
-        next.shift()
-        const apis = [
-          'POST /v1/systems.deploy',
-          'GET /v1/nodes/active',
-          'POST /v1/networks/sync',
-          'GET /v1/database/health',
-          'POST /v1/deployments',
-          'GET /v1/metrics/load',
-          'POST /v1/auth/verify'
-        ]
-        const statuses = ['200 OK', '201 Created', '202 Accepted']
-        const randomApi = apis[Math.floor(Math.random() * apis.length)]
-        const randomStatus = statuses[Math.floor(Math.random() * statuses.length)]
-        const randomTime = Math.floor(Math.random() * 40 + 5) + 'ms'
-        
-        next.push({
-          id: Date.now(),
-          api: randomApi,
-          status: randomStatus,
-          time: randomTime
-        })
-        return next
-      })
-    }, 2800)
-    return () => clearInterval(timer)
-  }, [large])
-
   useEffect(() => {
     const card = cardRef.current
     if (!card) return
@@ -390,11 +347,11 @@ function ProductCard({ product, large = false }) {
       const xc = bounds.width / 2
       const yc = bounds.height / 2
       
-      // Calculate tilt offset
+      
       const tiltX = (x - xc) / 20
       const tiltY = (y - yc) / 20
 
-      // GSAP tilt card container
+      
       gsap.to(card, {
         x: tiltX * 0.8,
         y: tiltY * 0.8,
@@ -406,7 +363,7 @@ function ProductCard({ product, large = false }) {
         overwrite: 'auto'
       })
 
-      // Parallax inner content in opposite direction
+      
       if (contentRef.current) {
         gsap.to(contentRef.current, {
           x: -tiltX * 0.25,
@@ -419,7 +376,7 @@ function ProductCard({ product, large = false }) {
     }
 
     const onMouseLeave = () => {
-      // Elastic spring back to home
+      
       gsap.to(card, {
         x: 0,
         y: 0,
@@ -481,20 +438,17 @@ function ProductCard({ product, large = false }) {
         <div ref={contentRef} style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 24, transformStyle: 'preserve-3d' }}>
           
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: large ? '1.25fr 0.75fr' : '1fr',
-            gap: 24,
-            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: large ? 32 : 24,
             height: '100%',
           }} className="product-card-grid">
             
-            {/* Left side info */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {/* Top: icon + status badge */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                  <Icon size={18} strokeWidth={2.2} className="text-accent" />
-                </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, justifyContent: large ? 'center' : 'flex-start', height: '100%' }}>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span className="text-label" style={{ color: 'var(--accent)', fontWeight: 600 }}>{product.label}</span>
                 <span
                   style={{
                     padding: '4px 12px',
@@ -512,12 +466,7 @@ function ProductCard({ product, large = false }) {
                 </span>
               </div>
 
-              {/* Label */}
-              <div>
-                <span className="text-label" style={{ color: 'var(--accent)', fontWeight: 600 }}>{product.label}</span>
-              </div>
-
-              {/* Title */}
+              
               <h3
                 style={{
                   fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
@@ -531,10 +480,10 @@ function ProductCard({ product, large = false }) {
                 {product.title}
               </h3>
 
-              {/* Desc */}
+              
               <p className="text-body" style={{ flex: 1, lineHeight: 1.75, fontSize: 14 }}>{product.desc}</p>
 
-              {/* Metric */}
+              
               <div
                 style={{
                   padding: '14px 18px',
@@ -560,7 +509,7 @@ function ProductCard({ product, large = false }) {
                 </span>
               </div>
 
-              {/* Tags */}
+              
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 {product.tags.map((tag) => (
                   <span key={tag} className="tag tag-muted" style={{ fontSize: 10, borderRadius: 100 }}>{tag}</span>
@@ -568,66 +517,6 @@ function ProductCard({ product, large = false }) {
               </div>
             </div>
 
-            {/* Right side live interactive dashboard console (Only for large flagship card) */}
-            {large && (
-              <div style={{
-                background: theme === 'dark' ? '#070B19' : '#F0F4FF',
-                border: '1px solid var(--border)',
-                borderRadius: 16,
-                padding: 16,
-                fontFamily: 'monospace',
-                fontSize: 10,
-                color: theme === 'dark' ? '#9CA3AF' : '#475467',
-                boxShadow: theme === 'dark'
-                  ? 'inset 0 1px 3px rgba(0,0,0,0.8), 0 10px 20px rgba(0,0,0,0.2)'
-                  : 'inset 0 1px 3px rgba(0,0,0,0.05), 0 10px 20px rgba(21,101,192,0.05)',
-                minHeight: 220,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 12,
-                overflow: 'hidden',
-                position: 'relative',
-              }} className="terminal-mock">
-                
-                {/* Mock Window Controls */}
-                <div style={{ display: 'flex', gap: 6, marginBottom: 4, borderBottom: '1px solid var(--border)', paddingBottom: 10 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#EF4444', display: 'inline-block' }} />
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#F59E0B', display: 'inline-block' }} />
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
-                </div>
-                
-                {/* Status Ticker Line */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--accent)', fontSize: 9, fontWeight: 600 }}>
-                  <span>SYSTEM: ACTIVE</span>
-                  <span style={{ animation: 'hero-glow-pulse 1.5s infinite', color: '#10B981' }}>● LIVE FEED</span>
-                </div>
-
-                {/* Live Console Output */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
-                  {logs.map((log) => (
-                    <div
-                      key={log.id}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        opacity: 0.9,
-                        animation: 'fadeIn 0.4s ease-out forwards',
-                      }}
-                    >
-                      <div style={{ color: 'var(--text-primary)', display: 'flex', justifyContent: 'space-between', fontSize: 10 }}>
-                        <span>{log.api}</span>
-                        <span style={{ color: 'var(--accent)', fontSize: 9 }}>{log.time}</span>
-                      </div>
-                      <div style={{ color: '#10B981', fontSize: 9 }}>
-                        {log.status}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
           </div>
           
         </div>

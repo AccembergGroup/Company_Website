@@ -1,82 +1,42 @@
-/* ============================================================
-   ACCEMBERG — Global Design System
-   Precision Dark Theme · Space Grotesk + Inter
-   Next.js font/google self-hosts Space Grotesk + Inter;
-   no external @import needed.
-   ============================================================ */
-
 @import "tailwindcss";
 
-
-/* ─── CSS Custom Properties ─────────────────────────────── */
 :root {
-  /* Default font properties */
-  --font-display: var(--font-space-grotesk, 'Space Grotesk', system-ui, sans-serif);
-  --font-body:    var(--font-inter, 'Inter', system-ui, sans-serif);
+  
+  --font-display: var(--font-syne, 'Syne', system-ui, sans-serif);
+  --font-body:    var(--font-archivo, 'Archivo', system-ui, sans-serif);
 
-  /* Easing */
+  
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Spacing rhythm */
-  --section-y:    clamp(90px, 12vw, 180px); /* Stripe-like generous spacing */
-  --section-y-sm: clamp(70px, 8vw, 120px);
+  
+  --section-y:    clamp(60px, 6vw, 90px); 
+  --section-y-sm: clamp(40px, 4vw, 70px);
   --container-x:  clamp(24px, 6vw, 100px);
 
-  /* Design Tokens */
-  --bg: #0A0F1E;
-  --surface: #0D1B4B;
-  --surface-elevated: #111E54;
-  --text: #E8EDF8;
-  --text-secondary: #A0AED0;
-  --text-muted: #6C7CA0;
-  --primary: #1565C0;
-  --secondary: #0D1B4B;
-  --accent: #4FC3F7; /* sky steel blue */
-  --accent-light: #80D8FF;
-  --accent-dim: rgba(79, 195, 247, 0.12);
-  --accent-glow: rgba(21, 101, 192, 0.22); /* blue plasma */
-  --border: rgba(255, 255, 255, 0.055); /* thin neutral border */
-  --border-strong: rgba(79, 195, 247, 0.25);
-  --glow: rgba(21, 101, 192, 0.22);
-  --bg-card: rgba(13, 27, 75, 0.65);
   
-  /* Logo dots */
-  --charcoal: #8E9BAE;
+  --bg: #FFFFFF;
+  --surface: #F8F9FA;
+  --surface-elevated: #F1F3F5;
+  --text: #32373c;
+  --text-secondary: #4A5568;
+  --text-muted: #718096;
+  --primary: #0C49A2;
+  --secondary: #32373c;
+  --accent: #0C49A2;
+  --accent-light: #1A5EBA;
+  --accent-dim: rgba(12, 73, 162, 0.08);
+  --accent-glow: rgba(12, 73, 162, 0.12);
+  --border: rgba(12, 73, 162, 0.15);
+  --border-strong: rgba(12, 73, 162, 0.30);
+  --glow: rgba(12, 73, 162, 0.15);
+  --bg-card: rgba(255, 255, 255, 0.95);
   
-  /* Additional variables consumed by existing components */
-  --bg-base: var(--bg);
-  --bg-surface: var(--surface);
-  --bg-elevated: var(--surface-elevated);
-  --bg-hover: #111E54;
-  --border-subtle: var(--border);
-  --border-default: var(--border);
-  --text-primary: var(--text);
-  --text-accent: var(--accent);
-}
-
-:root[data-theme="light"] {
-  --bg: #F5F7FF;
-  --surface: #FFFFFF;
-  --surface-elevated: #EFF1FA;
-  --text: #101828;
-  --text-secondary: #475467;
-  --text-muted: #667085;
-  --primary: #1565C0;
-  --secondary: #0D1B4B;
-  --accent: #1565C0; /* electric royal blue */
-  --accent-light: #1A8FFF;
-  --accent-dim: rgba(21, 101, 192, 0.08);
-  --accent-glow: rgba(21, 101, 192, 0.12);
-  --border: rgba(21, 101, 192, 0.06); /* subtle light border */
-  --border-strong: rgba(21, 101, 192, 0.18);
-  --bg-card: rgba(255, 255, 255, 0.75);
   
-  /* Logo dots */
   --charcoal: #3A4555;
   
-  /* Additional variables consumed by existing components */
+  
   --bg-base: var(--bg);
   --bg-surface: var(--surface);
   --bg-elevated: var(--surface-elevated);
@@ -84,10 +44,9 @@
   --border-subtle: var(--border);
   --border-default: var(--border);
   --text-primary: var(--text);
-  --text-accent: var(--primary);
+  --text-accent: var(--accent);
 }
 
-/* ─── Reset ─────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -95,15 +54,12 @@
 }
 
 html {
-  --font-display: var(--font-space-grotesk, 'Space Grotesk', system-ui, sans-serif);
-  --font-body:    var(--font-inter, 'Inter', system-ui, sans-serif);
-  scroll-behavior: auto; /* Lenis handles smooth scroll */
+  scroll-behavior: auto; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* Lenis required */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -131,7 +87,6 @@ body {
   transition: background-color 300ms var(--ease-in-out-smooth), color 300ms var(--ease-in-out-smooth);
 }
 
-/* Stripe/Linear style background grid overlay */
 body::after {
   content: '';
   position: absolute;
@@ -176,7 +131,6 @@ input, textarea, select {
   font-size: inherit;
 }
 
-/* ─── Typography ────────────────────────────────────────── */
 .font-display { font-family: var(--font-display); }
 .font-body    { font-family: var(--font-body); }
 
@@ -233,7 +187,6 @@ input, textarea, select {
 .text-secondary { color: var(--text-secondary); }
 .text-muted { color: var(--text-muted); }
 
-/* ─── Layout Utilities ──────────────────────────────────── */
 .container {
   width: 100%;
   max-width: 1360px;
@@ -258,7 +211,6 @@ input, textarea, select {
   position: relative;
 }
 
-/* ─── Section Header Pattern ────────────────────────────── */
 .section-label {
   display: inline-flex;
   align-items: center;
@@ -271,16 +223,6 @@ input, textarea, select {
   margin-bottom: 20px;
 }
 
-.section-label::before {
-  content: '';
-  display: block;
-  width: 20px;
-  height: 1px;
-  background: var(--accent);
-  opacity: 0.7;
-}
-
-/* ─── Buttons ───────────────────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -291,7 +233,7 @@ input, textarea, select {
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.01em;
-  border-radius: 100px; /* Stripe-like fully rounded buttons */
+  border-radius: 100px; 
   transition: all 250ms var(--ease-out-quart);
   position: relative;
   overflow: hidden;
@@ -352,11 +294,10 @@ input, textarea, select {
   font-size: 13px;
 }
 
-/* ─── Card Styles ───────────────────────────────────────── */
 .card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: 20px; /* Stripe-like 20px rounded corners */
+  border-radius: 20px; 
   padding: 32px;
   position: relative;
   transition: border-color 300ms var(--ease-out-quart),
@@ -391,7 +332,6 @@ input, textarea, select {
   background: var(--bg-card) !important;
 }
 
-/* Nav Link Sliding Underline Animation */
 .nav-link-underline {
   position: relative;
 }
@@ -412,7 +352,6 @@ input, textarea, select {
   transform-origin: bottom left;
 }
 
-/* ─── Tag / Chip ────────────────────────────────────────── */
 .tag {
   display: inline-flex;
   align-items: center;
@@ -434,14 +373,35 @@ input, textarea, select {
   border-color: var(--border-subtle);
 }
 
-/* ─── Dividers ──────────────────────────────────────────── */
 .divider {
   width: 100%;
   height: 1px;
   background: var(--border-subtle);
 }
 
-/* ─── Background Textures / Effects ─────────────────────── */
+section {
+  border-top: none !important;
+  border-bottom: none !important;
+  position: relative;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  max-width: 1200px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(12, 73, 162, 0.4) 25%, var(--accent) 50%, rgba(12, 73, 162, 0.4) 75%, transparent 100%);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 2px 14px var(--accent-glow);
+  border-radius: 2px;
+}
+
 .dot-grid {
   position: absolute;
   inset: 0;
@@ -471,7 +431,6 @@ input, textarea, select {
   pointer-events: none;
 }
 
-/* ─── Scroll Reveal Animations ──────────────────────────── */
 .reveal,
 .reveal-left,
 .reveal-right,
@@ -529,7 +488,6 @@ input, textarea, select {
   transform: scale(1);
 }
 
-/* Preloader-skipped immediate override */
 .preloader-skipped .page-wrapper {
   opacity: 1 !important;
   transition: none !important;
@@ -544,7 +502,6 @@ input, textarea, select {
   transition: none !important;
 }
 
-/* Stagger delays (applied via inline style or nth-child) */
 .stagger-1  { transition-delay: 80ms; }
 .stagger-2  { transition-delay: 160ms; }
 .stagger-3  { transition-delay: 240ms; }
@@ -552,7 +509,6 @@ input, textarea, select {
 .stagger-5  { transition-delay: 400ms; }
 .stagger-6  { transition-delay: 480ms; }
 
-/* ─── Marquee ────────────────────────────────────────────── */
 @keyframes marquee-left {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -579,7 +535,6 @@ input, textarea, select {
   animation-play-state: paused;
 }
 
-/* ─── Number / Stat Large ───────────────────────────────── */
 .stat-number {
   font-family: var(--font-display);
   font-size: clamp(40px, 5vw, 64px);
@@ -589,7 +544,6 @@ input, textarea, select {
   line-height: 1;
 }
 
-/* ─── Form Elements ─────────────────────────────────────── */
 .form-field {
   width: 100%;
 }
@@ -637,7 +591,6 @@ input, textarea, select {
   resize: vertical;
 }
 
-/* ─── Navbar ─────────────────────────────────────────────── */
 .navbar {
   position: fixed;
   top: 0;
@@ -676,13 +629,11 @@ input, textarea, select {
   color: var(--text-primary);
 }
 
-/* ─── Footer ─────────────────────────────────────────────── */
 .footer-bg {
   background: var(--bg-surface);
   border-top: 1px solid var(--border-subtle);
 }
 
-/* ─── Icon wrapper ──────────────────────────────────────── */
 .icon-box {
   display: flex;
   align-items: center;
@@ -696,25 +647,21 @@ input, textarea, select {
   flex-shrink: 0;
 }
 
-/* ─── Horizontal Rule ────────────────────────────────────── */
 hr {
   border: none;
   border-top: 1px solid var(--border-subtle);
 }
 
-/* ─── Selection ─────────────────────────────────────────── */
 ::selection {
   background: var(--accent);
   color: #fff;
 }
 
-/* ─── Scrollbar ─────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
 ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--charcoal); }
 
-/* ─── Preloader ─────────────────────────────────────────── */
 .preloader {
   position: fixed;
   inset: 0;
@@ -734,7 +681,6 @@ hr {
   pointer-events: none;
 }
 
-/* ─── Process Step ──────────────────────────────────────── */
 .process-num {
   font-family: var(--font-display);
   font-size: 11px;
@@ -743,7 +689,6 @@ hr {
   color: var(--accent);
 }
 
-/* ─── Reduced Motion ────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-left,
@@ -759,7 +704,6 @@ hr {
   }
 }
 
-/* ─── Responsive Breakpoints ────────────────────────────── */
 @media (max-width: 1024px) {
   :root {
     --section-y: clamp(70px, 8vw, 120px);
@@ -785,9 +729,6 @@ hr {
   }
 }
 
-/* ─── Global Mobile Safety Net ──────────────────────────── */
-
-/* Prevent ANY horizontal overflow from leaking */
 @media (max-width: 768px) {
   html, body {
     overflow-x: hidden !important;
@@ -796,31 +737,31 @@ hr {
     max-width: 100vw;
   }
 
-  /* Section headings scale down gracefully */
+  
   .text-h2 { font-size: clamp(26px, 7vw, 40px) !important; }
   .text-h3 { font-size: clamp(17px, 4.5vw, 22px) !important; }
 
-  /* Section padding tighter on mobile */
+  
   .section {
     padding-top: var(--section-y);
     padding-bottom: var(--section-y);
   }
 
-  /* Buttons: full-width stacks on smallest screens */
+  
   .btn { padding: 12px 22px; font-size: 13px; }
 
-  /* Clients marquee: slightly smaller pills on mobile */
+  
   .marquee-track, .marquee-track-reverse { gap: 8px; }
 
-  /* Section labels always visible */
+  
   .section-label { font-size: 10px; }
 
-  /* Contact: form panel full padding reset */
+  
   .contact-grid > div:last-child > div {
     padding: 24px 20px !important;
   }
 
-  /* Footer bottom bar: stack on very small */
+  
   .footer-bottom-bar {
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -829,13 +770,12 @@ hr {
 }
 
 @media (max-width: 480px) {
-  /* Tighter section heading */
+  
   .text-h2 { font-size: clamp(22px, 7vw, 34px) !important; letter-spacing: -0.02em !important; }
 
-  /* Buttons full-width on very small screens */
+  
   .hero-cta-row .btn { flex: 1; justify-content: center; min-width: 140px; }
 
-  /* Reduce section vertical spacing a bit more */
+  
   :root { --section-y: 64px; }
 }
-

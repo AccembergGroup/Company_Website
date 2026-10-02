@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import FastScroll from './FastScroll'
 import { SpotlightProvider, SpotlightCard } from './Spotlight'
 import ScrambleText from './ScrambleText'
 import { useTheme } from '@/components/ThemeProvider'
@@ -61,98 +60,43 @@ const SERVICES = [
   {
     num: '01',
     title: 'Full-Stack Software Development',
-    desc: 'End-to-end product engineering from architecture to deployment — scalable, maintainable, and built for growth.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Code brackets + center line */}
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-        <line x1="14" y1="4" x2="10" y2="20" strokeOpacity="0.45" />
-      </svg>
-    ),
+    desc: 'Complete product engineering from first commit to live deployment. Scalable, maintainable, and built to grow with your business.',
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
     tags: ['React', 'Node.js', 'Databases', 'APIs'],
   },
   {
     num: '02',
     title: 'System Architecture & Integration',
-    desc: 'Robust technical foundations and seamless third-party integrations that eliminate bottlenecks at scale.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        {/* Hex nodes in triangle */}
-        <circle cx="12" cy="5" r="2" fill="currentColor" fillOpacity="0.3" />
-        <circle cx="5" cy="18" r="2" fill="currentColor" fillOpacity="0.3" />
-        <circle cx="19" cy="18" r="2" fill="currentColor" fillOpacity="0.3" />
-        <line x1="12" y1="7" x2="6" y2="16" />
-        <line x1="12" y1="7" x2="18" y2="16" />
-        <line x1="7" y1="18" x2="17" y2="18" />
-      </svg>
-    ),
+    desc: 'Resilient technical foundations and smooth third-party integrations that eliminate bottlenecks at scale.',
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/2933/2933261.png',
     tags: ['Microservices', 'APIs', 'Legacy Migration'],
   },
   {
     num: '03',
     title: 'Cloud Infrastructure & DevOps',
     desc: 'Cloud-native infrastructure design with CI/CD pipelines, container orchestration, and 99.9% uptime targets.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Cloud with upward arrow */}
-        <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="currentColor" fillOpacity="0.12" />
-        <line x1="12" y1="22" x2="12" y2="14" />
-        <polyline points="9 17 12 14 15 17" />
-      </svg>
-    ),
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/2933/2933230.png',
     tags: ['AWS', 'GCP', 'Kubernetes', 'CI/CD'],
   },
   {
     num: '04',
     title: 'AI & ML Integration',
     desc: 'Intelligent automation, predictive analytics, and LLM-powered features built directly into your product stack.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        {/* Neural net: 3-layer nodes + edges */}
-        <circle cx="4" cy="8" r="1.5" fill="currentColor" />
-        <circle cx="4" cy="16" r="1.5" fill="currentColor" />
-        <circle cx="12" cy="5" r="1.5" fill="currentColor" />
-        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-        <circle cx="12" cy="19" r="1.5" fill="currentColor" />
-        <circle cx="20" cy="12" r="1.5" fill="currentColor" />
-        <line x1="5.5" y1="8" x2="10.5" y2="5" strokeOpacity="0.5" />
-        <line x1="5.5" y1="8" x2="10.5" y2="12" strokeOpacity="0.5" />
-        <line x1="5.5" y1="16" x2="10.5" y2="12" strokeOpacity="0.5" />
-        <line x1="5.5" y1="16" x2="10.5" y2="19" strokeOpacity="0.5" />
-        <line x1="13.5" y1="5" x2="18.5" y2="12" strokeOpacity="0.5" />
-        <line x1="13.5" y1="12" x2="18.5" y2="12" strokeOpacity="0.5" />
-        <line x1="13.5" y1="19" x2="18.5" y2="12" strokeOpacity="0.5" />
-      </svg>
-    ),
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/4117/4117106.png',
     tags: ['LLMs', 'ML Pipelines', 'NLP', 'GenAI'],
   },
   {
     num: '05',
     title: 'Technical Consulting & Strategy',
     desc: 'Senior engineering advisory for product decisions, technical debt reduction, and scalability roadmaps.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Compass */}
-        <circle cx="12" cy="12" r="9" fill="currentColor" fillOpacity="0.08" />
-        <polygon points="12 3 14 10 12 12 10 10" fill="currentColor" fillOpacity="0.7" />
-        <polygon points="12 21 10 14 12 12 14 14" fill="currentColor" fillOpacity="0.25" />
-        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-      </svg>
-    ),
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/2933/2933215.png',
     tags: ['Roadmapping', 'Audits', 'Advisory'],
   },
   {
     num: '06',
     title: 'QA, Testing & Maintenance',
-    desc: 'Multi-stage quality assurance with automated testing pipelines and dedicated support — ensuring reliability.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {/* Shield with checkmark */}
-        <path d="M12 2L4 6V12C4 16.42 7.58 21 12 22C16.42 21 20 16.42 20 12V6L12 2Z" fill="currentColor" fillOpacity="0.12" />
-        <polyline points="9 12 11 14 15 10" />
-      </svg>
-    ),
+    desc: 'Automated testing pipelines, multi-stage QA, and dedicated support. We ship code that holds up under real-world pressure.',
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135695.png',
     tags: ['Automated QA', 'Performance', 'SLAs'],
   },
 ]
@@ -185,7 +129,8 @@ export default function Services() {
               num: String(idx + 1).padStart(2, '0'),
               title: s.title,
               desc: s.description,
-              icon: getIcon(s.icon),
+              icon: getIconSvg(s.icon),
+              imageUrl: SERVICES[idx]?.imageUrl,
               tags: tags,
             }
           })
@@ -218,8 +163,6 @@ export default function Services() {
     el.querySelectorAll('.reveal, .reveal-scale').forEach((t) => observer.observe(t))
     return () => observer.disconnect()
   }, [loading, data])
-
-
 
   const overrideVars = theme === 'dark' ? {
     background: 'linear-gradient(180deg, #0A0F1E 0%, #08173B 50%, #0A0F1E 100%)',
@@ -255,7 +198,7 @@ export default function Services() {
     <section id="services" className="section" ref={ref}
       style={{ ...overrideVars, position: 'relative', overflow: 'hidden', transition: 'background-color 400ms, color 400ms' }}
     >
-      {/* Glow bottom-center */}
+      
       <div style={{
         position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
         width: 800, height: 400,
@@ -266,22 +209,22 @@ export default function Services() {
       }} />
 
       <div className="container">
-        {/* Section header */}
+        
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', maxWidth: 600 }}>
           <div className="section-label reveal">
             <ScrambleText text="What We Deliver" speed={35} />
           </div>
-          <h2 className="text-h2" style={{ marginBottom: 16 }}>
-            <FastScroll><span style={{ display: 'inline-block' }}>Full-Spectrum</span></FastScroll>
+          <h2 className="text-h2 reveal" style={{ marginBottom: 16 }}>
+            <span style={{ display: 'inline-block' }}>Full-Spectrum</span>
             <br />
-            <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Engineering Services</span></FastScroll>
+            <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Engineering Services</span>
           </h2>
           <p className="text-body-lg reveal" style={{ color: 'var(--text-secondary)' }}>
-            From initial architecture to production-grade deployment — we bring a studio-grade approach to every dimension of software engineering.
+            Six core disciplines. One unified engineering team. Built to handle every layer of your product with precision.
           </p>
         </div>
 
-        {/* 3×2 grid with middle row offset */}
+        
         <SpotlightProvider className="services-grid">
           {data.map((svc, i) => (
             <div
@@ -351,38 +294,34 @@ function ServiceCard({ svc }) {
         e.currentTarget.style.transform = 'translateY(0)'
       }}
     >
-      {/* Top row: icon + number */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)', color: theme === 'dark' ? '#4FC3F7' : '#1565C0' }}>
-          {svc.icon}
-        </div>
+      
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
         <span style={{
           fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: 700,
-          letterSpacing: '0.14em',
+          letterSpacing: '0.1em',
           color: 'var(--text-muted)',
+          opacity: 0.6,
         }}>
           {svc.num}
         </span>
+        <h3 style={{
+          fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+          fontSize: 16,
+          fontWeight: 600,
+          color: 'var(--text-primary)',
+          lineHeight: 1.35,
+          letterSpacing: '-0.01em',
+        }}>
+          {svc.title}
+        </h3>
       </div>
 
-      {/* Title */}
-      <h3 style={{
-        fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-        fontSize: 16,
-        fontWeight: 600,
-        color: 'var(--text-primary)',
-        lineHeight: 1.35,
-        letterSpacing: '-0.01em',
-      }}>
-        {svc.title}
-      </h3>
-
-      {/* Desc */}
+      
       <p className="text-body" style={{ flex: 1 }}>{svc.desc}</p>
 
-      {/* Tags */}
+      
       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', paddingTop: 4 }}>
         {svc.tags.map((tag) => (
           <span key={tag} className="tag tag-muted" style={{ fontSize: 10, borderRadius: 100 }}>{tag}</span>

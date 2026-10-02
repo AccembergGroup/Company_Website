@@ -8,26 +8,26 @@ const NAV_COLS = [
   {
     heading: 'Company',
     links: [
-      { label: 'About Us', href: '#about' },
-      { label: 'Why Accemberg', href: '#why-accemberg' },
-      { label: 'Careers & Culture', href: '#careers' },
-      { label: 'Book a Call', href: '#contact' },
+      { label: 'About Us', href: '/about' },
+      { label: 'Why Accemberg', href: '/#why-accemberg' },
+      { label: 'Careers & Culture', href: '/#careers' },
+      { label: 'Book a Call', href: '/contact' },
     ],
   },
   {
     heading: 'Services & Solutions',
     links: [
-      { label: 'Engineering Services', href: '#services' },
-      { label: 'FinTech Platforms', href: '#solutions' },
-      { label: 'Multi-Tenant SaaS', href: '#solutions' },
-      { label: 'Logistics Systems', href: '#solutions' },
+      { label: 'Engineering Services', href: '/services' },
+      { label: 'FinTech Platforms', href: '/#solutions' },
+      { label: 'Multi-Tenant SaaS', href: '/#solutions' },
+      { label: 'Logistics Systems', href: '/#solutions' },
     ],
   },
   {
     heading: 'Resources',
     links: [
-      { label: 'Case Studies', href: '#projects' },
-      { label: 'FAQs Accordion', href: '#faq' },
+      { label: 'Case Studies', href: '/projects' },
+      { label: 'FAQs', href: '/about#faq' },
       { label: 'Support & Enquiries', href: 'mailto:office@accemberg.com' },
     ],
   },
@@ -49,7 +49,7 @@ export default function Footer() {
     },
     {
       label: 'GitHub',
-      href: 'https://github.com',
+      href: 'https://github.com/accemberg',
       icon: <GitHubIcon />,
     },
     {
@@ -67,7 +67,7 @@ export default function Footer() {
         transition: 'background-color 400ms, border-color 400ms',
       }}
     >
-      {/* Main footer body */}
+      
       <div className="container" style={{ paddingTop: 'clamp(60px,8vw,96px)', paddingBottom: 'clamp(40px,5vw,64px)' }}>
         <div style={{
           display: 'grid',
@@ -75,10 +75,14 @@ export default function Footer() {
           gap: 'clamp(32px,4vw,60px)',
         }} className="footer-grid">
 
-          {/* Brand column */}
+          
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            {/* Logo */}
-            <a href="#" aria-label="Accemberg" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, width: 'fit-content' }}>
+            
+            <a
+              href="/"
+              aria-label="Accemberg"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, width: 'fit-content' }}
+            >
               <div style={{
                 width: 34, height: 34, borderRadius: '50%',
                 background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21, 101, 192, 0.08)',
@@ -105,7 +109,7 @@ export default function Footer() {
               </span>
             </a>
 
-            {/* Tagline */}
+            
             <p style={{
               fontSize: 13.5,
               lineHeight: 1.6,
@@ -129,7 +133,7 @@ export default function Footer() {
               office@accemberg.com
             </a>
 
-            {/* Social icons */}
+            
             <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
               {SOCIAL_LINKS.map((s) => (
                 <a
@@ -167,7 +171,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Nav columns */}
+          
           {NAV_COLS.map((col) => (
             <div key={col.heading}>
               <h4 style={{
@@ -207,7 +211,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar */}
+      
       <div style={{ borderTop: '1px solid var(--border)' }}>
         <div className="container" style={{
           paddingTop: 20,
@@ -254,7 +258,6 @@ export default function Footer() {
   )
 }
 
-/* ── Inline SVG Social Icons ────────────────────────────────── */
 function LinkedInIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

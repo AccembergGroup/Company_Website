@@ -61,7 +61,7 @@ export default function ScrambleText({ text, speed = 35 }) {
     return () => {
       observer.disconnect()
       cancelAnimationFrame(frame)
-      setDisplayText(text) // Restore original text during cleanup
+      setDisplayText(text) 
     }
   }, [text, speed])
 

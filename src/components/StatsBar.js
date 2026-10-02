@@ -6,7 +6,7 @@ import { useTheme } from '@/components/ThemeProvider'
 const SCALE_STATS = [
   { end: 99.999, decimals: 3, suffix: '%', label: 'SLA Uptime', sub: 'Guaranteed system availability' },
   { end: 14,     decimals: 0, prefix: '< ', suffix: 'ms', label: 'Response Latency', sub: 'Avg API execution time' },
-  { end: 4.8,    decimals: 1, suffix: 'B+', label: 'Daily Operations', sub: 'Processed across client stacks' },
+  { end: 6,      decimals: 0, suffix: ' wks', label: 'MVP Delivery', sub: 'Idea to production-ready launch' },
 ]
 
 function useCountUp(end, decimals = 0, duration = 2000, start = false) {
@@ -18,7 +18,7 @@ function useCountUp(end, decimals = 0, duration = 2000, start = false) {
     const step = (timestamp) => {
       if (!startTime) startTime = timestamp
       const progress = Math.min((timestamp - startTime) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3) // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3) 
       
       const currentVal = eased * end
       setCount(currentVal)
@@ -96,7 +96,7 @@ export default function StatsBar() {
     return () => observer.disconnect()
   }, [])
 
-  // Volumetric Ribbon Animation Canvas
+  
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -127,13 +127,13 @@ export default function StatsBar() {
 
         for (let x = 0; x < width; x++) {
           const normX = x / width
-          // Envelope shape: starts narrow at sides, swells in middle
+          
           const envelope = Math.sin(normX * Math.PI) * (height * 0.38)
           
           const angle = normX * Math.PI * 1.8 - t * 2.2 + phaseOffset
           const y = height / 2 + Math.sin(angle) * envelope
 
-          // Add minor 3D shift perspective
+          
           const projectedX = x + Math.cos(angle) * 14
 
           if (x === 0) {
@@ -143,11 +143,11 @@ export default function StatsBar() {
           }
         }
 
-        // Stripe volumetric ribbon gradient (peach -> magenta -> violet)
+        
         const gradient = ctx.createLinearGradient(0, 0, width, 0)
-        gradient.addColorStop(0, 'rgba(251, 146, 60, 0.04)')  // orange peach
-        gradient.addColorStop(0.5, theme === 'dark' ? 'rgba(236, 72, 153, 0.38)' : 'rgba(236, 72, 153, 0.25)') // pink magenta
-        gradient.addColorStop(1, 'rgba(124, 58, 237, 0.04)')   // violet
+        gradient.addColorStop(0, 'rgba(251, 146, 60, 0.04)')  
+        gradient.addColorStop(0.5, theme === 'dark' ? 'rgba(236, 72, 153, 0.38)' : 'rgba(236, 72, 153, 0.25)') 
+        gradient.addColorStop(1, 'rgba(124, 58, 237, 0.04)')   
 
         ctx.strokeStyle = gradient
         ctx.lineWidth = 1.4
@@ -179,7 +179,7 @@ export default function StatsBar() {
       }}
     >
       <div className="container">
-        {/* Header Block */}
+        
         <div style={{ maxWidth: 620, marginBottom: 40, textAlign: 'left' }}>
           <h2
             style={{
@@ -201,11 +201,11 @@ export default function StatsBar() {
               color: 'var(--text-secondary)',
             }}
           >
-            Engineered to handle millions of operations per second with microsecond latency and absolute reliability, even during peak traffic surges.
+            We deliver mission-critical software at startup speed. Backed by strict SLAs and low-latency infrastructure, our systems are built to perform and engineered to last.
           </p>
         </div>
 
-        {/* Volumetric Ribbon Canvas Container */}
+        
         <div style={{ position: 'relative', width: '100%', height: 160, marginBottom: 40 }}>
           <canvas
             ref={canvasRef}
@@ -218,7 +218,7 @@ export default function StatsBar() {
           />
         </div>
 
-        {/* Eased Metrics */}
+        
         <div
           className="scale-stats-grid"
           style={{

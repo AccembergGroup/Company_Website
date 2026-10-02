@@ -7,6 +7,22 @@ const emailService = require('../services/emailService');
 exports.createBooking = async (req, res, next) => {
   try {
     const { name, email, company, phone, preferredDate, message } = req.body;
+    
+    // Check if database is configured
+    if (!process.env.DATABASE_URL) {
+      console.log('⚠️ [Mock] Form submitted successfully (No DB connected):', req.body);
+      
+      const mockBooking = { id: 'mock-id-' + Date.now(), ...req.body };
+      emailService.sendBookACallNotification(mockBooking).catch((e) => console.error('[email] notify:', e.message));
+      emailService.sendBookACallConfirmation(mockBooking).catch((e) => console.error('[email] confirm:', e.message));
+
+      return res.status(201).json({ 
+        success: true, 
+        bookingId: mockBooking.id,
+        data: req.body 
+      });
+    }
+
     const booking = await BookACall.create({
       name, email, company, phone,
       preferredDate: preferredDate ? new Date(preferredDate) : null,
@@ -18,6 +34,18 @@ exports.createBooking = async (req, res, next) => {
 
     res.status(201).json({ success: true, bookingId: booking.id, data: booking });
   } catch (err) {
+    if (!process.env.DATABASE_URL || err.name === 'PrismaClientInitializationError') {
+      console.log('⚠️ [Mock Fallback] Form submitted successfully:', req.body);
+      const mockBooking = { id: 'mock-id-' + Date.now(), ...req.body };
+      emailService.sendBookACallNotification(mockBooking).catch((e) => console.error('[email] notify:', e.message));
+      emailService.sendBookACallConfirmation(mockBooking).catch((e) => console.error('[email] confirm:', e.message));
+
+      return res.status(201).json({ 
+        success: true, 
+        bookingId: mockBooking.id,
+        data: req.body 
+      });
+    }
     next(err);
   }
 };

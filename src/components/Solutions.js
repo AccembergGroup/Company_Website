@@ -3,7 +3,6 @@
 import { useRef, useEffect } from 'react'
 import { Landmark, Sparkles, Truck, HeartPulse, Zap } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
 const SOLUTIONS = [
@@ -71,7 +70,7 @@ export default function Solutions() {
     <section id="solutions" className="section" ref={ref}
       style={{ background: 'var(--bg-base)', position: 'relative', overflow: 'hidden', paddingTop: 'var(--section-y)', paddingBottom: '50px', transition: 'background-color 400ms' }}
     >
-      {/* Blending Divider Line */}
+      
       <div style={{
         height: '1px',
         width: '100%',
@@ -81,7 +80,7 @@ export default function Solutions() {
         left: 0,
       }} />
 
-      {/* Background glow stops */}
+      
       <div style={{
         position: 'absolute', top: '20%', right: '-10%',
         width: 600, height: 600,
@@ -90,22 +89,22 @@ export default function Solutions() {
       }} />
 
       <div className="container">
-        {/* Section header */}
+        
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', maxWidth: 620 }} className="reveal">
           <div className="section-label">
             <ScrambleText text="Targeted Expertise" speed={30} />
           </div>
           <h2 className="text-h2" style={{ marginBottom: 16 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Tailored Solutions for</span></FastScroll>
+              <span style={{ display: 'inline-block' }}>Tailored Solutions for</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Modern Industries</span></FastScroll>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Modern Industries</span>
             </h2>
           <p className="text-body-lg">
             We build specialized web systems and data engines designed to solve complex business constraints in high-impact domains.
           </p>
         </div>
 
-        {/* Bento Grid */}
+        
         <div className="bento-grid">
           {SOLUTIONS.map((sol, i) => {
             const Icon = sol.icon
@@ -140,43 +139,38 @@ export default function Solutions() {
                   e.currentTarget.style.transform = 'translateY(0)'
                 }}
               >
-                {/* Card Top */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                    <Icon size={18} strokeWidth={2.2} />
-                  </div>
-                  <span style={{
-                    fontSize: 10,
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    padding: '4px 10px',
-                    borderRadius: 100,
-                    background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.04)',
-                    color: 'var(--text-secondary)',
-                    border: '1px solid var(--border)',
-                  }}>
-                    {sol.badge}
-                  </span>
-                </div>
-
-                {/* Card Title & Desc */}
+                
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
-                  <h3 style={{
-                    fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
-                    fontSize: 20,
-                    fontWeight: 600,
-                    color: 'var(--text-primary)',
-                    letterSpacing: '-0.015em',
-                  }}>
-                    {sol.title}
-                  </h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
+                      fontSize: 20,
+                      fontWeight: 600,
+                      color: 'var(--text-primary)',
+                      letterSpacing: '-0.015em',
+                    }}>
+                      {sol.title}
+                    </h3>
+                    <span style={{
+                      fontSize: 10,
+                      fontWeight: 600,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      padding: '4px 10px',
+                      borderRadius: 100,
+                      background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.04)',
+                      color: 'var(--text-secondary)',
+                      border: '1px solid var(--border)',
+                    }}>
+                      {sol.badge}
+                    </span>
+                  </div>
                   <p className="text-body" style={{ fontSize: 14.5 }}>
                     {sol.desc}
                   </p>
                 </div>
 
-                {/* Aesthetic interactive trigger line */}
+                
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',

@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useTheme } from '@/components/ThemeProvider'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
 if (typeof window !== 'undefined') {
@@ -18,15 +17,15 @@ const ENGINES = [
     role: 'Precision Development',
     desc: 'Tailor-made software solutions architected from the ground up to solve complex enterprise challenges with elegant, maintainable code.',
     color: 'var(--accent)',
-    icon: <BuildIcon />,
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/2933/2933250.png',
   },
   {
     num: '02',
     title: 'Product-First Mindset',
     role: 'User-Centric Design',
-    desc: 'We approach every engagement through the lens of product ownership — prioritising intuitive user experiences, performance, and scalable architecture.',
+    desc: 'We approach every engagement through the lens of product ownership, prioritising intuitive user experiences, performance, and scalable architecture.',
     color: '#4DAAFF',
-    icon: <RocketIcon />,
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135673.png',
   },
   {
     num: '03',
@@ -34,7 +33,7 @@ const ENGINES = [
     role: 'Rigorous Delivery',
     desc: 'Multi-stage QA, automated testing pipelines, and comprehensive code reviews ensure our deployments are rock-solid, secure, and ready to scale.',
     color: '#8CC8FF',
-    icon: <LayersIcon />,
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135695.png',
   },
 ]
 
@@ -97,6 +96,7 @@ function useReveal(ref, options = {}) {
     const targets = el.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
     targets.forEach((t) => observer.observe(t))
     return () => observer.disconnect()
+    
   }, [])
 }
 
@@ -106,28 +106,13 @@ export default function About() {
   const ref = useRef(null)
   useReveal(ref)
 
-  // ── GSAP ScrollTrigger animations for philosophy sequence ──
+  
   useEffect(() => {
     const el = ref.current
     if (!el || typeof window === 'undefined') return
 
     const ctx = gsap.context(() => {
-      // 1. Draw connecting progress line
-      gsap.fromTo('.connecting-line-progress',
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          duration: 1.2,
-          ease: 'power2.inOut',
-          scrollTrigger: {
-            trigger: '.principles-section-wrapper',
-            start: 'top 85%',
-            once: true,
-          }
-        }
-      )
-
-      // 2. Stagger nodes and card reveals
+      
       const cards = el.querySelectorAll('.engine-card')
       cards.forEach((card, i) => {
         const node = el.querySelector(`.step-node-${i + 1}`)
@@ -162,7 +147,7 @@ export default function About() {
 
   return (
     <section id="about" className="section" ref={ref} style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Subtle glow top-right */}
+      
       <div
         style={{
           position: 'absolute',
@@ -177,7 +162,7 @@ export default function About() {
       />
 
       <div className="container">
-        {/* Top asymmetric row */}
+        
         <div
           style={{
             display: 'grid',
@@ -188,21 +173,21 @@ export default function About() {
           }}
           className="about-grid"
         >
-          {/* Left — Text */}
+          
           <div>
             <div className="section-label reveal">
               <ScrambleText text="Our Philosophy" speed={40} />
             </div>
-            <h2 className="text-h2" style={{ marginBottom: 24, transform: 'translateZ(0)' }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Engineering Excellence.</span></FastScroll>
+            <h2 className="text-h2 reveal" style={{ marginBottom: 24, transform: 'translateZ(0)' }}>
+              <span style={{ display: 'inline-block' }}>Engineering Excellence.</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Uncompromising Quality.</span></FastScroll>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Uncompromising Quality.</span>
             </h2>
             <p className="text-body-lg reveal" style={{ marginBottom: 32 }}>
-              Most firms accept tradeoffs between velocity and quality. At Accemberg, we architect software that eliminates compromise. Every platform we build is engineered with extreme attention to detail, robust system architecture, and an obsessive focus on user experience.
+              Most firms accept tradeoffs between velocity and quality. At Accemberg, we architect software that eliminates compromise. Every platform we build is engineered with extreme attention to detail, scalable system architecture, and an obsessive focus on user experience.
             </p>
             <p className="text-body reveal" style={{ marginBottom: 36 }}>
-              Our philosophy is rooted in engineering discipline. From complex enterprise migrations to rapid zero-to-one SaaS deployments, our team of passionate engineers treats every codebase as a craft. We don't just write code; we build durable digital assets that compound in value over time.
+              Our philosophy is rooted in engineering discipline. From complex enterprise migrations to rapid zero-to-one SaaS deployments, our team of passionate engineers treats every codebase as a craft. We don&apos;t just write code; we build durable digital assets that compound in value over time.
             </p>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }} className="reveal">
               <a href="#services" className="btn btn-primary btn-sm">
@@ -214,7 +199,7 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right — 3D Orbital Diagram */}
+          
           <div
             className="reveal-right"
             style={{
@@ -229,20 +214,11 @@ export default function About() {
           </div>
         </div>
 
-        {/* Principles section container */}
+        
         <div style={{ position: 'relative', marginTop: '48px' }} className="principles-section-wrapper">
-          {/* Subtle horizontal connecting line & step nodes (Desktop only) */}
-          <div className="connecting-line-container">
-            {/* Animated progress line */}
-            <div className="connecting-line-progress" />
+          
 
-            {/* Nodes */}
-            <div className="step-node step-node-1" style={{ left: '16.67%' }} />
-            <div className="step-node step-node-2" style={{ left: '50%' }} />
-            <div className="step-node step-node-3" style={{ left: '83.33%' }} />
-          </div>
-
-          {/* Engine cards grid */}
+          
           <div
             style={{
               display: 'grid',
@@ -271,43 +247,31 @@ export default function About() {
                   card.style.setProperty('--mouse-y', `-999px`)
                 }}
               >
-                {/* Top edge accent glow line */}
+                
                 <div className="card-top-glow" />
 
-                {/* Spotlight Layer */}
+                
                 <div className="card-spotlight" />
 
-                {/* Unique Technical Graphic */}
+                
                 {getTechGraphic(engine.num)}
 
-                {/* Top Row: Icon Box + Monospace Number */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20, position: 'relative', zIndex: 5 }}>
-                  <div
-                    className="engine-icon-box"
-                    style={{
-                      color: engine.color,
-                    }}
-                  >
-                    {engine.icon}
-                  </div>
-                  <span className="engine-num-label">
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, position: 'relative', zIndex: 5 }}>
+                  <span className="engine-num-label" style={{ opacity: 0.6 }}>
                     {engine.num}
                   </span>
-                </div>
-
-                {/* Role/Eyebrow */}
-                <div style={{ marginBottom: 6, position: 'relative', zIndex: 5 }}>
                   <span className="text-label" style={{ color: engine.color }}>
                     {engine.role}
                   </span>
                 </div>
 
-                {/* Title */}
+                
                 <h3 className="text-h3" style={{ marginBottom: 12, fontSize: 18, position: 'relative', zIndex: 5, color: isDark ? '#FFF' : '#101828' }}>
                   {engine.title}
                 </h3>
 
-                {/* Description */}
+                
                 <p className="text-body" style={{ position: 'relative', zIndex: 5, margin: 0, color: isDark ? 'rgba(255,255,255,0.7)' : '#475467' }}>
                   {engine.desc}
                 </p>
@@ -352,14 +316,14 @@ export default function About() {
         .step-node {
           position: absolute;
           top: 50%;
-          transform: translate(-50%, -50%);
+          margin: -4px 0 0 -4px;
           width: 8px;
           height: 8px;
           border-radius: 50%;
           background: var(--bg-card);
           border: 1.5px solid var(--border);
           z-index: 12;
-          transition: background-color 0.4s, border-color 0.4s, transform 0.4s;
+          transition: background-color 0.4s, border-color 0.4s;
         }
         .engine-card {
           position: relative;
@@ -376,19 +340,17 @@ export default function About() {
           border: 1px solid var(--border);
         }
         .engine-card.light {
-          background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(245,247,255,0.92) 100%);
-          border: 1px solid rgba(21, 101, 192, 0.12);
-          box-shadow: 0 4px 20px -6px rgba(21, 101, 192, 0.04);
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          box-shadow: 0 4px 20px -6px rgba(12, 73, 162, 0.04);
         }
         .engine-card.dark:hover {
-          transform: translateY(-5px) scale(1.01);
           border-color: var(--border-strong);
           box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.4);
         }
         .engine-card.light:hover {
-          transform: translateY(-5px) scale(1.01) !important;
-          border-color: rgba(21, 101, 192, 0.28) !important;
-          box-shadow: 0 16px 36px -12px rgba(21, 101, 192, 0.12) !important;
+          border-color: var(--border-strong) !important;
+          box-shadow: 0 16px 36px -12px rgba(12, 73, 162, 0.12) !important;
         }
         @media (min-width: 769px) {
           .engine-card:first-child { border-radius: 12px 0 0 12px; }
@@ -508,7 +470,7 @@ export default function About() {
         }
         .about-orbit-ring {
           position: absolute;
-          border: 1px solid #2A3660;
+          border: 1px solid var(--border-strong);
           border-radius: 50%;
           top: 50%;
           left: 50%;
@@ -525,7 +487,7 @@ export default function About() {
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -50%) rotateX(-58deg);
+          transform: translate(-50%, -50%) rotateX(-58deg) translateZ(35px);
           width: 100px;
           height: 68px;
           border-radius: 13px;
@@ -537,8 +499,15 @@ export default function About() {
           justify-content: center;
           gap: 4px;
           box-shadow: 0 0 20px rgba(21,101,192,0.1), 0 4px 12px rgba(0,0,0,0.05);
-          pointer-events: none;
+          cursor: pointer;
+          transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s, box-shadow 0.3s;
           will-change: left, top;
+          z-index: 10;
+        }
+        .about-orbit-node:hover {
+          transform: translate(-50%, -50%) rotateX(-58deg) translateZ(50px) scale(1.15);
+          border-color: var(--accent);
+          box-shadow: 0 0 30px rgba(21,101,192,0.3), 0 8px 24px rgba(0,0,0,0.15);
         }
         .about-node-icon {
           font-family: monospace;
@@ -586,7 +555,6 @@ export default function About() {
   )
 }
 
-/* ── 3-D Orbital Diagram ────────────────────────────────── */
 function OrbitalDiagram() {
   const innerRef = useRef(null)
   const n0 = useRef(null)
@@ -594,7 +562,7 @@ function OrbitalDiagram() {
   const n2 = useRef(null)
 
   useEffect(() => {
-    // Each ring: radiusFrac = half its CSS width percentage (ring-1=62%→31%, etc.)
+    
     const RINGS = [
       { ref: n0, radiusFrac: 0.31, period: 18000, dir: 1 },
       { ref: n1, radiusFrac: 0.41, period: 28000, dir: -1 },
@@ -613,7 +581,7 @@ function OrbitalDiagram() {
         if (!ref.current) return
         const angle = dir * (elapsed / period) * Math.PI * 2
         const r = size * radiusFrac
-        // Move in the tilted orbital plane via left/top (not transform)
+        
         ref.current.style.left = `calc(50% + ${(Math.sin(angle) * r).toFixed(2)}px)`
         ref.current.style.top = `calc(50% + ${(-Math.cos(angle) * r).toFixed(2)}px)`
       })
@@ -630,21 +598,21 @@ function OrbitalDiagram() {
       <div className="about-orbital-inner" ref={innerRef}>
         <div className="about-orbital-glow" />
 
-        {/* Rings — decorative spinning circles only, no nodes inside */}
+        
         <div className="about-orbit-ring about-ring-3" />
         <div className="about-orbit-ring about-ring-2" />
         <div className="about-orbit-ring about-ring-1" />
 
-        {/* Nodes — siblings of rings, positioned by rAF, always face screen */}
-        <div ref={n0} className="about-orbit-node">
+        
+        <div ref={n0} className="about-orbit-node" onClick={() => document.querySelector('.engines-grid')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>
           <span className="about-node-icon">&lt;/&gt;</span>
           <span className="about-node-label">QUALITY</span>
         </div>
-        <div ref={n1} className="about-orbit-node">
+        <div ref={n1} className="about-orbit-node" onClick={() => document.querySelector('.engines-grid')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>
           <span className="about-node-icon">◆</span>
           <span className="about-node-label">ENGINEERING</span>
         </div>
-        <div ref={n2} className="about-orbit-node">
+        <div ref={n2} className="about-orbit-node" onClick={() => document.querySelector('.engines-grid')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>
           <span className="about-node-icon">☁</span>
           <span className="about-node-label">ARCHITECTURE</span>
         </div>
@@ -658,7 +626,6 @@ function OrbitalDiagram() {
   )
 }
 
-/* ── SVG Icons ──────────────────────────────────────────── */
 function BuildIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">

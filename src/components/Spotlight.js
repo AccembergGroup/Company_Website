@@ -16,8 +16,13 @@ export function SpotlightCard({ children, className = '', style = {} }) {
   const [isDesktop, setIsDesktop] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches) {
-      setIsDesktop(true)
+    let mql
+    if (typeof window !== 'undefined') {
+      mql = window.matchMedia('(pointer: fine)')
+      if (mql.matches) {
+        
+        setTimeout(() => setIsDesktop(true), 0)
+      }
     }
   }, [])
 
@@ -62,7 +67,7 @@ export function SpotlightCard({ children, className = '', style = {} }) {
     >
       {isDesktop && (
         <>
-          {/* Card face glow matching brand tokens */}
+          
           <div
             className="spotlight-glow"
             style={{
@@ -76,7 +81,7 @@ export function SpotlightCard({ children, className = '', style = {} }) {
               pointerEvents: 'none',
             }}
           />
-          {/* Card border glow matching brand primary/tertiary colors */}
+          
           <div 
             className="spotlight-border-glow"
             style={{

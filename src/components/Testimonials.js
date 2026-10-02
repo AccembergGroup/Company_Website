@@ -6,7 +6,6 @@ import { useTheme } from '@/components/ThemeProvider'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 import Magnetic from './Magnetic'
 
@@ -14,45 +13,15 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
-const FALLBACK_TESTIMONIALS = [
-  {
-    id: 'fallback-1',
-    name: 'Sarah Connor',
-    role: 'CTO',
-    company: 'Cyberdyne Systems',
-    review: 'Accemberg delivered our system integration ahead of schedule. Uncompromising code quality.',
-    rating: 5,
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2',
-  },
-  {
-    id: 'fallback-2',
-    name: 'John Doe',
-    role: 'VP of Engineering',
-    company: 'Stark Industries',
-    review: 'The midnight neo-glow UI animations are silky smooth. Highly recommended.',
-    rating: 5,
-    avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a',
-  },
-  {
-    id: 'fallback-3',
-    name: 'Bruce Wayne',
-    role: 'Founder',
-    company: 'Wayne Enterprises',
-    review: 'Exceptional client experience and enterprise-ready security compliance.',
-    rating: 5,
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
-  }
-]
-
 export default function Testimonials() {
   const { theme } = useTheme()
   const ref = useRef(null)
-  const [data, setData] = useState(FALLBACK_TESTIMONIALS)
-  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
   const [activeIdx, setActiveIdx] = useState(0)
 
   useEffect(() => {
-    // Fetch live testimonials from backend
+    
     const url = process.env.NEXT_PUBLIC_API_URL
       ? `${process.env.NEXT_PUBLIC_API_URL}/testimonials`
       : 'http://localhost:5000/api/testimonials'
@@ -63,11 +32,11 @@ export default function Testimonials() {
         if (resJson.success && resJson.data && resJson.data.length > 0) {
           setData(resJson.data)
         } else {
-          setData(FALLBACK_TESTIMONIALS)
+          setData([])
         }
       })
       .catch(() => {
-        setData(FALLBACK_TESTIMONIALS)
+        setData([])
       })
       .finally(() => setLoading(false))
   }, [])
@@ -78,7 +47,7 @@ export default function Testimonials() {
     if (!el) return
 
     const ctx = gsap.context(() => {
-      // Reveal the left column info panel and headers
+      
       gsap.fromTo(el.querySelectorAll('.reveal-gsap-header'),
         {
           opacity: 0,
@@ -98,7 +67,7 @@ export default function Testimonials() {
         }
       )
 
-      // Reveal the testimonials cards/slider
+      
       gsap.from(el.querySelectorAll('.reveal-gsap-card'), {
         scrollTrigger: {
           trigger: el,
@@ -125,9 +94,11 @@ export default function Testimonials() {
     setActiveIdx((prev) => (prev - 1 + data.length) % data.length)
   }
 
-
-
   const current = data[activeIdx]
+
+  if (loading || !current) {
+    return null
+  }
 
   const overrideVars = theme === 'dark' ? {
     background: 'linear-gradient(180deg, #0A0F1E 0%, #08173B 50%, #0A0F1E 100%)',
@@ -171,21 +142,21 @@ export default function Testimonials() {
           alignItems: 'center',
         }} className="testimonials-grid">
 
-          {/* Left panel: Info */}
+          
           <div className="reveal-gsap-header">
             <div className="section-label">
               <ScrambleText text="Client Reviews" speed={30} />
             </div>
             <h2 className="text-h2" style={{ marginBottom: 16 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>What Partners say</span></FastScroll>
+              <span style={{ display: 'inline-block' }}>What Partners say</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>About Accemberg</span></FastScroll>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>About Accemberg</span>
             </h2>
             <p className="text-body-lg" style={{ marginBottom: 32 }}>
               Hear from startup founders, engineering VPs, and corporate tech leaders who partnered with us to launch systems.
             </p>
 
-            {/* Slider buttons */}
+            
             <div className="testimonials-slider-buttons" style={{ display: 'flex', gap: 10 }}>
               <Magnetic>
                 <button
@@ -236,7 +207,7 @@ export default function Testimonials() {
             </div>
           </div>
 
-          {/* Right panel: Active Card */}
+          
           <div className="reveal-gsap-card">
             <div
               className="testimonials-slider-card"
@@ -273,7 +244,7 @@ export default function Testimonials() {
                   : '0 20px 40px -15px rgba(21,101,192,0.08)'
               }}
             >
-              {/* Stars */}
+              
               <div style={{ display: 'flex', gap: 4 }}>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
@@ -285,7 +256,7 @@ export default function Testimonials() {
                 ))}
               </div>
 
-              {/* Review Text */}
+              
               <blockquote
                 style={{
                   fontFamily: 'var(--font-body)',
@@ -297,12 +268,12 @@ export default function Testimonials() {
                   margin: 0,
                 }}
               >
-                "{current.review}"
+                &quot;{current.review}&quot;
               </blockquote>
 
-              {/* Author Info */}
+              
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, borderTop: '1px solid var(--border)', paddingTop: 20 }}>
-                {/* Avatar */}
+                
                 <div style={{ position: 'relative', width: 44, height: 44, borderRadius: '50%', overflow: 'hidden', background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}>
                   {current.avatar ? (
                     <img
@@ -326,7 +297,7 @@ export default function Testimonials() {
 
             </div>
 
-            {/* Mobile vertical scroll list */}
+            
             <div className="mobile-testimonials-list">
               {data.map((item) => (
                 <div
@@ -362,7 +333,7 @@ export default function Testimonials() {
                       : '0 10px 30px -10px rgba(21,101,192,0.05)'
                   }}
                 >
-                  {/* Stars */}
+                  
                   <div style={{ display: 'flex', gap: 4 }}>
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
@@ -374,7 +345,7 @@ export default function Testimonials() {
                     ))}
                   </div>
 
-                  {/* Review Text */}
+                  
                   <blockquote
                     style={{
                       fontFamily: 'var(--font-body)',
@@ -385,10 +356,10 @@ export default function Testimonials() {
                       margin: 0,
                     }}
                   >
-                    "{item.review}"
+                    &quot;{item.review}&quot;
                   </blockquote>
 
-                  {/* Author Info */}
+                  
                   <div style={{ display: 'flex', alignItems: 'center', gap: 14, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
                     <div style={{ position: 'relative', width: 36, height: 36, borderRadius: '50%', overflow: 'hidden', background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}>
                       {item.avatar ? (

@@ -22,7 +22,6 @@ async function bootstrap() {
 
   const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n🚀  Accemberg API  →  http://localhost:${PORT}/api`);
-    console.log(`   Network      →  http://192.168.1.33:${PORT}/api`);
     console.log(`   Environment  : ${process.env.NODE_ENV || 'development'}\n`);
   });
 

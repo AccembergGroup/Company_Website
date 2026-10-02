@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 import { SpotlightProvider, SpotlightCard } from './Spotlight'
 import { useTheme } from '@/components/ThemeProvider'
@@ -10,26 +9,26 @@ const STEPS = [
   {
     num: '01',
     title: 'Discovery & Scoping',
-    desc: 'We immerse ourselves in your requirements, technical landscape, and business goals to produce a precise, deliverable-bound project scope.',
-    icon: <DiscoveryIcon />,
+    desc: 'We dig deep into your requirements, technical landscape, and business goals. The output is a precise, deliverable-bound scope with zero ambiguity.',
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/2933/2933190.png',
   },
   {
     num: '02',
     title: 'Architecture & Strategy',
-    desc: 'Our senior engineers design the technical foundation — selecting the right stack, system boundaries, and scalability approach before a single line is written.',
-    icon: <ArchIcon />,
+    desc: 'Senior engineers design the full technical foundation before a single line is written. Right stack, right boundaries, right scalability model.',
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/2933/2933250.png',
   },
   {
     num: '03',
     title: 'Iterative Development',
-    desc: 'Modular, documentation-first engineering with QA gates at every sprint. You see progress early and often — no black-box delivery.',
-    icon: <DevIcon />,
+    desc: 'Modular, documentation-first sprints with QA gates built in. You see real progress early and often. No black-box delivery, ever.',
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
   },
   {
     num: '04',
     title: 'Deployment & Scale',
-    desc: 'Structured handoff, production deployment, monitoring setup, and optional long-term maintenance — built for systems that need to keep running.',
-    icon: <DeployIcon />,
+    desc: 'Clean handoff, production deployment, monitoring setup, and optional long-term maintenance. Built for systems that cannot afford to go down.',
+    imageUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135673.png',
   },
 ]
 
@@ -92,20 +91,20 @@ export default function Process() {
       <div className="dot-grid" style={{ opacity: 0.4 }} />
 
       <div className="container">
-        {/* Header */}
+        
         <div style={{ textAlign: 'center', marginBottom: 'clamp(52px,7vw,88px)', maxWidth: 600, margin: '0 auto clamp(52px,7vw,88px)' }}>
           <div className="section-label reveal" style={{ justifyContent: 'center' }}>
             <ScrambleText text="Our Process" speed={30} />
           </div>
           <h2 className="text-h2" style={{ marginBottom: 16 }}>
-            <FastScroll><span style={{ display: 'inline-block' }}>How We <span style={{ color: 'var(--accent)' }}>Deliver</span></span></FastScroll>
+            <span style={{ display: 'inline-block' }}>How We <span style={{ color: 'var(--accent)' }}>Deliver</span></span>
           </h2>
           <p className="text-body-lg reveal">
-            A structured, repeatable system that eliminates ambiguity and delivers quality — at every stage.
+            No guesswork. No bottlenecks. Just disciplined execution from first brief to final deployment.
           </p>
         </div>
 
-        {/* Steps grid */}
+        
         <SpotlightProvider style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -178,11 +177,11 @@ function StepCard({ step }) {
         WebkitBackdropFilter: 'blur(16px)',
         border: '1px solid var(--border)',
         borderRadius: 20,
-        padding: '28px',
+        padding: '36px',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        gap: 16,
+        gap: 20,
         transition: 'border-color 300ms, box-shadow 300ms, transform 300ms var(--ease-out-quart)',
         cursor: 'default',
         boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.03)',
@@ -200,10 +199,14 @@ function StepCard({ step }) {
         e.currentTarget.style.transform = 'translateY(0)'
       }}
     >
-      {/* Top row: Icon + Step number */}
+      
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-          {step.icon}
+        <div className="icon-box" style={{ background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {step.imageUrl ? (
+            <img src={step.imageUrl} alt="Icon" width={22} height={22} style={{ objectFit: 'contain' }} />
+          ) : (
+            step.icon
+          )}
         </div>
         <span style={{
           fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
@@ -216,7 +219,7 @@ function StepCard({ step }) {
         </span>
       </div>
 
-      {/* Title */}
+      
       <h3 style={{
         fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',
         fontSize: 16,
@@ -228,7 +231,7 @@ function StepCard({ step }) {
         {step.title}
       </h3>
 
-      {/* Desc */}
+      
       <p className="text-body" style={{ flex: 1 }}>{step.desc}</p>
     </SpotlightCard>
   )

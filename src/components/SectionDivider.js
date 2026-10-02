@@ -14,10 +14,10 @@ export default function SectionDivider({ index = 0 }) {
   const banner = BANNERS[index % BANNERS.length]
   const isCloud = banner.src === '/divider-cloud.png'
 
-  // Cloud image is expanded (240px), others are compact (130px)
+  
   const height = isCloud ? 240 : 130
 
-  // Configure radial mask stops based on expansion (cloud has a super soft blend)
+  
   const mask = isCloud
     ? 'radial-gradient(ellipse 65% 85% at center, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 35%, rgba(0,0,0,0.15) 70%, transparent 100%)'
     : 'radial-gradient(ellipse at center, black 0%, rgba(0,0,0,0.85) 25%, rgba(0,0,0,0.3) 55%, transparent 75%)'
@@ -53,10 +53,10 @@ export default function SectionDivider({ index = 0 }) {
           sizes="100vw"
           priority={false}
         />
-        {/* Ambient overlay to tint the image */}
+        
         <div className="sdi-overlay" style={{ background: overlayBg }} />
 
-        {/* Custom blending overlays */}
+        
         <div className="sdi-fade-top" style={{
           background: theme === 'dark'
             ? 'linear-gradient(to bottom, #0A0F1E 0%, rgba(10, 15, 30, 0.99) 25%, rgba(10, 15, 30, 0.8) 55%, transparent 100%)'

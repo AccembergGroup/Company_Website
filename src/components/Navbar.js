@@ -2,49 +2,20 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { Sun, Moon, ArrowRight } from 'lucide-react'
-import { useTheme } from '@/components/ThemeProvider'
+import { ArrowRight } from 'lucide-react'
 import Magnetic from '@/components/Magnetic'
 import { gsap } from 'gsap'
 
 const NAV_LINKS = [
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Products', href: '#products' },
-  { label: 'Process', href: '#process' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Products', href: '/products' },
+  { label: 'Process', href: '/process' },
+  { label: 'Projects', href: '/projects' },
 ]
 
 export default function Navbar() {
-  const { theme, toggleTheme } = useTheme()
-  const toggleBtnRef = useRef(null)
-
-  const handleThemeToggle = () => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) {
-      toggleTheme()
-      return
-    }
-
-    gsap.to(toggleBtnRef.current, {
-      rotation: '+=360',
-      scale: 0.1,
-      opacity: 0,
-      duration: 0.25,
-      ease: 'power2.in',
-      onComplete: () => {
-        toggleTheme()
-        gsap.to(toggleBtnRef.current, {
-          scale: 1,
-          opacity: 1,
-          duration: 0.35,
-          ease: 'back.out(1.8)',
-        })
-      }
-    })
-  }
-
-  const [scrolled, setScrolled] = useState(false)
+    const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -70,7 +41,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── Floating pill navbar ─────────────────────────── */}
+      
       <nav
         className="nav-container"
         style={{
@@ -81,14 +52,10 @@ export default function Navbar() {
           zIndex: 100,
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: theme === 'dark'
-            ? (scrolled ? 'rgba(10, 16, 24, 0.82)' : 'rgba(255, 255, 255, 0.05)')
-            : (scrolled ? 'rgba(245, 247, 255, 0.82)' : 'rgba(0, 0, 0, 0.04)'),
-          backdropFilter: 'blur(28px) saturate(1.8)',
-          WebkitBackdropFilter: 'blur(28px) saturate(1.8)',
-          border: theme === 'dark'
-            ? '1px solid rgba(255, 255, 255, 0.10)'
-            : '1px solid rgba(21, 101, 192, 0.12)',
+          backgroundColor: scrolled ? 'rgba(245, 247, 255, 0.82)' : 'rgba(0, 0, 0, 0.04)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(21, 101, 192, 0.12)',
           borderRadius: 100,
           backgroundClip: 'padding-box',
           transition: 'background 400ms, box-shadow 400ms, border-color 400ms',
@@ -99,9 +66,9 @@ export default function Navbar() {
           maxWidth: 'calc(100vw - 48px)',
         }}
       >
-        {/* Logo mark */}
+        
         <a
-          href="#"
+          href="/"
           aria-label="Accemberg"
           className="nav-logo-link"
           style={{
@@ -117,8 +84,8 @@ export default function Navbar() {
               width: 30,
               height: 30,
               borderRadius: '50%',
-              background: theme === 'dark' ? 'rgba(26,143,255,0.12)' : 'rgba(21, 101, 192, 0.08)',
-              border: theme === 'dark' ? '1px solid rgba(26,143,255,0.22)' : '1px solid rgba(21, 101, 192, 0.15)',
+              background: 'rgba(21, 101, 192, 0.08)',
+              border: '1px solid rgba(21, 101, 192, 0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -149,7 +116,7 @@ export default function Navbar() {
           </span>
         </a>
 
-        {/* Desktop nav links */}
+        
         <div
           style={{ display: 'flex', alignItems: 'center', gap: 2, marginRight: 8 }}
           className="pill-nav-links"
@@ -179,51 +146,12 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Action area — Theme switch + Get in Touch */}
+        
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          {/* Theme switcher (Magnetic) */}
-          <Magnetic>
-            <button
-              onClick={handleThemeToggle}
-              ref={toggleBtnRef}
-              aria-label="Toggle visual theme"
-              className="theme-toggle-btn"
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: '50%',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
-                border: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)',
-                color: 'var(--text-secondary)',
-                cursor: 'pointer',
-                transition: 'all 200ms',
-                transformOrigin: 'center center',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'
-                e.currentTarget.style.color = 'var(--text-primary)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)'
-                e.currentTarget.style.color = 'var(--text-secondary)'
-              }}
-              suppressHydrationWarning
-            >
-              {theme === 'dark' ? (
-                <Sun size={15} strokeWidth={2} />
-              ) : (
-                <Moon size={15} strokeWidth={2} />
-              )}
-            </button>
-          </Magnetic>
-
-          {/* CTA pill — right side (Magnetic) */}
+          
           <Magnetic>
             <a
-              href="#contact"
+              href="/contact"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -237,9 +165,7 @@ export default function Navbar() {
                 letterSpacing: '0.01em',
                 flexShrink: 0,
                 transition: 'background 200ms, box-shadow 200ms, transform 150ms',
-                boxShadow: theme === 'dark'
-                  ? '0 4px 14px rgba(79,195,247,0.2)'
-                  : '0 4px 14px rgba(21,101,192,0.3)',
+                boxShadow: '0 4px 14px rgba(21,101,192,0.3)',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--accent-light)'
@@ -255,7 +181,7 @@ export default function Navbar() {
           </Magnetic>
         </div>
 
-        {/* Hamburger (mobile) */}
+        
         <button
           aria-label="Toggle menu"
           onClick={() => setMenuOpen((v) => !v)}
@@ -295,7 +221,7 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* ── Mobile slide-down menu ───────────────────────── */}
+      
       <div
         ref={menuRef}
         style={{
@@ -304,9 +230,9 @@ export default function Navbar() {
           left: '50%',
           transform: `translateX(-50%) translateY(${menuOpen ? '0' : '-8px'})`,
           zIndex: 99,
-          background: theme === 'dark' ? 'rgba(10,16,24,0.92)' : 'rgba(245,247,255,0.92)',
+          background: 'rgba(245,247,255,0.92)',
           backdropFilter: 'blur(28px)',
-          border: theme === 'dark' ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(21,101,192,0.12)',
+          border: '1px solid rgba(21,101,192,0.12)',
           borderRadius: 20,
           padding: '16px 8px',
           minWidth: 220,
@@ -332,7 +258,7 @@ export default function Navbar() {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = 'var(--text-primary)'
-              e.currentTarget.style.background = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'
+              e.currentTarget.style.background = 'rgba(0,0,0,0.03)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.color = 'var(--text-secondary)'
@@ -351,27 +277,22 @@ export default function Navbar() {
         @media (max-width: 768px) {
           .pill-nav-links { display: none !important; }
           .pill-hamburger { display: flex !important; }
-          .nav-wordmark   { display: none; }
+          /* Show wordmark on mobile and center the logo */
+          .nav-wordmark { display: block !important; }
           
-          /* Destroy the "blob" pill on mobile — use natural full-width header */
-          .nav-container { 
-            top: 0 !important; 
-            left: 0 !important; 
-            transform: none !important;
-            width: 100% !important;
-            max-width: 100vw !important;
-            padding: 20px 24px !important;
-            justify-content: space-between !important;
-            
-            /* Remove central pill background */
-            background: transparent !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            border: none !important;
-            box-shadow: none !important;
+          /* Keep the floating pill on mobile but adjust padding */
+          .nav-container {
+            padding: 12px 16px !important;
+            width: calc(100vw - 32px) !important;
+            justify-content: flex-end !important;
           }
           
-          .nav-logo-link { margin-right: 0 !important; }
+          .nav-logo-link { 
+            position: absolute !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            margin: 0 !important;
+          }
           
           /* Just the hamburger gets a subtle glass button look at top-right */
           .pill-hamburger { 

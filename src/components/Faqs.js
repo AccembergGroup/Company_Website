@@ -6,7 +6,6 @@ import { useTheme } from '@/components/ThemeProvider'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
 if (typeof window !== 'undefined') {
@@ -66,7 +65,7 @@ export default function Faqs() {
   const [openIdx, setOpenIdx] = useState(null)
 
   useEffect(() => {
-    // Fetch live FAQs from backend
+    
     const url = process.env.NEXT_PUBLIC_API_URL
       ? `${process.env.NEXT_PUBLIC_API_URL}/faqs`
       : 'http://localhost:5000/api/faqs'
@@ -114,7 +113,7 @@ export default function Faqs() {
         )
       }
 
-      // Staggered reveal for FAQ rows
+      
       const rows = el.querySelectorAll('.faq-row')
       if (rows.length > 0) {
         gsap.from(rows, {
@@ -139,8 +138,6 @@ export default function Faqs() {
   const toggleFaq = (idx) => {
     setOpenIdx(openIdx === idx ? null : idx)
   }
-
-
 
   const overrideVars = theme === 'dark' ? {
     background: 'linear-gradient(180deg, #0A0F1E 0%, #08173B 50%, #0A0F1E 100%)',
@@ -176,7 +173,7 @@ export default function Faqs() {
     <section id="faq" className="section" ref={ref}
       style={{ ...overrideVars, position: 'relative', overflow: 'hidden', borderTop: 'none', paddingTop: '90px', transition: 'background-color 400ms, color 400ms' }}
     >
-      {/* Background ambient glow bottom-right */}
+      
       <div style={{
         position: 'absolute', bottom: '-10%', right: '-5%',
         width: 600, height: 600,
@@ -185,21 +182,21 @@ export default function Faqs() {
       }} />
 
       <div className="container" style={{ maxWidth: 840 }}>
-        {/* Section Header */}
+        
         <div style={{ marginBottom: 'clamp(48px,6vw,80px)', textAlign: 'center' }}>
           <div className="section-label" style={{ justifyContent: 'center' }}>
             <ScrambleText text="Frequently Asked Questions" speed={30} />
           </div>
           <h2 className="text-h2" style={{ marginBottom: 14 }}>
-            <FastScroll><span style={{ display: 'inline-block' }}>Got Questions?</span></FastScroll><br />
-            <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>We have answers.</span></FastScroll>
+            <span style={{ display: 'inline-block' }}>Got Questions?</span><br />
+            <span style={{ display: 'inline-block', color: 'var(--accent)' }}>We have answers.</span>
           </h2>
           <p className="text-body-lg" style={{ maxWidth: 540, margin: '0 auto' }}>
             Everything you need to know about our workflow models, technology alignment, and partnership SLA agreements.
           </p>
         </div>
 
-        {/* Accordion Group */}
+        
         <div className="faq-rows-container" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {faqs.map((faq, i) => {
             const isOpen = openIdx === i
@@ -232,7 +229,7 @@ export default function Faqs() {
                     : 'none'
                 }}
               >
-                {/* Question Trigger */}
+                
                 <button
                   onClick={() => toggleFaq(i)}
                   style={{
@@ -269,7 +266,7 @@ export default function Faqs() {
                   />
                 </button>
 
-                {/* Answer Content */}
+                
                 <div
                   style={{
                     height: isOpen ? 'auto' : 0,

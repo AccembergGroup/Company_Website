@@ -3,7 +3,6 @@
 import { useRef, useEffect } from 'react'
 import { ShieldCheck, Eye, RefreshCw, Trophy } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
 const PILLARS = [
@@ -85,7 +84,7 @@ export default function WhyAccemberg() {
     <section id="why-accemberg" className="section" ref={ref}
       style={{ ...overrideVars, position: 'relative', overflow: 'hidden', borderTop: 'none', paddingTop: '50px', paddingBottom: '160px', transition: 'background-color 400ms, color 400ms' }}
     >
-      {/* Light/Dark theme-aware backdrop glow */}
+      
       <div style={{
         position: 'absolute', bottom: '-10%', left: '-5%',
         width: 700, height: 700,
@@ -101,15 +100,15 @@ export default function WhyAccemberg() {
           alignItems: 'start',
         }} className="why-grid">
 
-          {/* Left Panel */}
+          
           <div style={{ maxWidth: 440 }}>
             <div className="section-label reveal">
               <ScrambleText text="The Accemberg Quality" speed={30} />
             </div>
             <h2 className="text-h2" style={{ marginBottom: 20 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Why Leading Teams</span></FastScroll>
+              <span style={{ display: 'inline-block' }}>Why Leading Teams</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Choose Accemberg</span></FastScroll>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Choose Accemberg</span>
             </h2>
             <p className="text-body-lg reveal" style={{ marginBottom: 30 }}>
               We bypass junior bloat and slow agency layers to deliver high-velocity, clean architectures that scale.
@@ -121,7 +120,7 @@ export default function WhyAccemberg() {
             </div>
           </div>
 
-          {/* Right pillars list */}
+          
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }} className="pillars-grid">
             {PILLARS.map((pillar, i) => {
               const Icon = pillar.icon

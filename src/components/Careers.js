@@ -3,7 +3,6 @@
 import { useRef, useEffect } from 'react'
 import { Briefcase, ArrowUpRight, Zap, Globe, Heart } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 
 const JOBS = [
@@ -61,44 +60,36 @@ export default function Careers() {
           alignItems: 'start',
         }} className="careers-grid">
 
-          {/* Left panel: Culture */}
+          
           <div>
             <div className="section-label">
               <ScrambleText text="Careers" speed={30} />
             </div>
             <h2 className="text-h2" style={{ marginBottom: 20 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Build the Future of</span></FastScroll>
+              <span style={{ display: 'inline-block' }}>Build the Future of</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Enterprise Systems</span></FastScroll>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Enterprise Systems</span>
             </h2>
             <p className="text-body-lg" style={{ marginBottom: 30 }}>
               We are a team of passionate, remote-first systems builders. We care about elegant software architectures, clear roadmaps, and continuous craft excellence.
             </p>
 
-            {/* Perks */}
+            
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
-                { label: 'Work from Anywhere', desc: 'Accemberg is fully remote-first. Choose your workspace anywhere globally.', icon: Globe },
-                { label: 'Premium Hardware & Tools', desc: 'Get top-tier hardware allowances and subscriptions for whatever tooling you need.', icon: Zap },
-                { label: 'High Trust, High Freedom', desc: 'No micro-management or time-tracking. We measure value delivered, not hours.', icon: Heart }
-              ].map((perk) => {
-                const Icon = perk.icon
-                return (
-                  <div key={perk.label} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                    <div className="icon-box" style={{ width: 34, height: 34, background: theme === 'dark' ? 'rgba(79,195,247,0.12)' : 'rgba(21,101,192,0.06)' }}>
-                      <Icon size={14} className="text-accent" />
-                    </div>
-                    <div>
-                      <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>{perk.label}</h4>
-                      <p className="text-body" style={{ fontSize: 13, lineHeight: 1.5 }}>{perk.desc}</p>
-                    </div>
-                  </div>
-                )
-              })}
+                { label: 'Work from Anywhere', desc: 'Accemberg is fully remote-first. Choose your workspace anywhere globally.' },
+                { label: 'Premium Hardware & Tools', desc: 'Get top-tier hardware allowances and subscriptions for whatever tooling you need.' },
+                { label: 'High Trust, High Freedom', desc: 'No micro-management or time-tracking. We measure value delivered, not hours.' }
+              ].map((perk) => (
+                <div key={perk.label} style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 8 }}>
+                  <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0, letterSpacing: '-0.01em' }}>{perk.label}</h4>
+                  <p className="text-body" style={{ fontSize: 14, lineHeight: 1.5, margin: 0, opacity: 0.9 }}>{perk.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Right panel: Job Listings */}
+          
           <div>
             <h3 style={{
               fontFamily: 'var(--font-space-grotesk, "Space Grotesk", sans-serif)',

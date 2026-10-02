@@ -10,11 +10,9 @@ import Magnetic from '@/components/Magnetic'
 import HeroWaveCanvas from './HeroWaveCanvas'
 import ScrambleText from './ScrambleText'
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Orbit configuration
-const ORBIT_RADIUS = 220   // horizontal radius in px (elliptical orbit)
-const ORBIT_RADIUS_Y = 176  // vertical radius in px on the tilted plane
-const ORBIT_MS = 28000     // 28s per full revolution — calm, premium pace
+const ORBIT_RADIUS = 220   
+const ORBIT_RADIUS_Y = 176  
+const ORBIT_MS = 28000     
 
 const ORBIT_ITEMS = [
   { id: 'api', icon: '</>', label: 'API', accent: '#4FC3F7', glow: 'rgba(79,195,247,0.65)', baseSize: 70 },
@@ -27,9 +25,6 @@ const ORBIT_ITEMS = [
   { id: 'devops', icon: '◈', label: 'DEVOPS', accent: '#F472B6', glow: 'rgba(244,114,182,0.65)', baseSize: 70 },
 ]
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Trusted brands marquee
-// ─────────────────────────────────────────────────────────────────────────────
 const TRUSTED_BRANDS = [
   {
     name: 'OpenAI', color: '#10A37F',
@@ -106,9 +101,6 @@ const TRUSTED_BRANDS = [
   },
 ]
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Tech detail descriptions for the click panel
-// ─────────────────────────────────────────────────────────────────────────────
 const TECH_DETAILS = {
   'API': { desc: 'High-performance REST & GraphQL APIs. We architect scalable, secure API layers with sub-14ms response times that power your entire ecosystem.', tag: 'Backend Services', capabilities: ['REST', 'GRAPHQL', 'gRPC'] },
   'NEXT.JS': { desc: 'Enterprise Next.js applications with server-side rendering, edge functions, and optimized delivery — built for performance and SEO from day one.', tag: 'Frontend Framework', capabilities: ['SSR', 'EDGE ROUTING', 'TURBOPACK'] },
@@ -120,31 +112,18 @@ const TECH_DETAILS = {
   'DEVOPS': { desc: 'Full CI/CD pipeline design, container orchestration, monitoring, and automated deployment strategies for resilient delivery.', tag: 'Platform Operations', capabilities: ['CI/CD', 'DOCKER', 'PROMETHEUS'] },
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  OrbitRing — Clean circular/elliptical orbit with subtle 3D depth
-//
-//  Architecture:
-//  - Cards orbit in a tilted 3D plane (rotateX(36deg) rotateY(-6deg))
-//  - Orbit geometry is mathematically clean and spaced out (rx=270px, ry=220px)
-//  - Dynamic depth scaling matches recommended ranges (0.85 back, 1.10 front)
-//  - Opacity is highly restrained (0.72 minimum at back, 1.0 at front)
-//  - No blur filter is used for depth
-//  - Counter-rotation keeps cards upright and readable
-//  - Mouse parallax tilt is constrained to a very subtle 1.5° max
-//  - Logo remains fixed in the center, stable and clearly visible
-// ─────────────────────────────────────────────────────────────────────────────
 function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion }) {
   const { theme } = useTheme()
 
-  // ── Constants ──
-  const LOGO_SIZE = 112    // central logo size (px)
-  const MAX_CARD = 70     // max card base size
+  
+  const LOGO_SIZE = 112    
+  const MAX_CARD = 70     
   const STAGE_W = radiusX * 2 + MAX_CARD + 40
   const STAGE_H = radiusY * 2 + MAX_CARD + 40
   const CX = STAGE_W / 2
   const CY = STAGE_H / 2
 
-  // ── Refs ──
+  
   const stageRef = useRef(null)
   const planeRef = useRef(null)
   const nodeRefs = useRef([])
@@ -157,7 +136,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
   const popoverCoordsRef = useRef(null)
   const hoveredIdxRef = useRef(null)
 
-  // Central Core Refs
+  
   const logoWrapperRef = useRef(null)
   const logoSphereRef = useRef(null)
   const pulseRef = useRef(null)
@@ -180,15 +159,15 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
   const connectionAngleRef = useRef(0)
   const connectionStrengthRef = useRef(0)
 
-  // QuickSetters for performance
+  
   const positionSettersRef = useRef([])
   const scaleSettersRef = useRef([])
 
-  // ── State ──
+  
   const [hoveredIdx, setHoveredIdx] = useState(null)
   const [popoverCoords, setPopoverCoords] = useState(null)
 
-  // ── Mouse tracking for central core tilt & highlight shifting ──
+  
   useEffect(() => {
     const stage = stageRef.current
     if (!stage || paused) return
@@ -210,8 +189,8 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
       const strength = Math.max(0, 1 - distance / maxDist)
 
       logoTiltRef.current = {
-        x: (dy / maxDist) * -3.0, // pitch
-        y: (dx / maxDist) * 3.0,  // yaw
+        x: (dy / maxDist) * -3.0, 
+        y: (dx / maxDist) * 3.0,  
         strength: strength
       }
     }
@@ -228,11 +207,11 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
     }
   }, [paused])
 
-  // Initialize GSAP QuickSetters once on mount
+  
   useEffect(() => {
     const nodes = nodeRefs.current.filter(Boolean)
 
-    // Set static centering offsets
+    
     nodes.forEach(node => {
       gsap.set(node, { xPercent: -50, yPercent: -50 })
     })
@@ -248,14 +227,14 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
     })
   }, [items])
 
-  // ── Main GSAP Ticker Animation Loop ──
+  
   useEffect(() => {
     if (paused) return
 
     const tick = (time, deltaTime) => {
-      const dt = deltaTime || 16.67 // fallback if undefined
+      const dt = deltaTime || 16.67 
 
-      // Speed interpolation
+      
       currentSpeedRef.current += (targetSpeedRef.current - currentSpeedRef.current) * 0.1
 
       const dAngle = (dt / durationMs) * Math.PI * 2 * currentSpeedRef.current
@@ -265,9 +244,9 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
       const nodes = nodeRefs.current.filter(Boolean)
       const n = nodes.length
 
-      // ── Upgraded Central Core updates ──
+      
       const isDark = theme === 'dark'
-      const breath = Math.sin(time * (2 * Math.PI / 4.0)) * 0.5 + 0.5 // 4.0s cycle
+      const breath = Math.sin(time * (2 * Math.PI / 4.0)) * 0.5 + 0.5 
       const breathScale = 1.0 + breath * 0.015
 
       const tilt = currentLogoTilt.current
@@ -276,12 +255,12 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
       tilt.y += (targetTilt.y - tilt.y) * 0.1
       tilt.strength += (targetTilt.strength - tilt.strength) * 0.1
 
-      // 1. Logo wrapper tilt, breathing scale, and z-index positioning
+      
       if (logoWrapperRef.current) {
         logoWrapperRef.current.style.transform = `translate3d(0, 0, 15px) rotateX(${tilt.x.toFixed(2)}deg) rotateY(${tilt.y.toFixed(2)}deg) scale(${breathScale.toFixed(4)})`
       }
 
-      // 2. Direct logo hover state tracking & expanding pulse trigger
+      
       const directHoverBonus = isLogoHoveredRef.current ? 0.25 : 0.0
       if (isLogoHoveredRef.current && !lastLogoHoveredRef.current) {
         pulseScaleRef.current = 1.0
@@ -289,7 +268,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
       }
       lastLogoHoveredRef.current = isLogoHoveredRef.current
 
-      // Expansive pulse wave animation
+      
       if (pulseOpacityRef.current > 0) {
         pulseScaleRef.current += (dt * 0.001) * 0.8
         pulseOpacityRef.current -= (dt * 0.001) * 2.2
@@ -299,7 +278,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         }
       }
 
-      // 3. Shifting radial illumination gradient and logo disc highlights
+      
       if (logoSphereRef.current) {
         const bgX = 35 + tilt.y * 3
         const bgY = 32 + tilt.x * -3
@@ -323,20 +302,20 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
           : `0 0 ${shadowBlur}px rgba(21,101,192,${shadowGlowOpacity}), inset 0 1px 0 rgba(255,255,255,0.5)`
       }
 
-      // 4. Primary Segmented Ring Rotation (speeds up on logo hover)
+      
       const pSpeed = isLogoHoveredRef.current ? 0.65 : 0.5
       primaryRingAngleRef.current += (dt * 0.001) * pSpeed
       if (primaryRingRef.current) {
         primaryRingRef.current.style.transform = `rotate(${(primaryRingAngleRef.current * 180 / Math.PI).toFixed(1)}deg)`
       }
 
-      // 5. Secondary Segmented Ring Rotation (slower, opposite direction)
+      
       secondaryRingAngleRef.current += (dt * 0.001) * (-0.25)
       if (secondaryRingRef.current) {
         secondaryRingRef.current.style.transform = `rotate(${(secondaryRingAngleRef.current * 180 / Math.PI).toFixed(1)}deg)`
       }
 
-      // 6. Traveling Energy Particles along paths
+      
       p1AngleRef.current += (dt * 0.001) * (isLogoHoveredRef.current ? 1.4 : 1.1)
       const p1x = 64 * Math.cos(p1AngleRef.current)
       const p1y = 64 * Math.sin(p1AngleRef.current)
@@ -351,12 +330,12 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         gsap.set(p2Ref.current, { x: p2x, y: p2y, xPercent: -50, yPercent: -50 })
       }
 
-      // Slightly brighten particles when cursor is nearby
+      
       const pGlow = 0.5 + tilt.strength * 0.5
       if (p1Ref.current) p1Ref.current.style.opacity = pGlow.toFixed(2)
       if (p2Ref.current) p2Ref.current.style.opacity = (pGlow * 0.8).toFixed(2)
 
-      // 7. Technology Card Hover Connection Highlight Arc
+      
       if (hoveredIdxRef.current !== null) {
         const theta = a0 + (2 * Math.PI / n) * hoveredIdxRef.current
         connectionAngleRef.current = theta
@@ -381,28 +360,28 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         }
       }
 
-      // Position cards
+      
       nodes.forEach((node, i) => {
         if (!node) return
         const item = items[i]
 
         const theta = a0 + (2 * Math.PI / n) * i
 
-        // 2D projected coordinates on flat elliptical path
+        
         const x = CX + radiusX * Math.cos(theta)
         const y = CY + radiusY * Math.sin(theta)
 
-        const depthVal = Math.sin(theta) // 1 at front (bottom), -1 at back (top)
+        const depthVal = Math.sin(theta) 
         const depthScale = 0.96 + depthVal * 0.10
 
-        // Apply coordinates via quickSetters
+        
         const posSetter = positionSettersRef.current[i]
         if (posSetter) {
           posSetter.x(x)
           posSetter.y(y)
         }
 
-        // Apply depth scale via quickSetter
+        
         const scaleSetter = scaleSettersRef.current[i]
         if (scaleSetter) {
           scaleSetter(depthScale)
@@ -418,7 +397,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         }
         node.style.opacity = finalOpacity.toFixed(3)
 
-        // Glow and border highlight (applied to visual technology-card leaf)
+        
         const cardInner = node.querySelector('.orb-card-inner')
         if (cardInner) {
           const glowAmt = isHovered ? 0.75 : (0.28 + depthVal * 0.12)
@@ -433,7 +412,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         }
       })
 
-      // Position energy particles
+      
       const PARTS = [
         { speed: 1.5, phase: 0 },
         { speed: 1.2, phase: Math.PI }
@@ -447,7 +426,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         gsap.set(pNode, { x: px, y: py, xPercent: -50, yPercent: -50 })
       })
 
-      // Update SVG connector line coordinates if popover is active
+      
       const currentCoords = popoverCoordsRef.current
       if (hoveredIdxRef.current !== null && lineRef.current && currentCoords) {
         const theta = a0 + (2 * Math.PI / n) * hoveredIdxRef.current
@@ -468,12 +447,13 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
     return () => {
       gsap.ticker.remove(tick)
     }
+    
   }, [paused, radiusX, radiusY, items])
 
-  // ── Smart Popover Positioning ──
+  
   const getPopoverCoords = (cx, cy, cardSize) => {
-    const w = 300 // popover width
-    const h = 130 // popover height
+    const w = 300 
+    const h = 130 
     const gap = 20
     const half = cardSize / 2
     const minX = 16
@@ -482,7 +462,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
     const maxY = STAGE_H - 16
 
     const candidates = [
-      // 1. Right of card
+      
       {
         name: 'right',
         x: cx + half + gap,
@@ -490,7 +470,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         targetX: cx + half,
         targetY: cy
       },
-      // 2. Left of card
+      
       {
         name: 'left',
         x: cx - half - gap - w,
@@ -498,7 +478,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         targetX: cx - half,
         targetY: cy
       },
-      // 3. Above card
+      
       {
         name: 'above',
         x: cx - w / 2,
@@ -506,7 +486,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         targetX: cx,
         targetY: cy - half
       },
-      // 4. Below card
+      
       {
         name: 'below',
         x: cx - w / 2,
@@ -516,26 +496,26 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
       }
     ]
 
-    // Find first candidate that fits completely without clamping
+    
     let selected = candidates.find(c =>
       c.x >= minX && c.x + w <= maxX && c.y >= minY && c.y + h <= maxY
     )
 
     if (!selected) {
-      // Fallback: Pick based on side and clamp
+      
       const preferRight = cx <= STAGE_W / 2
       selected = preferRight ? candidates[0] : candidates[1]
     }
 
-    // Clamp selected position inside boundaries
+    
     const popoverX = Math.max(minX, Math.min(selected.x, maxX - w))
     const popoverY = Math.max(minY, Math.min(selected.y, maxY - h))
 
-    // Update target coordinates to match clamped position
+    
     let targetX = selected.targetX
     let targetY = selected.targetY
 
-    // Adjust target points if popover was clamped significantly
+    
     if (selected.name === 'right') {
       targetX = popoverX
       targetY = cy
@@ -553,10 +533,10 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
     return { popoverX, popoverY, targetX, targetY }
   }
 
-  // ── Calculate popover position once per hover ──
+  
   useEffect(() => {
     if (hoveredIdx === null) {
-      setPopoverCoords(null)
+      setTimeout(() => setPopoverCoords(null), 0)
       popoverCoordsRef.current = null
       return
     }
@@ -580,15 +560,16 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
     return () => {
       window.removeEventListener('resize', calculatePos)
     }
+    
   }, [hoveredIdx, CX, CY, radiusX, radiusY, items])
 
-  // ── Immediate Pointer Event Handlers ──
+  
   const handlePointerEnter = (i) => {
     setHoveredIdx(i)
     hoveredIdxRef.current = i
-    targetSpeedRef.current = 0.0 // slow orbit immediately
+    targetSpeedRef.current = 0.0 
 
-    // Scale hover-wrapper immediately
+    
     const nodes = nodeRefs.current.filter(Boolean)
     const activeNode = nodes[i]
     if (activeNode) {
@@ -602,9 +583,9 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
   const handlePointerLeave = (i) => {
     setHoveredIdx(null)
     hoveredIdxRef.current = null
-    targetSpeedRef.current = 1.0 // resume orbit immediately
+    targetSpeedRef.current = 1.0 
 
-    // Reset hover-wrapper scale immediately
+    
     const nodes = nodeRefs.current.filter(Boolean)
     const activeNode = nodes[i]
     if (activeNode) {
@@ -627,7 +608,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         height: STAGE_H,
       }}
     >
-      {/* 2D Flat Plane container */}
+      
       <div
         ref={planeRef}
         style={{
@@ -635,7 +616,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
           inset: 0,
         }}
       >
-        {/* Visual track ring — lying in the tilted plane */}
+        
         <div style={{
           position: 'absolute',
           top: CY - radiusY,
@@ -648,7 +629,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
           pointerEvents: 'none',
         }} />
 
-        {/* Central Accemberg logo core — container positioned at the center */}
+        
         <div
           ref={logoWrapperRef}
           className="orbit-gsap-logo orbit-logo-core"
@@ -665,7 +646,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
             transformStyle: 'preserve-3d',
           }}
         >
-          {/* Outward pulse wave */}
+          
           <div
             ref={pulseRef}
             style={{
@@ -680,7 +661,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
             }}
           />
 
-          {/* Core disc (Central dark logo disc) */}
+          
           <div
             ref={logoSphereRef}
             onPointerEnter={() => { isLogoHoveredRef.current = true }}
@@ -718,7 +699,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
             />
           </div>
 
-          {/* SVG Container for Rings and Card Highlight */}
+          
           <svg
             style={{
               position: 'absolute',
@@ -727,7 +708,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
               pointerEvents: 'none',
             }}
           >
-            {/* Soft breathing inner glow circle */}
+            
             <circle
               cx="100"
               cy="100"
@@ -737,7 +718,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
               strokeWidth="4"
             />
 
-            {/* Segmented primary ring: R = 64 */}
+            
             <circle
               ref={primaryRingRef}
               cx="100"
@@ -750,7 +731,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
               style={{ transformOrigin: 'center' }}
             />
 
-            {/* Second counter-rotating outer ring: R = 72 */}
+            
             <circle
               ref={secondaryRingRef}
               cx="100"
@@ -763,7 +744,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
               style={{ transformOrigin: 'center' }}
             />
 
-            {/* Subtle technology connection highlight sector facing hovered card */}
+            
             <path
               ref={highlightSectorRef}
               d=""
@@ -775,8 +756,8 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
             />
           </svg>
 
-          {/* Energy Particles */}
-          {/* Particle 1 (Primary ring, R = 64) */}
+          
+          
           <div
             ref={p1Ref}
             style={{
@@ -790,7 +771,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
             }}
           />
 
-          {/* Particle 2 (Secondary ring, R = 72) */}
+          
           <div
             ref={p2Ref}
             style={{
@@ -805,8 +786,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
           />
         </div>
 
-
-        {/* Energy particles */}
+        
         {[
           { color: '#4FC3F7', r: 2 },
           { color: '#FBBF24', r: 2 },
@@ -827,7 +807,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
           />
         ))}
 
-        {/* Orbit nodes */}
+        
         {items.map((item, i) => {
           const size = item.baseSize || 56
           return (
@@ -845,7 +825,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
               onPointerEnter={() => handlePointerEnter(i)}
               onPointerLeave={() => handlePointerLeave(i)}
             >
-              {/* depth-wrapper */}
+              
               <div
                 className="orb-depth-wrap"
                 style={{
@@ -853,7 +833,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
                   height: '100%',
                 }}
               >
-                {/* hover-wrapper */}
+                
                 <div
                   className="orb-hover-wrap"
                   style={{
@@ -861,7 +841,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
                     height: '100%',
                   }}
                 >
-                  {/* technology-card */}
+                  
                   <div
                     className="orb-card-inner"
                     style={{
@@ -882,7 +862,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
                       transition: 'box-shadow 0.3s, border-color 0.3s, background-color 0.3s',
                     }}
                   >
-                    {/* Reflection */}
+                    
                     <div style={{
                       position: 'absolute', top: 0, left: '20%', right: '20%',
                       height: 1,
@@ -916,7 +896,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
         })}
       </div>
 
-      {/* PopoverOverlayLayer (outside the tilted 3D plane, directly in 2D space) */}
+      
       <div
         className="popover-overlay-layer"
         style={{
@@ -932,7 +912,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
 
           return (
             <>
-              {/* Dashed connector line */}
+              
               <svg style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
                 <line
                   ref={lineRef}
@@ -952,7 +932,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
                 <circle cx={popoverCoords.targetX.toFixed(1)} cy={popoverCoords.targetY.toFixed(1)} r="3.5" fill={item.accent} />
               </svg>
 
-              {/* Premium details popover */}
+              
               <div
                 className="orb-card-popover"
                 style={{
@@ -980,7 +960,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
                   animation: 'orb-panel-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both',
                 }}
               >
-                {/* Top Row: Icon + Name & Category */}
+                
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{
                     width: 38, height: 38, borderRadius: 10,
@@ -1013,7 +993,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
                   </div>
                 </div>
 
-                {/* Description */}
+                
                 {detail && (
                   <p style={{
                     fontSize: 13.5, lineHeight: 1.55,
@@ -1025,7 +1005,7 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
                   </p>
                 )}
 
-                {/* Capability Tags */}
+                
                 {detail && detail.capabilities && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
                     {detail.capabilities.map(cap => (
@@ -1058,19 +1038,30 @@ function OrbitRing({ radiusX, radiusY, items, durationMs, paused, reducedMotion 
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Hero
-// ─────────────────────────────────────────────────────────────────────────────
 export default function Hero({ preloaderDone }) {
   const { theme } = useTheme()
   const containerRef = useRef(null)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
-  // Detect reduced-motion and mobile size on client
+  const WORDS = [
+    { from: 'Concept', to: 'Platform' },
+    { from: 'Ambition', to: 'Software' },
+    { from: 'Strategy', to: 'Scale' }
+  ]
+  const [wordIdx, setWordIdx] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWordIdx(prev => (prev + 1) % WORDS.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [])
+
+  
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducedMotion(mq.matches)
+    setTimeout(() => setReducedMotion(mq.matches), 0)
     const handler = () => setReducedMotion(mq.matches)
     mq.addEventListener('change', handler)
 
@@ -1086,20 +1077,20 @@ export default function Hero({ preloaderDone }) {
     }
   }, [])
 
-  // ── GSAP entry animation ─────────────────────────────────────────────────
+  
   useGSAP(() => {
     if (!preloaderDone) return
     if (reducedMotion) return
 
     const ctx = gsap.context(() => {
-      // Orbit wrap: scale 0→1 pop
+      
       gsap.from('.orbit-gsap-wrap', {
         scale: 0,
         opacity: 0,
         duration: 1.0,
         ease: 'back.out(1.4)',
       })
-      // Central logo
+      
       gsap.from('.orbit-gsap-logo', {
         scale: 0,
         opacity: 0,
@@ -1118,12 +1109,12 @@ export default function Hero({ preloaderDone }) {
       ref={containerRef}
       style={{
         position: 'relative',
-        minHeight: '100vh',
+        minHeight: '80vh',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        paddingTop: 'clamp(130px, 10vw, 170px)',
-        paddingBottom: 'clamp(100px, 8vw, 150px)',
+        justifyContent: 'flex-start',
+        paddingTop: 'clamp(120px, 12vw, 160px)',
+        paddingBottom: 'clamp(40px, 4vw, 60px)',
         overflow: 'hidden',
         background: 'var(--bg-base)',
         transition: 'background-color 400ms',
@@ -1132,9 +1123,7 @@ export default function Hero({ preloaderDone }) {
       <div style={{
         position: 'absolute', top: 0, left: 0,
         width: '100%', height: '100%',
-        background: theme === 'dark'
-          ? 'linear-gradient(150deg, #0A0F1E 20%, #0D1B4B 48%, #0d59e4 72%, #7d15ef 100%)'
-          : 'linear-gradient(150deg, #FFFFFF 20%, #F5F7FF 48%, #ECF2FF 72%, #F0D6FF 100%)',
+        background: 'linear-gradient(150deg, #FFFFFF 20%, #F5F7FF 48%, #ECF2FF 72%, #F0D6FF 100%)',
         clipPath: 'polygon(0 0, 100% 0, 100% 70%, 0 78%)',
         WebkitClipPath: 'polygon(0 0, 100% 0, 100% 70%, 0 78%)',
         pointerEvents: 'none',
@@ -1144,25 +1133,19 @@ export default function Hero({ preloaderDone }) {
         <div style={{
           position: 'absolute', top: '20%', right: '10%',
           width: 500, height: 500, borderRadius: '50%',
-          background: theme === 'dark'
-            ? 'radial-gradient(circle, rgba(79,195,247,0.3) 0%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)',
-          filter: 'blur(40px)',
+          background: 'radial-gradient(circle, rgba(12, 73, 162, 0.1) 0%, transparent 70%)',
           animation: reducedMotion ? 'none' : 'hero-glow-pulse 6s ease-in-out infinite',
         }} />
         <div style={{
           position: 'absolute', bottom: '10%', left: '15%',
           width: 400, height: 400, borderRadius: '50%',
-          background: theme === 'dark'
-            ? 'radial-gradient(circle, rgba(124,58,237,0.25) 0%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 70%)',
-          filter: 'blur(30px)',
+          background: 'radial-gradient(circle, rgba(12, 73, 162, 0.08) 0%, transparent 70%)',
           animation: reducedMotion ? 'none' : 'hero-glow-pulse 8s ease-in-out infinite 1s',
         }} />
         <HeroWaveCanvas />
       </div>
 
-      {/* ── Dot-grid overlay ── */}
+      
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: theme === 'dark'
@@ -1176,33 +1159,39 @@ export default function Hero({ preloaderDone }) {
       }} />
 
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <div style={{
+        <div className="hero-grid-responsive" style={{
           display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1.08fr) minmax(0, 0.92fr)',
           gap: 'clamp(40px, 5vw, 80px)',
           alignItems: 'center',
           paddingBottom: '40px',
         }}>
-          {/* ─────────────── LEFT: Copy ─────────────── */}
+          
           <div>
             <h1 style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(44px, 5.5vw, 76px)',
+              fontSize: 'clamp(36px, 4.5vw, 68px)',
               fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: '-0.03em',
+              lineHeight: 1.1,
+              letterSpacing: '-0.02em',
               color: 'var(--text-primary)',
               marginBottom: 24,
             }}>
-              We build software{' '}<br />
-              <span style={{
-                background: 'linear-gradient(135deg, #1565C0 0%, #4FC3F7 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                display: 'inline-block',
-              }}>
-                engineered to last.
+              <span style={{ display: 'block' }}>
+                <span key={`from-${wordIdx}`} className="animate-word-fade" style={{ display: 'inline-block' }}>{WORDS[wordIdx].from}</span>
               </span>
+              <span style={{ display: 'block' }}>
+                to{' '}
+                <span key={`to-${wordIdx}`} className="animate-word-fade" style={{
+                  background: 'linear-gradient(135deg, #0C49A2 0%, #1A5EBA 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  display: 'inline-block',
+                  paddingBottom: '0.1em',
+                }}>
+                  {WORDS[wordIdx].to}
+                </span>
+              </span>
+              <span style={{ display: 'block' }}>with precision.</span>
             </h1>
 
             <p className="hero-desc" style={{
@@ -1212,9 +1201,9 @@ export default function Hero({ preloaderDone }) {
               marginBottom: 36,
               maxWidth: 560,
             }}>
-              Accemberg is an engineering-first Venture Studio. We build premier digital
-              systems, scalable SaaS platforms, and enterprise cloud architectures for
-              organizations demanding technical excellence.
+              Accemberg is an elite engineering studio. We architect mission-critical digital systems,
+              high-velocity SaaS platforms, and resilient cloud infrastructures for organizations
+              that demand uncompromising quality.
             </p>
 
             <div className="hero-btns-container" style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 60 }}>
@@ -1239,7 +1228,7 @@ export default function Hero({ preloaderDone }) {
 
           </div>
 
-          {/* ─────────────── RIGHT: Orbit ─────────────── */}
+          
           <div
             className="hero-orbit-container"
             style={{
@@ -1252,7 +1241,7 @@ export default function Hero({ preloaderDone }) {
               overflow: 'visible',
             }}
           >
-            {/* Ambient glow behind orbit */}
+            
             <div style={{
               position: 'absolute',
               width: 320, height: 320,
@@ -1263,7 +1252,7 @@ export default function Hero({ preloaderDone }) {
               animation: reducedMotion ? 'none' : 'orbitGlowBreath 5s ease-in-out infinite',
             }} />
 
-            {/* Orbit ring + nodes */}
+            
             <div className="orbit-gsap-wrap">
               <OrbitRing
                 radiusX={ORBIT_RADIUS}
@@ -1275,7 +1264,7 @@ export default function Hero({ preloaderDone }) {
               />
             </div>
 
-            {/* Mobile Static Grid */}
+            
             <div className="mobile-static-grid">
               {ORBIT_ITEMS.map((item) => (
                 <div key={item.label} className="mobile-grid-item" style={{
@@ -1306,18 +1295,18 @@ export default function Hero({ preloaderDone }) {
           </div>
         </div>
 
-        {/* Trusted brands marquee */}
+        
         <div style={{
           borderTop: '1px solid var(--border)',
-          paddingTop: 28,
+          paddingTop: 16,
           paddingBottom: 10,
           overflow: 'hidden',
-          marginTop: '40px',
+          marginTop: 20,
         }}>
           <p style={{
             fontSize: 11, fontWeight: 600,
             textTransform: 'uppercase', letterSpacing: '0.12em',
-            color: 'var(--text-muted)', marginBottom: 16,
+            color: 'var(--text-muted)', marginBottom: 12,
           }}>
             Powering next-gen systems for
           </p>
@@ -1380,7 +1369,7 @@ export default function Hero({ preloaderDone }) {
         </div>
       </div>
 
-      {/* ── All keyframes ── */}
+      
       <style>{`
         @keyframes hero-glow-pulse {
           0%, 100% { transform: scale(1);    opacity: 0.75; }
@@ -1456,6 +1445,14 @@ export default function Hero({ preloaderDone }) {
         }
 
         /* ── Mobile: prevent hero flex-centering from pushing text off-screen ── */
+        .hero-grid-responsive {
+          grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+        }
+        @media (max-width: 900px) {
+          .hero-grid-responsive {
+            grid-template-columns: 1fr;
+          }
+        }
         @media (max-width: 768px) {
           #hero {
             justify-content: flex-start !important;
@@ -1502,7 +1499,16 @@ export default function Hero({ preloaderDone }) {
           }
         }
 
-
+        @keyframes textCycleFade {
+          0% { opacity: 0; transform: translateY(15px); }
+          15% { opacity: 1; transform: translateY(0); }
+          85% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(-15px); }
+        }
+        .animate-word-fade {
+          display: inline-block;
+          animation: textCycleFade 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
       `}</style>
     </section>
   )

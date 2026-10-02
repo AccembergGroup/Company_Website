@@ -15,23 +15,24 @@ export default function LenisProvider({ children }) {
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    // Sync Lenis updates directly with GSAP's ticker to match frame rates
+    
     const update = (time) => {
       lenisRef.current?.lenis?.raf(time * 1000)
     }
     
     gsap.ticker.add(update)
 
-    // Notify ScrollTrigger when Lenis scrolls
+    
     const scrollUpdate = () => {
       ScrollTrigger.update()
     }
     
-    lenisRef.current?.lenis?.on('scroll', scrollUpdate)
+    const lenis = lenisRef.current?.lenis
+    lenis?.on('scroll', scrollUpdate)
 
     return () => {
       gsap.ticker.remove(update)
-      lenisRef.current?.lenis?.off('scroll', scrollUpdate)
+      lenis?.off('scroll', scrollUpdate)
     }
   }, [])
 

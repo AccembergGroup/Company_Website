@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Mail, Globe, Clock, Check, Send, AlertTriangle, Calendar } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
-import FastScroll from './FastScroll'
 import ScrambleText from './ScrambleText'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
@@ -23,7 +22,7 @@ export default function Contact() {
     if (!el) return
 
     const ctx = gsap.context(() => {
-      // Reveal left column elements
+      
       gsap.fromTo(el.querySelectorAll('.reveal-gsap-left'), 
         {
           opacity: 0,
@@ -44,7 +43,7 @@ export default function Contact() {
         }
       )
 
-      // Reveal right card panel
+      
       gsap.fromTo(el.querySelectorAll('.reveal-gsap-right'), 
         {
           opacity: 0,
@@ -73,7 +72,7 @@ export default function Contact() {
   const [form, setForm] = useState({
     name: '', company: '', email: '', phone: '', preferredDate: '', message: '',
   })
-  const [status, setStatus] = useState('idle') // idle | submitting | success | error
+  const [status, setStatus] = useState('idle') 
   const [errMessage, setErrMessage] = useState('')
 
   const handleChange = (e) => {
@@ -128,7 +127,7 @@ export default function Contact() {
     <section id="contact" className="section" ref={ref}
       style={{ background: 'var(--bg-base)', position: 'relative', overflow: 'hidden', borderTop: '1px solid var(--border)', transition: 'background-color 400ms' }}
     >
-      {/* Glow bottom-left */}
+      
       <div style={{
         position: 'absolute', left: '-5%', bottom: '-10%',
         width: 700, height: 700,
@@ -144,22 +143,22 @@ export default function Contact() {
           alignItems: 'flex-start',
         }} className="contact-grid">
 
-          {/* Left — Info panel */}
+          
           <div style={{ paddingTop: 8 }} className="reveal-gsap-left">
             <div className="section-label">
               <ScrambleText text="Get In Touch" speed={30} />
             </div>
             <h2 className="text-h2" style={{ marginBottom: 20 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Let's Build</span></FastScroll>
+              <span style={{ display: 'inline-block' }}>Let&apos;s Build</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Something Great</span></FastScroll>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Something Great</span>
             </h2>
             <p className="text-body-lg reveal-gsap-left" style={{ marginBottom: 40 }}>
-              Whether you're an enterprise looking for a delivery partner, or a visionary
-              founder with a high-impact product idea — we want to collaborate with you.
+              Whether you&apos;re an enterprise looking for a delivery partner or a visionary
+              founder with a high-impact product idea, we are ready to collaborate with you.
             </p>
 
-            {/* Contact details */}
+            
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }} className="reveal-gsap-left">
               <ContactDetail
                 icon={<Mail size={16} />}
@@ -179,15 +178,15 @@ export default function Contact() {
               />
             </div>
 
-            {/* Divider */}
+            
             <div style={{ height: 1, background: 'var(--border)', margin: '36px 0' }} className="reveal-gsap-left" />
 
-            {/* Trust signals */}
+            
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }} className="reveal-gsap-left">
               {[
                 '98% client retention across all engagements',
                 'Transparent, flexible engagement models tailored to your roadmap',
-                'Led by senior engineers — we never compromise on technical leadership',
+                'Led exclusively by senior engineers to ensure uncompromising technical leadership',
               ].map((item) => (
                 <div key={item} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--accent)', fontSize: 14, lineHeight: 1.6, flexShrink: 0 }}>✓</span>
@@ -197,7 +196,7 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Right — Form */}
+          
           <div className="reveal-gsap-right">
             <div className="card-glass" style={{
               padding: 'clamp(28px,4vw,48px)',
@@ -211,7 +210,7 @@ export default function Contact() {
                 <form onSubmit={handleSubmit} noValidate>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                     
-                    {/* Error display */}
+                    
                     {status === 'error' && (
                       <div style={{
                         display: 'flex',
@@ -229,7 +228,7 @@ export default function Contact() {
                       </div>
                     )}
 
-                    {/* Row: name + company */}
+                    
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }} className="form-row">
                       <div className="form-field">
                         <label className="form-label" htmlFor="name">Full Name *</label>
@@ -238,7 +237,7 @@ export default function Contact() {
                           name="name"
                           type="text"
                           className="form-input"
-                          placeholder="Jane Smith"
+                          placeholder="Rahul Patel"
                           value={form.name}
                           onChange={handleChange}
                           required
@@ -264,7 +263,7 @@ export default function Contact() {
                       </div>
                     </div>
 
-                    {/* Row: email + phone */}
+                    
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }} className="form-row">
                       <div className="form-field">
                         <label className="form-label" htmlFor="email">Email Address *</label>
@@ -283,7 +282,7 @@ export default function Contact() {
                         />
                       </div>
                       <div className="form-field">
-                        <label className="form-label" htmlFor="phone">Phone (optional)</label>
+                        <label className="form-label" htmlFor="phone">Phone</label>
                         <input
                           id="phone"
                           name="phone"
@@ -299,11 +298,11 @@ export default function Contact() {
                       </div>
                     </div>
 
-                    {/* Meeting Preferred Date */}
+                    
                     <div className="form-field">
                       <label className="form-label" htmlFor="preferredDate" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <Calendar size={12} />
-                        <span>Preferred Call Date (optional)</span>
+                        <span>Preferred Call Date</span>
                       </label>
                       <input
                         id="preferredDate"
@@ -317,7 +316,7 @@ export default function Contact() {
                       />
                     </div>
 
-                    {/* Message */}
+                    
                     <div className="form-field">
                       <label className="form-label" htmlFor="message">Message (optional)</label>
                       <textarea
@@ -332,7 +331,7 @@ export default function Contact() {
                       />
                     </div>
 
-                    {/* Submit */}
+                    
                     <Magnetic style={{ width: '100%' }}>
                       <button
                         type="submit"

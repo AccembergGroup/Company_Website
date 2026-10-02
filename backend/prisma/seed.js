@@ -69,46 +69,24 @@ async function main() {
     data: [
       {
         name: 'Agnishakti',
-        description:
-          'An enterprise-grade AI-powered operations platform for large-scale organisations. Agnishakti unifies workflow automation, real-time analytics, and multi-tenant access control into a single, cohesive system built for scale.',
-        features: [
-          'Multi-tenant SaaS architecture',
-          'Real-time operational analytics',
-          'AI-assisted workflow automation',
-          'Role-based access control (RBAC)',
-          'Enterprise SSO / SAML integration',
-          '99.9% uptime SLA',
-        ],
-        ctaLink: 'https://agnishakti.accemberg.com',
+        description: 'A next-generation emergency response and hazard prediction platform leveraging real-time data streams to proactively mitigate disaster risks.',
+        features: ['Python', 'React', 'Machine Learning', 'Data Engineering'],
+        ctaLink: null,
         badge: 'Flagship',
       },
       {
-        name: 'FormForge',
-        description:
-          'A niche rapid-launch tool that turns any data schema into production-ready, validated forms in minutes. Designed for founders and internal teams who need forms without the boilerplate.',
-        features: [
-          'Schema-to-form generation',
-          'Built-in validation engine',
-          'Webhook and Zapier integration',
-          'Embeddable on any website',
-          'Free tier available',
-        ],
+        name: 'Niramaya',
+        description: 'A comprehensive healthcare management system streamlining patient records and enabling predictive health analytics for medical institutions.',
+        features: ['Next.js', 'Node.js', 'MongoDB', 'Express'],
         ctaLink: null,
-        badge: 'Beta',
+        badge: 'Active Track',
       },
       {
-        name: 'PulseBoard',
-        description:
-          'A lightweight SaaS status-page and uptime monitoring tool targeted at small engineering teams. Spin up a public or private status page in under five minutes.',
-        features: [
-          'HTTP / TCP / ICMP health checks',
-          'Customisable status page',
-          'Slack + email alerts',
-          'Incident timeline management',
-          'Response-time graphs',
-        ],
+        name: 'VaakSetu',
+        description: 'Real-time multilingual speech-to-text platform designed to break language barriers and facilitate seamless cross-regional enterprise communications.',
+        features: ['Python', 'NLP', 'React', 'WebSockets'],
         ctaLink: null,
-        badge: 'Coming Soon',
+        badge: 'New',
       },
     ],
   });
@@ -123,118 +101,19 @@ async function main() {
         website: 'https://iitkottayam.ac.in',
         isVerified: true,
       },
-      {
-        name: 'Nexus Dynamics',
-        logoUrl: 'https://ui-avatars.com/api/?name=Nexus+Dynamics&background=0D8ABC&color=fff&size=128&bold=true',
-        website: 'https://nexusdynamics.example.com',
-        isVerified: true,
-      },
-      {
-        name: 'FinEdge Solutions',
-        logoUrl: 'https://ui-avatars.com/api/?name=FinEdge&background=6C3483&color=fff&size=128&bold=true',
-        website: 'https://finedge.example.com',
-        isVerified: true,
-      },
-      {
-        name: 'CloudAxis',
-        logoUrl: 'https://ui-avatars.com/api/?name=CloudAxis&background=1ABC9C&color=fff&size=128&bold=true',
-        website: 'https://cloudaxis.example.com',
-        isVerified: true,
-      },
-      {
-        name: 'Meridian Labs',
-        logoUrl: 'https://ui-avatars.com/api/?name=Meridian+Labs&background=F39C12&color=fff&size=128&bold=true',
-        website: 'https://meridianlabs.example.com',
-        isVerified: true,
-      },
     ],
   });
-  console.log('✅ Seeded Partners (5 records — 1 real [IIT Kottayam], 4 dummy).');
+  console.log('✅ Seeded Partners (1 record — IIT Kottayam).');
 
   // ── 5. Seed Testimonials ─────────────────────────────────────────────────────
+  // No real client testimonials yet. Add real ones here as they come in — do not
+  // seed placeholder/fictional names (this table previously shipped with entries
+  // like "Sarah Connor / Cyberdyne Systems" and "Bruce Wayne / Wayne Enterprises",
+  // which is exactly the kind of fabricated content that shouldn't reach a live site).
   await prisma.testimonial.createMany({
-    data: [
-      {
-        name: 'Sarah Connor',
-        role: 'CTO',
-        company: 'Cyberdyne Systems',
-        review:
-          'Accemberg delivered our system integration ahead of schedule. Uncompromising code quality and a team that actually communicates.',
-        rating: 5,
-        avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop',
-        isFeatured: true,
-        sortOrder: 1,
-        isActive: true,
-        createdAt: new Date('2026-06-01T10:00:00Z'),
-      },
-      {
-        name: 'John Doe',
-        role: 'VP of Engineering',
-        company: 'Stark Industries',
-        review:
-          'The UI animations are silky smooth and the underlying architecture is solid. Highly recommended for any serious tech project.',
-        rating: 5,
-        avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop',
-        isFeatured: true,
-        sortOrder: 2,
-        isActive: true,
-        createdAt: new Date('2026-06-15T12:00:00Z'),
-      },
-      {
-        name: 'Priya Mehta',
-        role: 'Head of Digital',
-        company: 'FinEdge Solutions',
-        review:
-          'Our SaaS dashboard was delivered in record time — pixel-perfect and fully accessible. The Accemberg team was responsive throughout.',
-        rating: 5,
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
-        isFeatured: true,
-        sortOrder: 3,
-        isActive: true,
-        createdAt: new Date('2026-06-20T09:00:00Z'),
-      },
-      {
-        name: 'Bruce Wayne',
-        role: 'Founder',
-        company: 'Wayne Enterprises',
-        review:
-          'Exceptional client experience and enterprise-ready security compliance. Would engage again without hesitation.',
-        rating: 5,
-        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
-        isFeatured: false,
-        sortOrder: 4,
-        isActive: true,
-        createdAt: new Date('2026-06-25T11:00:00Z'),
-      },
-      {
-        name: 'Arjun Kapoor',
-        role: 'Product Manager',
-        company: 'Nexus Dynamics',
-        review:
-          "Accemberg's rapid SaaS factory concept is exactly what early-stage startups need. They shipped our MVP in 5 weeks — battle-tested.",
-        rating: 4,
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
-        isFeatured: false,
-        sortOrder: 5,
-        isActive: true,
-        createdAt: new Date('2026-07-01T08:00:00Z'),
-      },
-      {
-        // Inactive draft — should be filtered out by public API
-        name: 'Alice Smith',
-        role: 'Director of Product',
-        company: 'Oscorp',
-        review: 'This draft testimonial should not be visible because it is set to inactive.',
-        rating: 4,
-        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop',
-        isFeatured: false,
-        sortOrder: 99,
-        isActive: false,
-        createdAt: new Date('2026-07-05T08:00:00Z'),
-      },
-    ],
+    data: [],
   });
-  console.log('✅ Seeded Testimonials (5 active + 1 inactive draft).');
+  console.log('✅ Seeded Testimonials (0 — none real yet, add as they come in).');
 
   // ── 6. Seed FAQs ─────────────────────────────────────────────────────────────
   await prisma.faq.createMany({
@@ -309,8 +188,8 @@ async function main() {
   console.log('\n🌱 Database seeding completed successfully!');
   console.log('   Services:     6');
   console.log('   Products:     3');
-  console.log('   Partners:     5 (4 verified, 1 unverified)');
-  console.log('   Testimonials: 5 active + 1 inactive draft');
+  console.log('   Partners:     1 (IIT Kottayam)');
+  console.log('   Testimonials: 0 (add real ones as they come in)');
   console.log('   FAQs:         8 active + 1 inactive draft');
 }
 

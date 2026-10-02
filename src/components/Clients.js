@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import FastScroll from './FastScroll'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import ScrambleText from './ScrambleText'
 
-// Placeholder client names — styled as corporate name pills
 const ROW_ONE = [
   'Vertex Systems', 'NovaTech Labs', 'Orion Dynamics', 'Stratos HQ',
   'DataBridge Inc.', 'CoreLogic Co.', 'Nexus Digital', 'Forefront AI',
@@ -31,6 +30,7 @@ function useReveal(ref) {
     )
     el.querySelectorAll('.reveal').forEach((t) => observer.observe(t))
     return () => observer.disconnect()
+    
   }, [])
 }
 
@@ -38,9 +38,20 @@ export default function Clients() {
   const ref = useRef(null)
   useReveal(ref)
 
-  // Triple-duplicate for seamless CSS loop
-  const r1 = [...ROW_ONE, ...ROW_ONE, ...ROW_ONE]
-  const r2 = [...ROW_TWO, ...ROW_TWO, ...ROW_TWO]
+  
+  const r1 = [...ROW_ONE, ...ROW_ONE, ...ROW_ONE, ...ROW_ONE]
+  const r2 = [...ROW_TWO, ...ROW_TWO, ...ROW_TWO, ...ROW_TWO]
+
+  
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  })
+  
+  const x1 = useTransform(scrollYProgress, [0, 1], [0, -400])
+  const x2 = useTransform(scrollYProgress, [0, 1], [-400, 0])
+  const yHeader = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100])
+  const opacityHeader = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
 
   return (
     <section
@@ -54,44 +65,48 @@ export default function Clients() {
         position: 'relative',
       }}
     >
-      {/* Edge fade masks */}
+      
       <div style={{
         position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
         background: 'linear-gradient(to right, var(--bg-surface) 0%, transparent 12%, transparent 88%, var(--bg-surface) 100%)',
       }} />
 
       <div className="container" style={{ marginBottom: 'clamp(32px,4vw,52px)' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div className="section-label reveal" style={{ justifyContent: 'center' }}>
+        <motion.div style={{ textAlign: 'center', y: yHeader, opacity: opacityHeader }}>
+          <div className="section-label" style={{ justifyContent: 'center' }}>
             <ScrambleText text="Trusted By" speed={25} />
           </div>
-          <h2 className="text-h2 reveal" style={{ marginBottom: 12 }}>
-              <FastScroll><span style={{ display: 'inline-block' }}>Clients Who</span></FastScroll>
+          <h2 className="text-h2" style={{ marginBottom: 12 }}>
+              <span style={{ display: 'inline-block' }}>Clients Who</span>
               <br />
-              <FastScroll><span style={{ display: 'inline-block', color: 'var(--accent)' }}>Scale With Us</span></FastScroll>
-            </h2>
-          <p className="text-body-lg reveal" style={{ maxWidth: 480, margin: '0 auto' }}>
+              <span style={{ display: 'inline-block', color: 'var(--accent)' }}>Scale With Us</span>
+          </h2>
+          <p className="text-body-lg" style={{ maxWidth: 480, margin: '0 auto' }}>
             From early-stage SaaS companies to established enterprises — we deliver at every level.
           </p>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Row 1 — left direction */}
+      
       <div style={{ overflow: 'hidden', marginBottom: 16 }}>
-        <div className="marquee-track">
-          {r1.map((name, i) => (
-            <ClientPill key={i} name={name} />
-          ))}
-        </div>
+        <motion.div style={{ x: x1 }}>
+          <div className="marquee-track">
+            {r1.map((name, i) => (
+              <ClientPill key={`r1-${i}`} name={name} />
+            ))}
+          </div>
+        </motion.div>
       </div>
 
-      {/* Row 2 — right direction */}
+      
       <div style={{ overflow: 'hidden' }}>
-        <div className="marquee-track-reverse">
-          {r2.map((name, i) => (
-            <ClientPill key={i} name={name} dimmed />
-          ))}
-        </div>
+        <motion.div style={{ x: x2 }}>
+          <div className="marquee-track-reverse">
+            {r2.map((name, i) => (
+              <ClientPill key={`r2-${i}`} name={name} dimmed />
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -113,7 +128,7 @@ function ClientPill({ name, dimmed = false }) {
         flexShrink: 0,
       }}
     >
-      {/* Dot accent */}
+      
       <span style={{
         width: 6,
         height: 6,

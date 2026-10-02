@@ -12,13 +12,13 @@ export default function FastScroll({ children }) {
   const containerRef = useRef(null)
 
   useEffect(() => {
-    // Desktop only to match the original constraints, though this is heavily optimized
+    
     if (typeof window === 'undefined' || window.innerWidth < 1024) return
 
     const container = containerRef.current
     if (!container) return
 
-    // Hardware Accelerated CPU Bypass via native CSS blur/transform pipeline
+    
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: container,
@@ -34,11 +34,11 @@ export default function FastScroll({ children }) {
           },
           {
             opacity: 0,
-            x: 60, // Simulate horizontal wind drift
-            y: -10, // Slight lift
-            filter: 'blur(12px)', // Native hardware blur simulates disintegration
+            x: 60, 
+            y: -10, 
+            filter: 'blur(12px)', 
             ease: 'none',
-            force3D: true, // Forces compositor layer
+            force3D: true, 
           }
         ),
       })
