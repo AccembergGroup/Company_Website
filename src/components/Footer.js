@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import { useTheme } from '@/components/ThemeProvider'
 
@@ -78,7 +79,7 @@ export default function Footer() {
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             
-            <a
+            <Link
               href="/"
               aria-label="Accemberg"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 10, width: 'fit-content' }}
@@ -107,7 +108,7 @@ export default function Footer() {
               }}>
                 ACCEMBERG
               </span>
-            </a>
+            </Link>
 
             
             <p style={{
@@ -188,7 +189,7 @@ export default function Footer() {
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {col.links.map((link) => (
                   <li key={link.label}>
-                    <a
+                    <Link
                       href={link.href}
                       style={{
                         fontSize: 13.5,
@@ -202,7 +203,7 @@ export default function Footer() {
                       onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -226,22 +227,22 @@ export default function Footer() {
             © {new Date().getFullYear()} Accemberg Products &amp; Services. All rights reserved.
           </span>
           <div style={{ display: 'flex', gap: 24 }}>
-            <a
+            <Link
               href="/privacy-policy"
               style={{ fontSize: 13, color: 'var(--text-muted)', transition: 'color 200ms' }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.muted }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
             >
               Privacy Policy
-            </a>
-            <a
+            </Link>
+            <Link
               href="/terms"
               style={{ fontSize: 13, color: 'var(--text-muted)', transition: 'color 200ms' }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text-secondary)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.muted }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
             >
               Terms &amp; Conditions
-            </a>
+            </Link>
           </div>
         </div>
       </div>

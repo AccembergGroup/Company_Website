@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import Magnetic from '@/components/Magnetic'
@@ -67,7 +68,7 @@ export default function Navbar() {
         }}
       >
         
-        <a
+        <Link
           href="/"
           aria-label="Accemberg"
           className="nav-logo-link"
@@ -114,7 +115,7 @@ export default function Navbar() {
           >
             ACCEMBERG
           </span>
-        </a>
+        </Link>
 
         
         <div
@@ -122,7 +123,7 @@ export default function Navbar() {
           className="pill-nav-links"
         >
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className="nav-link-underline"
@@ -142,7 +143,7 @@ export default function Navbar() {
               }}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -150,7 +151,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           
           <Magnetic>
-            <a
+            <Link
               href="/contact"
               style={{
                 display: 'inline-flex',
@@ -177,7 +178,7 @@ export default function Navbar() {
             >
               Get in Touch
               <ArrowRight size={13} strokeWidth={2} />
-            </a>
+            </Link>
           </Magnetic>
         </div>
 
@@ -242,8 +243,8 @@ export default function Navbar() {
           boxShadow: '0 20px 40px -15px rgba(0,0,0,0.15)',
         }}
       >
-        {[...NAV_LINKS, { label: 'Contact', href: '#contact' }].map((link) => (
-          <a
+        {[...NAV_LINKS, { label: 'Contact', href: '/contact' }].map((link) => (
+          <Link
             key={link.href}
             href={link.href}
             onClick={() => setMenuOpen(false)}
@@ -266,7 +267,7 @@ export default function Navbar() {
             }}
           >
             {link.label}
-          </a>
+          </Link>
         ))}
       </div>
 
