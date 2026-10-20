@@ -65,11 +65,9 @@ export default function Faqs() {
   const [openIdx, setOpenIdx] = useState(null)
 
   useEffect(() => {
-    
-    const url = process.env.NEXT_PUBLIC_API_URL
-      ? `${process.env.NEXT_PUBLIC_API_URL}/faqs`
-      : 'http://localhost:5000/api/faqs'
+    if (!process.env.NEXT_PUBLIC_API_URL) return
 
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/faqs`
     fetch(url)
       .then((res) => res.json())
       .then((resJson) => {

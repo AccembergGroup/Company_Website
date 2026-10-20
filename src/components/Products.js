@@ -58,10 +58,9 @@ export default function Products() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_API_URL
-      ? `${process.env.NEXT_PUBLIC_API_URL}/products`
-      : 'http://localhost:5000/api/products'
+    if (!process.env.NEXT_PUBLIC_API_URL) return
 
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/products`
     fetch(url)
       .then((res) => res.json())
       .then((resJson) => {

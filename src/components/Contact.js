@@ -91,7 +91,7 @@ export default function Contact() {
 
     const url = process.env.NEXT_PUBLIC_API_URL
       ? `${process.env.NEXT_PUBLIC_API_URL}/book-a-call`
-      : 'http://localhost:5000/api/book-a-call'
+      : '/api/book-a-call'
 
     try {
       const response = await fetch(url, {

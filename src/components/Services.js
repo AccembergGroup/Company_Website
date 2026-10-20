@@ -108,10 +108,9 @@ export default function Services() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_API_URL
-      ? `${process.env.NEXT_PUBLIC_API_URL}/services`
-      : 'http://localhost:5000/api/services'
+    if (!process.env.NEXT_PUBLIC_API_URL) return
 
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/services`
     fetch(url)
       .then((res) => res.json())
       .then((resJson) => {
